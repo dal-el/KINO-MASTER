@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>KINO MASTER — Allwyn</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-
-
 :root {
   --bg: #0d0f14;
   --surface: #151720;
@@ -28,9 +26,9 @@
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { scroll-behavior:smooth; }
 body {
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Lato', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
   min-height:100vh;
   padding-bottom:120px;
 }
@@ -42,12 +40,9 @@ body::before {
     radial-gradient(ellipse 60% 30% at 80% 110%, rgba(232,184,75,0.05) 0%, transparent 50%);
   pointer-events:none; z-index:0;
 }
-
-
-/* ── LANG SWITCHER ── */
 .lang-switch {
   display:flex; gap:3px; align-items:center;
-  background:var(--card);
+  background: var(--card);
   border:1px solid var(--border);
   border-radius:20px;
   padding:4px 6px;
@@ -63,7 +58,7 @@ body::before {
   background:transparent;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s;
-  opacity:0.4;
+  opacity:.4;
   filter:grayscale(70%);
 }
 .lang-btn.active {
@@ -71,8 +66,6 @@ body::before {
   opacity:1;
   filter:grayscale(0%);
 }
-
-/* ── HEADER ── */
 .header {
   background:linear-gradient(180deg, #10131d 0%, #0d0f14 100%);
   border-bottom:1px solid var(--border);
@@ -103,11 +96,9 @@ body::before {
 .live-dot {
   width:7px; height:7px; border-radius:50%;
   background:var(--green);
-  animation: pulse 2s infinite;
+  animation:pulse 2s infinite;
 }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
-
-/* Live results strip */
 .live-strip {
   background:rgba(62,207,142,0.06);
   border:1px solid rgba(62,207,142,0.15);
@@ -129,11 +120,7 @@ body::before {
   border-color:var(--green);
   color:#fff; font-weight:600;
 }
-
-/* ── WRAPPER ── */
 .wrap { padding:16px; position:relative; z-index:1; max-width:480px; margin:0 auto; }
-
-/* ── SECTION TITLE ── */
 .sec-title {
   font-family:'Oswald',sans-serif;
   font-size:13px; font-weight:500;
@@ -149,8 +136,6 @@ body::before {
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
-
-/* ── GAME TYPE ── */
 .type-scroll {
   display:flex; gap:8px;
   overflow-x:auto; padding-bottom:4px;
@@ -166,7 +151,7 @@ body::before {
   padding:10px 14px;
   cursor:pointer; text-align:center;
   transition:all .2s;
-  min-width:64px;
+  min-width:70px;
 }
 .type-card:hover { border-color:var(--gold); }
 .type-card.active {
@@ -174,25 +159,12 @@ body::before {
   background:rgba(232,184,75,0.1);
   box-shadow:0 0 20px rgba(232,184,75,0.15);
 }
-.type-card.disabled-card {
-  opacity:.3; cursor:not-allowed;
-  pointer-events:none;
-}
 .tc-k {
   font-family:'Oswald',sans-serif; font-size:28px; font-weight:700;
   color:var(--gold); line-height:1; display:block;
 }
 .type-card.active .tc-k { color:var(--gold2); }
 .tc-label { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
-.tc-badge {
-  margin-top:5px;
-  background:rgba(74,158,255,0.15);
-  border-radius:4px; padding:2px 5px;
-  font-size:9px; color:var(--blue2);
-  font-family:'Source Code Pro',monospace;
-}
-
-/* ── NUMBER GRID ── */
 .num-controls { display:flex; gap:8px; margin-bottom:10px; }
 .qpick-btn {
   flex:1; padding:9px;
@@ -211,7 +183,6 @@ body::before {
   cursor:pointer; transition:all .2s;
 }
 .clear-btn:hover { border-color:var(--red); color:var(--red); }
-
 .qpick-row { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
 .qpick-n {
   padding:6px 12px;
@@ -222,8 +193,6 @@ body::before {
   transition:all .2s;
 }
 .qpick-n:hover { background:rgba(74,158,255,0.18); border-color:var(--blue); }
-.qpick-n.hidden { display:none; }
-
 .num-grid {
   display:grid;
   grid-template-columns:repeat(10,1fr);
@@ -254,7 +223,6 @@ body::before {
   color:#fff;
   box-shadow:0 2px 8px rgba(62,207,142,.3);
 }
-
 .sel-bar {
   background:var(--surface);
   border:1px solid var(--border);
@@ -271,38 +239,30 @@ body::before {
   font-size:10px; color:var(--blue2); line-height:1.6;
   word-break:break-all;
 }
-
-/* ── GUARANTEE ── */
-.guar-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px; }
-.guar-card {
+.mode-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:8px; }
+.mode-card {
   background:var(--card);
   border:1.5px solid var(--border);
-  border-radius:10px; padding:10px 6px;
+  border-radius:10px; padding:10px 8px;
   cursor:pointer; text-align:center;
   transition:all .2s;
 }
-.guar-card:hover:not(.gc-disabled) { border-color:var(--blue); }
-.guar-card.active {
+.mode-card:hover:not(.mc-disabled) { border-color:var(--blue); }
+.mode-card.active {
   border-color:var(--blue);
   background:rgba(74,158,255,0.1);
   box-shadow:0 0 16px rgba(74,158,255,0.12);
 }
-.guar-card.gc-disabled { opacity:.25; cursor:not-allowed; pointer-events:none; }
-.gc-frac {
-  font-family:'Oswald',sans-serif; font-size:20px; font-weight:600;
-  color:var(--blue2); display:block; line-height:1;
+.mode-card.mc-disabled { opacity:.25; cursor:not-allowed; pointer-events:none; }
+.mc-title {
+  font-family:'Oswald',sans-serif; font-size:17px; font-weight:600;
+  color:var(--blue2); line-height:1;
 }
-.guar-card.active .gc-frac { color:#fff; }
-.gc-label { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
-.gc-combos {
-  margin-top:5px;
-  font-family:'Source Code Pro',monospace; font-size:10px;
-  color:var(--green);
-}
-.gc-combos.over { color:var(--red); }
-.gc-combos.warn { color:var(--price); }
-
-/* condition box */
+.mode-card.active .mc-title { color:#fff; }
+.mc-sub { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:4px; }
+.mc-meta { margin-top:6px; font-family:'Source Code Pro',monospace; font-size:10px; color:var(--green); }
+.mc-meta.warn { color:var(--price); }
+.mc-meta.over { color:var(--red); }
 .cond-box {
   background:rgba(74,158,255,0.05);
   border:1px solid rgba(74,158,255,0.15);
@@ -312,8 +272,6 @@ body::before {
 }
 .cond-box b { color:var(--blue2); }
 .cond-box .hl { color:var(--green); font-weight:700; }
-
-/* ── COST BAR ── */
 .cost-bar {
   background:linear-gradient(135deg, rgba(255,159,63,0.08), rgba(232,184,75,0.05));
   border:1px solid rgba(255,159,63,0.25);
@@ -329,8 +287,6 @@ body::before {
   text-align:right;
 }
 .cost-total small { font-size:14px; color:var(--muted2); font-family:'Lato',sans-serif; }
-
-/* ── GENERATE BTN ── */
 .gen-btn {
   width:100%; padding:18px;
   background:linear-gradient(135deg,#b8860b,var(--gold),var(--gold2));
@@ -348,8 +304,6 @@ body::before {
 .gen-btn:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(232,184,75,0.35); }
 .gen-btn:active { transform:translateY(0); }
 .gen-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
-
-/* ── RESULTS ── */
 .results-wrap { margin-top:4px; }
 .res-header {
   display:flex; align-items:center; justify-content:space-between;
@@ -363,7 +317,6 @@ body::before {
   font-family:'Source Code Pro',monospace;
   font-size:11px; color:var(--green);
 }
-
 .summary-grid {
   display:grid; grid-template-columns:repeat(4,1fr);
   gap:8px; margin-bottom:16px;
@@ -377,15 +330,13 @@ body::before {
 .sg-val.blue { color:var(--blue2); }
 .sg-val.orange { color:var(--price); }
 .sg-key { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
-
-.jolla-note {
+.note-box {
   background:rgba(74,158,255,0.05);
   border:1px solid rgba(74,158,255,0.15);
   border-radius:8px; padding:10px 14px;
   font-size:11px; color:var(--blue2);
   margin-bottom:14px; font-family:'Source Code Pro',monospace;
 }
-
 .res-card {
   background:var(--card);
   border:1px solid var(--border);
@@ -434,8 +385,6 @@ body::before {
   color:var(--green);
   box-shadow:0 2px 12px rgba(62,207,142,0.25);
 }
-
-/* ── EMPTY STATE ── */
 .empty {
   text-align:center; padding:40px 20px;
   border:1px dashed var(--border);
@@ -444,8 +393,6 @@ body::before {
 .empty-icon { font-size:44px; margin-bottom:12px; opacity:.4; display:block; }
 .empty p { font-size:13px; line-height:1.6; }
 .empty b { color:var(--gold); }
-
-/* ── ERROR ── */
 .err-box {
   background:rgba(255,90,90,0.08);
   border:1px solid rgba(255,90,90,0.25);
@@ -453,8 +400,6 @@ body::before {
   font-size:13px; color:var(--red);
   margin-bottom:16px;
 }
-
-/* ── BOTTOM NAV (sticky cost) ── */
 .sticky-bottom {
   position:fixed; bottom:0; left:0; right:0;
   background:linear-gradient(180deg,transparent 0%,var(--bg) 30%);
@@ -463,9 +408,6 @@ body::before {
   pointer-events:none;
 }
 .sticky-bottom .gen-btn { pointer-events:all; max-width:480px; margin:0 auto; display:block; }
-
-
-/* ── QR MODAL ── */
 .qr-btn {
   width:100%; padding:16px;
   background:linear-gradient(135deg,#1a3a2a,#1e4a30);
@@ -477,7 +419,6 @@ body::before {
   margin-top:16px; display:flex; align-items:center; justify-content:center; gap:10px;
 }
 .qr-btn:hover { background:rgba(62,207,142,0.15); box-shadow:0 6px 20px rgba(62,207,142,0.2); }
-
 .qr-modal {
   position:fixed; inset:0; z-index:200;
   background:rgba(0,0,0,0.92);
@@ -540,10 +481,6 @@ body::before {
   display:flex; justify-content:space-between; align-items:center;
 }
 .qr-cost-amt { font-family:'Oswald',sans-serif; font-size:22px; color:var(--price); }
-
-
-
-/* ── SAVE / STORED SYSTEMS ── */
 .save-btn {
   width:100%; padding:15px;
   background:linear-gradient(135deg,#0d1f35,#122840);
@@ -563,7 +500,6 @@ body::before {
   transition:all .2s;
 }
 .saved-list-btn:hover { border-color:var(--gold); color:var(--gold); }
-/* ── MODALS (save / list / view) ── */
 .sys-modal {
   position:fixed; inset:0; z-index:300;
   background:rgba(0,0,0,0.96);
@@ -610,12 +546,10 @@ body::before {
   font-weight:600; letter-spacing:2px; color:#000; cursor:pointer;
 }
 .empty-saved { text-align:center; padding:50px 20px; color:var(--muted); font-size:13px; line-height:1.8; }
-
 </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
-<!-- HEADER -->
 <div class="header">
   <div class="header-top">
     <div class="logo">
@@ -630,10 +564,10 @@ body::before {
         <button class="lang-btn active" id="langEl" onclick="setLang('el')" title="Ελληνικά">🇬🇷</button>
         <button class="lang-btn" id="langEn" onclick="setLang('en')" title="English">🇬🇧</button>
       </div>
-    <div class="live-badge" onclick="toggleLive()">
-      <div class="live-dot"></div>
-      <span id="liveBadgeText">LIVE</span>
-    </div>
+      <div class="live-badge" onclick="toggleLive()">
+        <div class="live-dot"></div>
+        <span id="liveBadgeText">LIVE</span>
+      </div>
     </div>
   </div>
   <div class="live-strip" id="liveStrip">
@@ -643,12 +577,9 @@ body::before {
 </div>
 
 <div class="wrap">
-
-  <!-- STEP 1: GAME TYPE -->
   <div class="sec-title"><div class="step-dot">1</div><span id="t-step1">Τύπος Παιχνιδιού</span></div>
   <div class="type-scroll" id="typeScroll"></div>
 
-  <!-- STEP 2: NUMBER PICKER -->
   <div class="sec-title"><div class="step-dot">2</div><span id="t-step2">Επιλογή Αριθμών</span></div>
   <div class="num-controls">
     <button class="qpick-btn" onclick="showQPick()">🎲 Quick Pick</button>
@@ -671,12 +602,10 @@ body::before {
     <div class="sel-nums-text" id="selNums">Επίλεξε αριθμούς από τον πίνακα...</div>
   </div>
 
-  <!-- STEP 3: GUARANTEE -->
-  <div class="sec-title"><div class="step-dot">3</div><span id="t-step3">Εγγύηση (Μεταβλητό)</span></div>
-  <div class="guar-grid" id="guarGrid"></div>
-  <div class="cond-box" id="condBox">Επίλεξε τύπο παιχνιδιού και αριθμούς για να δεις τις επιλογές εγγύησης.</div>
+  <div class="sec-title"><div class="step-dot">3</div><span id="t-step3">Λογική Συστήματος</span></div>
+  <div class="mode-grid" id="modeGrid"></div>
+  <div class="cond-box" id="condBox">Επίλεξε κατηγορία, αριθμούς και λογική συστήματος.</div>
 
-  <!-- COST -->
   <div class="cost-bar" id="costBar" style="display:none">
     <div class="cost-left">
       <span id="costCombos">0</span> <span id="t-lines">στήλες</span> × 0.50€<br>
@@ -687,41 +616,33 @@ body::before {
     </div>
   </div>
 
-  <!-- ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ -->
   <button class="saved-list-btn" onclick="openSavedModal()">
     <span id="t-saved-btn">📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span>
     <span id="savedBadge" style="font-size:12px;background:var(--border);border-radius:20px;padding:2px 10px;">0/30</span>
   </button>
 
-  <!-- GENERATE -->
   <button class="gen-btn" id="genBtn" onclick="generate()"><span id="t-genbtn">⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</span></button>
   <button class="save-btn" id="saveBtn" onclick="openSaveModal()"><span id="t-savebtn">💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></button>
 
-  <!-- RESULTS -->
   <div class="results-wrap" id="resultsWrap">
     <div class="empty">
       <span class="empty-icon">🎰</span>
-      <p><span id="t-empty">Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και εγγύηση, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b></span></p>
+      <p><span id="t-empty">Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και λογική, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b></span></p>
     </div>
   </div>
-
 </div>
 
-<!-- STICKY BOTTOM -->
 <div class="sticky-bottom">
   <button class="gen-btn" id="genBtnSticky" onclick="generate()" style="display:none"><span id="t-genbtn-sticky">⚡ ΔΗΜΙΟΥΡΓΙΑ</span></button>
 </div>
 
-<!-- QR MODAL -->
 <div class="qr-modal" id="qrModal">
   <div class="qr-modal-header">
     <div class="qr-modal-title"><span id="t-qr-title">📱 ΔΕΛΤΙΑ QR — ALLWYN</span></div>
     <button class="qr-close" onclick="closeQR()">✕</button>
   </div>
-  <!-- QR OPTIONS -->
   <div style="background:#151720;border-bottom:1px solid #252840;padding:14px 16px;max-width:480px;width:100%;margin:0 auto;">
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <!-- KINO BONUS -->
       <div style="display:flex;align-items:center;gap:8px;background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;flex:1;min-width:130px;">
         <input type="checkbox" id="qrBonus" onchange="renderQRContent()" style="width:18px;height:18px;accent-color:#3ecf8e;cursor:pointer;">
         <div>
@@ -729,7 +650,6 @@ body::before {
           <div style="font-size:10px;color:#6b7099;"><span id="t-bonus-sub">x2 τιμή στήλης</span></div>
         </div>
       </div>
-      <!-- DRAWS -->
       <div style="background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;flex:1;min-width:130px;">
         <div style="font-size:10px;color:#8890bb;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;"><span id="t-draws-lbl">Κληρώσεις</span></div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
@@ -742,7 +662,6 @@ body::before {
         <input type="hidden" id="qrDraws" value="1">
         <div style="font-size:10px;color:#3ecf8e;margin-top:5px;"><span id="t-total-lbl">Σύνολο</span>: <b id="drawsTotal">1</b></div>
       </div>
-      <!-- MULTIPLIER -->
       <div style="background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;width:100%;">
         <div style="font-size:10px;color:#8890bb;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;"><span id="t-mult-lbl">Πολλαπλασιαστής</span></div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
@@ -761,17 +680,44 @@ body::before {
   <div class="qr-content" id="qrContent"></div>
 </div>
 
+<div class="sys-modal" id="saveModal">
+  <div class="sys-modal-header">
+    <div class="sys-modal-title">💾 <span id="t-savemodal-title2">ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></div>
+    <button class="qr-close" onclick="closeSaveModal()">✕</button>
+  </div>
+  <div class="sys-modal-body">
+    <div class="save-form-card">
+      <div class="save-form-info" id="saveFormInfo">—</div>
+      <input class="save-name-input" id="saveNameInput" type="text" placeholder="Δώσε όνομα στο σύστημα..." maxlength="40">
+      <button class="save-confirm-btn" onclick="confirmSave()"><span id="t-saveconfirm">✓ ΑΠΟΘΗΚΕΥΣΗ</span></button>
+    </div>
+  </div>
+</div>
 
+<div class="sys-modal" id="savedListModal">
+  <div class="sys-modal-header">
+    <div class="sys-modal-title">📂 <span id="t-savedlist-title2">ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span></div>
+    <button class="qr-close" onclick="closeSavedModal()">✕</button>
+  </div>
+  <div class="sys-modal-body" id="savedListBody"></div>
+</div>
+
+<div class="sys-modal" id="sysViewModal">
+  <div class="sys-modal-header">
+    <div class="sys-modal-title" id="sysViewTitle">—</div>
+    <button class="qr-close" onclick="closeSysView()">✕</button>
+  </div>
+  <div class="sys-modal-body" id="sysViewBody"></div>
+</div>
 
 <script>
-
 const T = {
   el: {
     subtitle: 'Allwyn · Συστήματα Κάλυψης',
     lastdraw: 'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
     step1: 'Τύπος Παιχνιδιού',
     step2: 'Επιλογή Αριθμών',
-    step3: 'Εγγύηση (Μεταβλητό)',
+    step3: 'Λογική Συστήματος',
     howmany: 'Πόσους;',
     lines: 'στήλες',
     estcost: 'Εκτιμώμενο κόστος',
@@ -779,7 +725,7 @@ const T = {
     genbtn: '⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ',
     savebtn: '💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
     'genbtn-sticky': '⚡ ΔΗΜΙΟΥΡΓΙΑ',
-    empty: 'Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και εγγύηση, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b>',
+    empty: 'Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και λογική, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b>',
     'qr-title': '📱 ΔΕΛΤΙΑ QR — ALLWYN',
     'bonus-sub': 'x2 τιμή στήλης',
     'draws-lbl': 'Κληρώσεις',
@@ -791,19 +737,24 @@ const T = {
     'savedlist-title': 'ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',
     saveplaceholder: 'Δώσε όνομα στο σύστημα...',
     selNums: 'Επίλεξε αριθμούς από τον πίνακα...',
-    condBoxDefault: 'Επίλεξε τύπο παιχνιδιού και αριθμούς για να δεις τις επιλογές εγγύησης.',
+    condBoxDefault: 'Επίλεξε κατηγορία, αριθμούς και λογική συστήματος.',
     calculating: '⏳ Υπολογισμός...',
     close: 'ΚΛΕΙΣΙΜΟ',
     names: ['','','','Τριάδα','Τετράδα','Πεντάδα','Εξάδα','Επτάδα','Οκτάδα','Εννιάδα','Δεκάδα','Ενδεκάδα','Δωδεκάδα'],
+    modeNames: {
+      absolute: 'Απόλυτο',
+      strong: 'Δυνατό',
+      medium: 'Μεσαίο',
+      relaxed: 'Χαλαρό',
+      budget: 'Οικονομικό'
+    },
     guarantee: 'Εγγύηση',
     saving: 'Εξοικονόμηση',
     columns: 'Στήλες',
     cost: 'Κόστος',
     result: 'ΑΠΟΤΕΛΕΣΜΑ',
     column: 'ΣΤΗΛΗ',
-    bestResult: '✅ Βέλτιστο αποτέλεσμα:',
-    bestJolla: '📊 Βέλτιστο:',
-    system: 'Σύστημα:',
+    system: 'Σύστημα',
     tickets: 'δελτία',
     ticket: 'ΔΕΛΤΙΟ',
     klines: 'στήλες',
@@ -811,16 +762,9 @@ const T = {
     createQR: '📱 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΩΝ QR',
     selectMin: 'Επίλεξε τουλάχιστον',
     numbersFor: 'αριθμούς για',
-    ades: '-άδες.',
     withNums: 'Με',
-    selectedNums: 'επιλεγμένους αριθμούς, το σύστημα παράγει',
-    guarantee2: 'Εγγύηση: αν',
-    drawnNums: 'από τους αριθμούς σου κληρωθούν,',
-    atLeast1: 'τουλάχιστον 1 στήλη',
-    willHave: 'θα έχει',
-    success: 'επιτυχία.',
+    selectedNums: 'επιλεγμένους αριθμούς, ο στόχος είναι:',
     saveOver: 'Έχεις φτάσει το όριο των 30 αποθηκευμένων συστημάτων. Διάγραψε κάποιο για να συνεχίσεις.',
-    deleteConfirm: 'Διαγραφή αυτού του συστήματος;',
     noSaved: 'Δεν υπάρχουν αποθηκευμένα συστήματα ακόμα.<br><br>Δημιούργησε ένα σύστημα και πάτα<br><b style="color:var(--gold)">💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</b>',
     numbers: 'Αριθμοί',
     type: 'Τύπος',
@@ -828,20 +772,36 @@ const T = {
     regen: '⚡ ΕΠΑΝΑΔΗΜΙΟΥΡΓΙΑ',
     qrTickets: '📱 QR ΔΕΛΤΙΑ',
     saved: '✅ ΑΠΟΘΗΚΕΥΤΗΚΕ!',
-    overLimit: 'Ο συνδυασμός παράγει πάνω από',
-    lines2: 'στήλες',
-    reduceNums: 'Μείωσε αριθμούς ή άλλαξε εγγύηση.',
-    varGuarantee: 'Μεταβλητό',
-    vsFullCover: 'vs πλήρης κάλυψη',
-    apo: 'από',
-    fromTable: 'από τον πίνακα...',
+    overLimit: 'Το σύστημα ξεπερνά το όριο των',
+    lines2: 'στηλών',
+    reduceNums: 'Μείωσε αριθμούς ή διάλεξε πιο οικονομική λογική.',
+    mode: 'Λογική',
+    triggerHit: 'αν πιάσουμε',
+    amongSelected: 'στους επιλεγμένους',
+    weGuarantee: 'εγγυάται τουλάχιστον',
+    onALine: 'σε 1 στήλη',
+    exactChance: 'Πιθανότητα με ακριβώς',
+    validated: 'Επαληθευμένο',
+    generated: 'Παραγόμενες',
+    lowerBound: 'Κατώτατο',
+    noValidSystem: 'Δεν βρέθηκε έγκυρο σύστημα μέσα στο όριο των 300 στηλών.',
+    modelInfo: 'Η δημιουργία γίνεται με heuristic covering και μετά αυστηρό validation.',
+    maxReached: 'Έφτασες το μέγιστο επιτρεπόμενο πλήθος επιλεγμένων αριθμών.',
+    selectedTooManyForMode: 'Με αυτή τη λογική δεν βρέθηκε σύστημα έως 300 στήλες για τόσο μεγάλο πλήθος αριθμών.',
+    chooseCheaper: 'Δοκίμασε πιο οικονομική λογική ή λιγότερους αριθμούς.',
+    note: 'Σημείωση',
+    successLine: 'γραμμή επιτυχίας',
+    exactHitInfo: 'Με ακριβώς',
+    exactHitInfo2: 'σωστά στους επιλεγμένους, η πιθανότητα να έχεις τουλάχιστον μία γραμμή με',
+    modeShort: 'Mode',
+    connectionFail: 'Δεν ήταν δυνατή η σύνδεση',
   },
   en: {
     subtitle: 'Allwyn · Covering Systems',
     lastdraw: 'LAST DRAW',
     step1: 'Game Type',
     step2: 'Number Selection',
-    step3: 'Guarantee (Variable)',
+    step3: 'System Logic',
     howmany: 'How many?',
     lines: 'lines',
     estcost: 'Estimated cost',
@@ -849,7 +809,7 @@ const T = {
     genbtn: '⚡ GENERATE SYSTEM',
     savebtn: '💾 SAVE SYSTEM',
     'genbtn-sticky': '⚡ GENERATE',
-    empty: 'Select numbers, game type<br>and guarantee, then press<br><b>GENERATE SYSTEM</b>',
+    empty: 'Select numbers, game type<br>and logic, then press<br><b>GENERATE SYSTEM</b>',
     'qr-title': '📱 QR TICKETS — ALLWYN',
     'bonus-sub': 'x2 ticket price',
     'draws-lbl': 'Draws',
@@ -861,19 +821,24 @@ const T = {
     'savedlist-title': 'SAVED SYSTEMS',
     saveplaceholder: 'Give your system a name...',
     selNums: 'Select numbers from the grid...',
-    condBoxDefault: 'Select game type and numbers to see guarantee options.',
+    condBoxDefault: 'Select category, numbers and system logic.',
     calculating: '⏳ Calculating...',
     close: 'CLOSE',
     names: ['','','','Triple','Quad','Quintuple','Sextuple','Septuple','Octuple','Nonuple','Decuple','Undecuple','Duodecuple'],
+    modeNames: {
+      absolute: 'Absolute',
+      strong: 'Strong',
+      medium: 'Medium',
+      relaxed: 'Relaxed',
+      budget: 'Budget'
+    },
     guarantee: 'Guarantee',
     saving: 'Saving',
     columns: 'Lines',
     cost: 'Cost',
     result: 'RESULT',
     column: 'LINE',
-    bestResult: '✅ Optimal result:',
-    bestJolla: '📊 Optimal:',
-    system: 'System:',
+    system: 'System',
     tickets: 'tickets',
     ticket: 'TICKET',
     klines: 'lines',
@@ -881,16 +846,9 @@ const T = {
     createQR: '📱 CREATE QR TICKETS',
     selectMin: 'Select at least',
     numbersFor: 'numbers for',
-    ades: '-tuples.',
     withNums: 'With',
-    selectedNums: 'selected numbers, the system generates',
-    guarantee2: 'Guarantee: if',
-    drawnNums: 'of your numbers are drawn,',
-    atLeast1: 'at least 1 line',
-    willHave: 'will have',
-    success: 'success.',
+    selectedNums: 'selected numbers, the target is:',
     saveOver: 'You have reached the 30 saved systems limit. Delete one to continue.',
-    deleteConfirm: 'Delete this system?',
     noSaved: 'No saved systems yet.<br><br>Create a system and press<br><b style="color:var(--gold)">💾 SAVE SYSTEM</b>',
     numbers: 'Numbers',
     type: 'Type',
@@ -898,310 +856,262 @@ const T = {
     regen: '⚡ REGENERATE',
     qrTickets: '📱 QR TICKETS',
     saved: '✅ SAVED!',
-    overLimit: 'The combination produces more than',
+    overLimit: 'The system exceeds the limit of',
     lines2: 'lines',
-    reduceNums: 'Reduce numbers or change guarantee.',
-    varGuarantee: 'Variable',
-    vsFullCover: 'vs full coverage',
-    apo: 'from',
-    fromTable: 'from the grid...',
+    reduceNums: 'Reduce numbers or choose a cheaper logic.',
+    mode: 'Mode',
+    triggerHit: 'if we hit',
+    amongSelected: 'among selected',
+    weGuarantee: 'guarantees at least',
+    onALine: 'on 1 line',
+    exactChance: 'Chance with exactly',
+    validated: 'Validated',
+    generated: 'Generated',
+    lowerBound: 'Lower bound',
+    noValidSystem: 'No valid system was found within the 300-line limit.',
+    modelInfo: 'Generation uses heuristic covering followed by strict validation.',
+    maxReached: 'You reached the maximum allowed selected numbers.',
+    selectedTooManyForMode: 'No system up to 300 lines was found for this many numbers with this mode.',
+    chooseCheaper: 'Try a cheaper mode or fewer numbers.',
+    note: 'Note',
+    successLine: 'successful line',
+    exactHitInfo: 'With exactly',
+    exactHitInfo2: 'hits among selected numbers, the chance to have at least one line with',
+    modeShort: 'Mode',
+    connectionFail: 'Connection failed',
   }
 };
 
-let currentLang = 'el';
-function greekUpper(s) {
-  // Remove Greek accents then uppercase
-  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
-}
-
-// ══════════════════════════════════════════════
-// JOLLA COVERING DATA
-// jollaTable[k][t][n] = number of combinations needed
-// k = ticket size, t = guarantee, n = pool size
-// ══════════════════════════════════════════════
-const jollaTable = {
-  3:{
-    2:{3:1,4:2,5:3,6:4,7:5,8:7,9:9,10:11,11:13,12:16,13:19,14:22,15:25,16:28,17:32,18:36,19:40,20:45},
-    3:{3:1,4:4,5:10,6:20,7:35,8:56,9:84,10:120,11:165,12:220,13:286,14:364,15:455}
-  },
-  4:{
-    2:{4:1,5:2,6:3,7:4,8:5,9:7,10:9,11:11,12:13,13:16,14:19,15:22,16:25,17:28,18:32,19:36,20:40},
-    3:{4:1,5:2,6:3,7:4,8:6,9:8,10:10,11:13,12:16,13:19,14:23,15:27,16:31,17:36,18:41,19:46,20:52},
-    4:{4:1,5:5,6:15,7:35,8:70,9:126,10:210,11:330,12:495}
-  },
-  5:{
-    2:{5:1,6:2,7:3,8:4,9:5,10:6,11:7,12:9,13:11,14:13,15:15,16:17,17:19,18:22,19:25,20:28},
-    3:{5:1,6:2,7:3,8:4,9:6,10:8,11:10,12:13,13:16,14:19,15:23,16:27,17:31,18:36,19:41,20:47},
-    4:{5:1,6:2,7:3,8:4,9:5,10:7,11:9,12:12,13:15,14:18,15:22,16:26,17:30,18:35,19:40,20:46},
-    5:{5:1,6:6,7:21,8:56,9:126,10:252,11:462,12:792}
-  },
-  6:{
-    3:{6:1,7:2,8:3,9:4,10:5,11:7,12:9,13:11,14:14,15:17,16:20,17:23,18:27,19:31,20:35},
-    4:{6:1,7:2,8:3,9:4,10:6,11:8,12:11,13:14,14:17,15:21,16:25,17:30,18:35,19:40,20:46},
-    5:{6:1,7:2,8:3,9:5,10:7,11:10,12:13,13:17,14:22,15:27,16:33,17:39,18:46,19:54,20:63},
-    6:{6:1,7:7,8:28,9:84,10:210,11:462,12:924}
-  },
-  7:{
-    3:{7:1,8:2,9:3,10:4,11:5,12:7,13:9,14:11,15:14,16:17,17:20,18:23,19:27,20:31},
-    4:{7:1,8:2,9:3,10:4,11:6,12:8,13:11,14:14,15:17,16:21,17:25,18:30,19:35,20:40},
-    5:{7:1,8:2,9:3,10:5,11:7,12:10,13:13,14:17,15:22,16:27,17:33,18:39,19:46,20:54},
-    6:{7:1,8:2,9:4,10:6,11:9,12:13,13:18,14:23,15:30,16:37,17:45,18:54,19:64,20:75},
-    7:{7:1,8:8,9:36,10:120,11:330,12:792}
-  },
-  8:{
-    3:{8:1,9:2,10:3,11:4,12:6,13:8,14:10,15:12,16:15,17:18,18:21,19:25,20:29},
-    4:{8:1,9:2,10:3,11:5,12:7,13:10,14:13,15:17,16:21,17:26,18:31,19:37,20:44},
-    5:{8:1,9:2,10:4,11:6,12:9,13:12,14:16,15:21,16:27,17:33,18:40,19:48,20:57},
-    6:{8:1,9:3,10:5,11:8,12:12,13:17,14:23,15:30,16:38,17:47,18:57,19:69,20:82},
-    7:{8:1,9:2,10:5,11:9,12:14,13:20,14:28,15:37,16:48,17:60,18:74,19:90,20:108},
-    8:{8:1,9:9,10:45,11:165,12:495}
-  },
-  9:{
-    3:{9:1,10:2,11:3,12:5,13:7,14:9,15:11,16:14,17:17,18:20,19:24,20:28},
-    4:{9:1,10:2,11:4,12:6,13:9,14:12,15:16,16:20,17:25,18:30,19:36,20:43},
-    5:{9:1,10:3,11:5,12:8,13:12,14:16,15:21,16:27,17:34,18:42,19:51,20:61},
-    6:{9:1,10:3,11:6,12:10,13:15,14:21,15:28,16:37,17:47,18:59,19:72,20:87},
-    7:{9:1,10:4,11:8,12:13,13:20,14:28,15:38,16:50,17:64,18:80,19:98,20:119},
-    8:{9:1,10:2,11:6,12:12,13:20,14:30,15:42,16:57,17:74,18:94,19:116,20:142},
-    9:{9:1,10:10,11:55,12:220}
-  },
-  10:{
-    3:{10:1,11:2,12:4,13:6,14:8,15:10,16:13,17:16,18:19,19:23,20:27},
-    4:{10:1,11:3,12:5,13:8,14:11,15:15,16:19,17:24,18:30,19:36,20:43},
-    5:{10:1,11:4,12:7,13:11,14:15,15:20,16:26,17:33,18:41,19:50,20:61},
-    6:{10:1,11:4,12:8,13:13,14:19,15:26,16:35,17:45,18:57,19:70,20:86},
-    7:{10:1,11:5,12:10,13:17,14:25,15:35,16:47,17:61,18:78,19:97,20:119},
-    8:{10:1,11:3,12:8,13:15,14:25,15:38,16:53,17:71,18:93,19:118,20:147},
-    9:{10:1,11:3,12:9,13:18,14:30,15:45,16:64,17:86,18:113,19:143,20:179},
-    10:{10:1,11:11,12:66,13:286}
-  },
-  11:{
-    4:{11:1,12:3,13:6,14:9,15:13,16:17,17:22,18:28,19:35,20:43},
-    5:{11:1,12:4,13:7,14:11,15:16,16:22,17:29,18:38,19:48,20:59},
-    6:{11:1,12:4,13:8,14:13,15:19,16:27,17:36,18:47,19:60,20:74},
-    7:{11:1,12:5,13:11,14:19,15:29,16:41,17:56,18:73,19:94,20:118},
-    8:{11:1,12:4,13:10,14:19,15:31,16:47,17:66,18:89,19:116,20:148},
-    9:{11:1,12:5,13:13,14:25,15:41,16:62,17:88,18:120,19:158,20:204},
-    10:{11:1,12:4,13:13,14:26,15:45,16:70,17:102,18:143,19:193,20:254},
-    11:{11:1,12:12,13:78}
-  },
-  12:{
-    4:{12:1,13:3,14:5,15:8,16:12,17:16,18:21,19:27,20:34},
-    5:{12:1,13:4,14:7,15:11,16:16,17:22,18:29,19:38,20:48},
-    6:{12:1,13:4,14:8,15:13,16:19,17:27,18:36,19:48,20:62},
-    7:{12:1,13:5,14:10,15:17,16:26,17:38,18:53,19:71,20:93},
-    8:{12:1,13:4,14:10,15:19,16:32,17:49,18:70,19:97,20:130},
-    9:{12:1,13:5,14:13,15:25,16:42,17:66,18:97,19:137,20:187},
-    10:{12:1,13:6,14:16,15:33,16:59,17:96,18:149,19:221,20:300},
-    11:{12:1,13:5,14:17,15:38,16:72,17:124,18:205,19:322,20:492},
-    12:{12:1,13:13,14:91}
-  }
+const MODES_BY_K = {
+  3: [
+    { key: 'absolute', trigger: 4, hit: 3 },
+    { key: 'strong',   trigger: 4, hit: 2 }
+  ],
+  4: [
+    { key: 'absolute', trigger: 5, hit: 4 },
+    { key: 'strong',   trigger: 5, hit: 3 },
+    { key: 'budget',   trigger: 5, hit: 2 }
+  ],
+  5: [
+    { key: 'absolute', trigger: 6, hit: 5 },
+    { key: 'strong',   trigger: 6, hit: 4 },
+    { key: 'budget',   trigger: 6, hit: 3 }
+  ],
+  6: [
+    { key: 'absolute', trigger: 7, hit: 6 },
+    { key: 'strong',   trigger: 7, hit: 5 },
+    { key: 'medium',   trigger: 7, hit: 4 },
+    { key: 'budget',   trigger: 7, hit: 3 }
+  ],
+  7: [
+    { key: 'absolute', trigger: 8, hit: 7 },
+    { key: 'strong',   trigger: 8, hit: 6 },
+    { key: 'medium',   trigger: 8, hit: 5 },
+    { key: 'budget',   trigger: 8, hit: 4 }
+  ],
+  8: [
+    { key: 'absolute', trigger: 9, hit: 8 },
+    { key: 'strong',   trigger: 9, hit: 7 },
+    { key: 'medium',   trigger: 9, hit: 6 },
+    { key: 'relaxed',  trigger: 9, hit: 5 },
+    { key: 'budget',   trigger: 9, hit: 4 }
+  ],
+  9: [
+    { key: 'strong',   trigger: 10, hit: 8 },
+    { key: 'medium',   trigger: 10, hit: 7 },
+    { key: 'relaxed',  trigger: 10, hit: 6 },
+    { key: 'budget',   trigger: 10, hit: 5 }
+  ],
+  10: [
+    { key: 'strong',   trigger: 11, hit: 8 },
+    { key: 'medium',   trigger: 11, hit: 7 },
+    { key: 'relaxed',  trigger: 11, hit: 6 },
+    { key: 'budget',   trigger: 11, hit: 5 }
+  ],
+  11: [
+    { key: 'strong',   trigger: 12, hit: 8 },
+    { key: 'medium',   trigger: 12, hit: 7 },
+    { key: 'relaxed',  trigger: 12, hit: 6 },
+    { key: 'budget',   trigger: 12, hit: 5 }
+  ],
+  12: [
+    { key: 'strong',   trigger: 13, hit: 8 },
+    { key: 'medium',   trigger: 13, hit: 7 },
+    { key: 'relaxed',  trigger: 13, hit: 6 },
+    { key: 'budget',   trigger: 13, hit: 5 }
+  ]
 };
 
 const MAX_COMBOS = 300;
 const TICKET_PRICE = 0.50;
+const MAX_SAVED = 30;
 
-// ══════════════════════════════════════════════
-// COMBINATORICS
-// ══════════════════════════════════════════════
-function comb(n, r) {
-  if (r > n || r < 0) return 0;
-  if (r === 0 || r === n) return 1;
-  let res = 1;
-  for (let i = 0; i < Math.min(r, n - r); i++) {
-    res = res * (n - i) / (i + 1);
-  }
-  return Math.round(res);
-}
-
-function combinations(arr, r) {
-  const result = [];
-  function bt(start, combo) {
-    if (combo.length === r) { result.push([...combo]); return; }
-    for (let i = start; i < arr.length; i++) {
-      combo.push(arr[i]);
-      bt(i + 1, combo);
-      combo.pop();
-    }
-  }
-  bt(0, []);
-  return result;
-}
-
-function covers(combo, subset) {
-  return subset.every(x => combo.includes(x));
-}
-
-
-// ══ EXACT JOLLA DESIGNS (La Jolla Covering Repository) ══
-// Index-based: indices refer to positions 0..n-1 in sorted pool
-// C(n, k, t) = minimum combos of size k to cover all t-subsets
-
-const exactDesigns = {
-  // C(n,4,3): 4-tickets covering all 3-subsets
-  '4,3': {
-    4:  [[0,1,2,3]],
-    5:  [[0,1,2,3],[0,1,2,4]],
-    6:  [[0,1,2,3],[0,1,4,5],[2,3,4,5]],
-    7:  [[0,1,2,3],[0,1,4,5],[0,2,4,6],[1,3,5,6]],
-    8:  [[0,1,2,3],[0,1,4,5],[2,3,4,5],[0,2,6,7],[1,3,6,7]],
-    9:  [[0,1,2,3],[0,1,4,5],[0,2,6,7],[1,3,6,8],[2,4,5,8],[3,5,7,8],[0,4,6,8],[2,3,4,7]],
-    10: [[0,1,2,3],[0,1,4,5],[0,2,6,7],[1,3,6,8],[2,4,7,9],[3,5,6,9],[0,5,8,9],[1,4,7,9],[2,5,7,8],[4,6,8,9]],
-    11: [[0,1,2,3],[0,1,4,5],[0,2,6,7],[0,3,8,9],[1,4,8,10],[2,5,8,10],[3,6,8,10],[0,5,9,10],[1,6,7,10],[2,4,9,10],[3,5,7,9],[1,3,5,6],[2,4,6,7]],
-    12: [  // C(12,4,3) = 16 exact
-      [0,1,2,3],[0,1,4,5],[0,1,6,7],[0,1,8,9],
-      [0,2,4,6],[0,3,5,7],[2,3,4,7],[1,3,4,6],
-      [1,2,5,7],[2,3,6,8],[0,5,6,10],[0,4,9,10],
-      [1,7,9,10],[2,8,9,10],[3,7,8,10],[4,5,8,11]
-    ],
-  },
-  // C(n,4,4): trivial — all C(n,4) combos (only n=4: 1 combo)
-  '4,4': { 4: [[0,1,2,3]] },
-
-  // C(n,5,3): 5-tickets covering all 3-subsets
-  '5,3': {
-    5:  [[0,1,2,3,4]],
-    6:  [[0,1,2,3,4],[0,1,2,3,5]],
-    7:  [[0,1,2,3,4],[0,1,2,5,6],[0,3,4,5,6]],
-    8:  [[0,1,2,3,4],[0,1,5,6,7],[2,3,4,5,6],[1,2,4,6,7]],
-    9:  [[0,1,2,3,4],[0,1,5,6,7],[2,3,4,7,8],[0,4,5,7,8],[1,2,4,6,8],[3,5,6,8,0]],
-    10: [[0,1,2,3,4],[0,1,5,6,7],[0,2,5,8,9],[1,3,6,8,9],[2,4,6,7,9],[3,4,5,7,8]],
-  },
-  // C(n,5,4): 5-tickets covering all 4-subsets
-  '5,4': {
-    5:  [[0,1,2,3,4]],
-    6:  [[0,1,2,3,4],[0,1,2,3,5],[0,1,2,4,5]],
-    7:  [[0,1,2,3,4],[0,1,2,3,5],[0,1,2,4,6],[0,3,4,5,6],[1,3,5,6,2]],
-    8:  [[0,1,2,3,4],[0,1,2,5,6],[0,1,3,6,7],[0,2,4,6,7],[1,3,4,5,7],[2,3,5,6,7],[1,2,4,5,7]],
-  },
-
-  // C(n,6,3): 6-tickets covering all 3-subsets
-  '6,3': {
-    6:  [[0,1,2,3,4,5]],
-    7:  [[0,1,2,3,4,5],[0,1,2,3,4,6]],
-    8:  [[0,1,2,3,4,5],[0,1,2,6,7,3],[4,5,6,7,2,3]],
-    9:  [[0,1,2,3,4,5],[0,1,2,6,7,8],[3,4,5,6,7,8]],
-    10: [[0,1,2,3,4,5],[0,1,2,6,7,8],[0,3,4,6,7,9],[1,4,5,8,9,2],[2,3,5,6,8,9]],
-  },
-  // C(n,6,4): 6-tickets covering all 4-subsets
-  '6,4': {
-    6:  [[0,1,2,3,4,5]],
-    7:  [[0,1,2,3,4,5],[0,1,2,3,4,6]],
-    8:  [[0,1,2,3,4,5],[0,1,2,3,6,7],[0,1,4,5,6,7]],
-    9:  [[0,1,2,3,4,5],[0,1,2,3,6,7],[0,2,4,6,7,8],[1,3,5,6,7,8]],
-    10: [[0,1,2,3,4,5],[0,1,2,3,6,7],[0,2,4,6,8,9],[1,3,5,7,8,9],[2,4,5,6,7,9],[0,1,5,8,9,4]],
-    11: [[0,1,2,3,4,5],[0,1,2,6,7,8],[0,3,4,6,9,7],[1,2,5,6,8,10],[0,4,5,7,9,10],[1,3,4,8,9,10],[2,3,5,7,8,10]],
-    12: [[0,1,2,3,4,5],[0,1,6,7,8,9],[2,3,6,7,10,11],[0,4,5,8,10,11],[1,4,5,9,10,11],[2,4,6,8,9,11],[3,5,7,8,9,10],[1,3,4,7,8,11]],
-  },
-  // C(n,6,5): 6-tickets covering all 5-subsets
-  '6,5': {
-    6:  [[0,1,2,3,4,5]],
-    7:  [[0,1,2,3,4,5],[0,1,2,3,4,6],[0,1,2,3,5,6]],
-    8:  [[0,1,2,3,4,5],[0,1,2,3,6,7],[0,1,2,4,6,7],[0,3,4,5,6,7]],
-    9:  [[0,1,2,3,4,5],[0,1,2,3,6,7],[0,1,4,5,6,8],[0,2,4,7,8,3],[1,3,5,6,7,8],[2,4,5,7,8,6],[1,2,3,5,6,8]],
-  },
-  // C(n,7,4): 7-tickets covering all 4-subsets  
-  '7,4': {
-    7:  [[0,1,2,3,4,5,6]],
-    8:  [[0,1,2,3,4,5,6],[0,1,2,3,4,5,7]],
-    9:  [[0,1,2,3,4,5,6],[0,1,2,3,4,5,8],[0,1,2,6,7,8,3]],
-    10: [[0,1,2,3,4,5,6],[0,1,2,3,7,8,9],[0,4,5,6,7,8,9],[1,2,4,6,7,8,3]],
-  },
-  '8,4': {
-    8:  [[0,1,2,3,4,5,6,7]],
-    9:  [[0,1,2,3,4,5,6,7],[0,1,2,3,4,5,6,8]],
-    10: [[0,1,2,3,4,5,6,7],[0,1,2,3,4,5,8,9],[0,1,2,6,7,8,9,3]],
-  },
-};
-
-function getExactDesign(k, t, n) {
-  return exactDesigns[`${k},${t}`]?.[n] || null;
-}
-
-function smartCover(pool, k, t) {
-  const n = pool.length;
-  // 1. Try exact design
-  const design = getExactDesign(k, t, n);
-  if (design) return design.map(row => row.map(i => pool[i]));
-  // 2. Greedy — cap at jollaTarget if available
-  const jollaTarget = getExpectedCombos(k, t, n);
-  const cap = jollaTarget || MAX_COMBOS;
-  let best = null, bestLen = Infinity;
-  const attempts = n <= 18 ? 8 : 3;
-  for (let a = 0; a < attempts; a++) {
-    const res = greedyOnce(pool, k, t, a > 0, cap);
-    if (res.length < bestLen) { bestLen = res.length; best = res; }
-    if (jollaTarget && bestLen <= jollaTarget) break;
-  }
-  return best;
-}
-
-function greedyOnce(pool, k, t, randomize = false, maxCombos = MAX_COMBOS) {
-  const n = pool.length;
-  const idxArr = Array.from({length: n}, (_, i) => i);
-  const allK = combinations(idxArr, k);
-  const allT = combinations(idxArr, t);
-  const coverMap = allK.map(kc => allT.reduce((a, ts, ti) => { if (covers(kc, ts)) a.push(ti); return a; }, []));
-  const uncoveredSet = new Array(allT.length).fill(true);
-  let uncoveredCount = allT.length;
-  const selected = [];
-  let scores = coverMap.map(cm => cm.length);
-  const used = new Array(allK.length).fill(false);
-  while (uncoveredCount > 0 && selected.length < maxCombos) {
-    let bestScore = -1, bestIdx = -1;
-    for (let i = 0; i < allK.length; i++) {
-      if (used[i]) continue;
-      if (scores[i] > bestScore || (randomize && scores[i] === bestScore && Math.random() < 0.25)) {
-        bestScore = scores[i]; bestIdx = i;
-      }
-    }
-    if (bestIdx === -1 || bestScore === 0) break;
-    used[bestIdx] = true;
-    selected.push(allK[bestIdx]);
-    for (const ti of coverMap[bestIdx]) {
-      if (uncoveredSet[ti]) {
-        uncoveredSet[ti] = false;
-        uncoveredCount--;
-        for (let i = 0; i < allK.length; i++) {
-          if (!used[i] && coverMap[i].includes(ti)) scores[i]--;
-        }
-      }
-    }
-  }
-  return selected.map(row => row.map(i => pool[i]));
-}
-
-function greedyCover(pool, k, t) {
-  return smartCover(pool, k, t);
-}
-
-function getExpectedCombos(k, t, n) {
-  try { return jollaTable[k]?.[t]?.[n] ?? null; } catch { return null; }
-}
-
-// Estimate combos without running algorithm
-function estimateCombos(k, t, n) {
-  const jolla = getExpectedCombos(k, t, n);
-  if (jolla !== null) return jolla;
-  // rough upper bound estimate
-  const totalT = comb(n, t);
-  const covPerK = comb(k, t);
-  return Math.ceil(totalT / covPerK);
-}
-
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
+let currentLang = 'el';
 let gameK = 6;
-let guarantee = 4;
+let selectedModeKey = MODES_BY_K[6][0].key;
 let selected = new Set();
 let liveVisible = false;
 let liveNumbers = [];
 let currentResults = null;
+let selectedDraws = new Set([1]);
+let selectedMult = new Set([1]);
 
-// ══════════════════════════════════════════════
-// BUILD NUM GRID
-// ══════════════════════════════════════════════
+function greekUpper(s) {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+}
+function getLang() { return currentLang; }
+function tt(key) { return T[currentLang][key] || T.el[key] || key; }
+function namesList() { return T[currentLang].names; }
+function modeLabel(mode) { return T[currentLang].modeNames[mode.key] || mode.key; }
+function getModes(k) { return MODES_BY_K[k] || []; }
+function getCurrentMode() {
+  const modes = getModes(gameK);
+  return modes.find(m => m.key === selectedModeKey) || modes[0];
+}
+
+function comb(n, r) {
+  if (r > n || r < 0) return 0;
+  if (r === 0 || r === n) return 1;
+  r = Math.min(r, n - r);
+  let res = 1;
+  for (let i = 1; i <= r; i++) res = (res * (n - r + i)) / i;
+  return Math.round(res);
+}
+function combinations(arr, r) {
+  const result = [];
+  const combo = [];
+  function bt(start) {
+    if (combo.length === r) {
+      result.push([...combo]);
+      return;
+    }
+    for (let i = start; i <= arr.length - (r - combo.length); i++) {
+      combo.push(arr[i]);
+      bt(i + 1);
+      combo.pop();
+    }
+  }
+  bt(0);
+  return result;
+}
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function countIntersectionSorted(a, b) {
+  let i = 0, j = 0, count = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { count++; i++; j++; }
+    else if (a[i] < b[j]) i++;
+    else j++;
+  }
+  return count;
+}
+function validateSystem(lines, pool, k, trigger, hit) {
+  const triggerSets = combinations(pool, trigger);
+  return triggerSets.every(set => lines.some(line => countIntersectionSorted(line, set) >= hit));
+}
+function lineSuccessOnSet(line, set, hit) {
+  return countIntersectionSorted(line, set) >= hit;
+}
+function estimateLowerBound(v, k, trigger, hit) {
+  const total = comb(v, trigger);
+  let coverPerLine = 0;
+  for (let i = hit; i <= k; i++) {
+    coverPerLine += comb(k, i) * comb(Math.max(0, v - k), trigger - i);
+  }
+  if (!coverPerLine) return total;
+  return Math.ceil(total / coverPerLine);
+}
+function estimateExactHitChance(v, k, linesCount) {
+  const total = comb(v, k);
+  if (!total) return 0;
+  return Math.round((linesCount / total) * 100);
+}
+function uniqueLines(lines) {
+  const seen = new Set();
+  const out = [];
+  for (const line of lines) {
+    const key = line.join(',');
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(line);
+    }
+  }
+  return out;
+}
+function buildCandidateFromTrigger(triggerSet, pool, k, hit) {
+  const picked = shuffle(triggerSet).slice(0, hit);
+  const available = shuffle(pool.filter(x => !picked.includes(x)));
+  const line = [...picked, ...available.slice(0, k - hit)].sort((a,b)=>a-b);
+  return line;
+}
+function scoreCandidate(line, uncoveredSets, hit) {
+  let score = 0;
+  for (const s of uncoveredSets) if (lineSuccessOnSet(line, s, hit)) score++;
+  return score;
+}
+function removeCoveredByLine(uncoveredSets, line, hit) {
+  return uncoveredSets.filter(s => !lineSuccessOnSet(line, s, hit));
+}
+function pruneLines(lines, pool, k, trigger, hit) {
+  let current = [...lines];
+  for (let i = current.length - 1; i >= 0; i--) {
+    const test = current.slice(0, i).concat(current.slice(i + 1));
+    if (validateSystem(test, pool, k, trigger, hit)) current = test;
+  }
+  return current;
+}
+function generateSystem(pool, k, trigger, hit, maxLines = MAX_COMBOS) {
+  let uncovered = combinations(pool, trigger);
+  let lines = [];
+  let guard = 0;
+
+  while (uncovered.length && lines.length < maxLines && guard < 5000) {
+    guard++;
+    const seed = uncovered[0];
+    let best = null;
+    let bestScore = -1;
+    const tries = uncovered.length > 12000 ? 10 : uncovered.length > 4000 ? 14 : 20;
+
+    for (let i = 0; i < tries; i++) {
+      const candidate = buildCandidateFromTrigger(seed, pool, k, hit);
+      const score = scoreCandidate(candidate, uncovered, hit);
+      if (score > bestScore) {
+        bestScore = score;
+        best = candidate;
+      }
+    }
+    if (!best) break;
+    lines.push(best);
+    uncovered = removeCoveredByLine(uncovered, best, hit);
+  }
+
+  lines = uniqueLines(lines);
+
+  if (!validateSystem(lines, pool, k, trigger, hit)) {
+    let missing = combinations(pool, trigger).filter(s => !lines.some(line => lineSuccessOnSet(line, s, hit)));
+    let fixGuard = 0;
+    while (missing.length && lines.length < maxLines && fixGuard < 3000) {
+      fixGuard++;
+      const seed = missing[0];
+      const line = buildCandidateFromTrigger(seed, pool, k, hit);
+      lines.push(line);
+      lines = uniqueLines(lines);
+      missing = missing.filter(s => !lineSuccessOnSet(line, s, hit));
+    }
+  }
+
+  if (!validateSystem(lines, pool, k, trigger, hit)) return null;
+  lines = pruneLines(uniqueLines(lines), pool, k, trigger, hit);
+  if (lines.length > maxLines) return null;
+  return lines;
+}
+
 function buildNumGrid() {
   const g = document.getElementById('numGrid');
   g.innerHTML = '';
@@ -1214,267 +1124,251 @@ function buildNumGrid() {
     g.appendChild(d);
   }
 }
-
-function toggleNum(n) {
-  if (selected.has(n)) {
-    selected.delete(n);
-    document.getElementById('nc' + n).classList.remove('sel');
-  } else {
-    selected.add(n);
-    document.getElementById('nc' + n).classList.add('sel');
+function syncSelectedVisuals() {
+  for (let i = 1; i <= 80; i++) {
+    document.getElementById('nc' + i)?.classList.toggle('sel', selected.has(i));
   }
-  updateSelBar();
-  buildGuarGrid();
-  updateCond();
 }
-
-function clearNums() {
-  selected.forEach(n => document.getElementById('nc' + n)?.classList.remove('sel','live-hit'));
-  selected.clear();
-  updateSelBar();
-  buildGuarGrid();
-  updateCond();
-}
-
 function updateSelBar() {
   const sorted = [...selected].sort((a,b) => a-b);
   document.getElementById('selCount').textContent = sorted.length;
-  document.getElementById('selNums').textContent =
-    sorted.length ? sorted.join(' · ') : T[currentLang].selNums;
+  document.getElementById('selNums').textContent = sorted.length ? sorted.join(' · ') : T[currentLang].selNums;
 }
-
-// Quick pick
+function toggleNum(n) {
+  if (selected.has(n)) selected.delete(n);
+  else selected.add(n);
+  syncSelectedVisuals();
+  updateSelBar();
+  buildModeGrid();
+  updateCond();
+  document.getElementById('costBar').style.display = 'none';
+}
+function clearNums() {
+  selected.clear();
+  currentResults = null;
+  document.querySelectorAll('.nc').forEach(el => el.classList.remove('sel','live-hit'));
+  updateSelBar();
+  buildModeGrid();
+  updateCond();
+  document.getElementById('costBar').style.display = 'none';
+  document.getElementById('resultsWrap').innerHTML = `
+    <div class="empty">
+      <span class="empty-icon">🎰</span>
+      <p><span id="t-empty">${T[currentLang].empty}</span></p>
+    </div>
+  `;
+}
 function showQPick() {
   const r = document.getElementById('qpickRow');
   r.style.display = r.style.display === 'none' ? 'flex' : 'none';
 }
 function quickPick(n) {
   clearNums();
-  const pool = Array.from({length:80},(_,i)=>i+1);
-  for (let i = pool.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [pool[i],pool[j]] = [pool[j],pool[i]];
-  }
-  pool.slice(0, n).forEach(num => {
-    selected.add(num);
-    document.getElementById('nc'+num)?.classList.add('sel');
-  });
+  const pool = shuffle(Array.from({length:80},(_,i)=>i+1));
+  pool.slice(0, n).forEach(num => selected.add(num));
+  syncSelectedVisuals();
   updateSelBar();
-  buildGuarGrid();
+  buildModeGrid();
   updateCond();
   document.getElementById('qpickRow').style.display = 'none';
 }
 
-// ══════════════════════════════════════════════
-// GAME TYPE CARDS
-// ══════════════════════════════════════════════
 function buildTypeCards() {
   const sc = document.getElementById('typeScroll');
   sc.innerHTML = '';
-  const names = T[currentLang].names.reduce((o,n,i)=>{if(i>=3)o[i]=n;return o},{});
+  const names = namesList();
   for (let k = 3; k <= 12; k++) {
-    const n = selected.size;
-    const minT = Math.max(2, Math.floor(k/2));
-    // check if any guarantee is under 300
-    let feasible = n >= k;
-    if (feasible && n > 0) {
-      const minEst = estimateCombos(k, minT, n);
-      feasible = minEst <= MAX_COMBOS;
-    }
     const d = document.createElement('div');
-    d.className = 'type-card' + (k === gameK ? ' active' : '') + (!feasible && n >= k ? ' disabled-card' : '');
+    d.className = 'type-card' + (k === gameK ? ' active' : '');
     d.dataset.k = k;
     d.onclick = () => setGameType(k);
-    // Show min combos hint
-    let badge = '';
-    if (n >= k) {
-      const minT2 = Math.max(2, Math.floor(k/2));
-      const est = estimateCombos(k, minT2, n);
-      if (est <= MAX_COMBOS) badge = `<div class="tc-badge">${T[currentLang].apo} ${est}</div>`;
-    }
-    d.innerHTML = `<span class="tc-k">${k}</span><div class="tc-label">${names[k]||k+'άδα'}</div>${badge}`;
+    d.innerHTML = `<span class="tc-k">${k}</span><div class="tc-label">${names[k] || k}</div>`;
     sc.appendChild(d);
   }
 }
-
 function setGameType(k) {
   gameK = k;
-  document.querySelectorAll('.type-card').forEach(c => c.classList.toggle('active', parseInt(c.dataset.k) === k));
-  // reset guarantee to sensible default
-  const minT = Math.max(2, Math.floor(k/2));
-  guarantee = minT + 1 <= k ? minT + 1 : minT;
-  buildGuarGrid();
+  selectedModeKey = getModes(k)[0].key;
+  buildTypeCards();
+  buildModeGrid();
   updateCond();
+  document.getElementById('costBar').style.display = 'none';
 }
 
-// ══════════════════════════════════════════════
-// GUARANTEE GRID
-// ══════════════════════════════════════════════
-function buildGuarGrid() {
-  const grid = document.getElementById('guarGrid');
+function buildModeGrid() {
+  const grid = document.getElementById('modeGrid');
   grid.innerHTML = '';
-  const n = selected.size;
-  const minT = Math.max(2, Math.floor(gameK/2));
+  const modes = getModes(gameK);
+  const v = selected.size;
 
-  for (let t = minT; t <= gameK; t++) {
-    const est = n >= gameK ? estimateCombos(gameK, t, n) : null;
-    const over = est !== null && est > MAX_COMBOS;
-    const warn = est !== null && est > 100 && !over;
+  modes.forEach(mode => {
+    const lower = v >= gameK ? estimateLowerBound(v, gameK, mode.trigger, mode.hit) : null;
+    const over = lower !== null && lower > MAX_COMBOS;
+    const warn = lower !== null && lower > 120 && !over;
 
     const d = document.createElement('div');
-    d.className = 'guar-card' + (t === guarantee ? ' active' : '') + (over || n < gameK ? ' gc-disabled' : '');
-    d.onclick = () => { if (!over && n >= gameK) { guarantee = t; buildGuarGrid(); updateCond(); updateCostBar(est); } };
+    d.className = 'mode-card' + (mode.key === selectedModeKey ? ' active' : '') + (v < gameK || over ? ' mc-disabled' : '');
+    d.onclick = () => {
+      if (v >= gameK && !over) {
+        selectedModeKey = mode.key;
+        buildModeGrid();
+        updateCond();
+      }
+    };
 
-    let comboText = '';
-    if (est !== null) {
-      const cls = over ? 'over' : (warn ? 'warn' : '');
-      comboText = `<div class="gc-combos ${cls}">${over ? '>' + MAX_COMBOS + ' ✗' : est + ' ' + T[currentLang].lines}</div>`;
-    }
-
-    d.innerHTML = `<span class="gc-frac">${t}/${gameK}</span><div class="gc-label">${T[currentLang].varGuarantee} ${t}</div>${comboText}`;
+    d.innerHTML = `
+      <div class="mc-title">${modeLabel(mode)}</div>
+      <div class="mc-sub">${mode.trigger} → ${mode.hit}/${gameK}</div>
+      <div class="mc-meta ${over ? 'over' : (warn ? 'warn' : '')}">
+        ${lower === null ? '' : `${tt('lowerBound')}: ${lower}`}
+      </div>
+    `;
     grid.appendChild(d);
-  }
-  // update cost bar
-  if (n >= gameK) {
-    const est = estimateCombos(gameK, guarantee, n);
-    updateCostBar(est);
-  } else {
-    document.getElementById('costBar').style.display = 'none';
-  }
+  });
 }
-
-function updateCostBar(combos) {
-  if (!combos || combos > MAX_COMBOS) {
+function updateCostBar(linesCount) {
+  if (!linesCount || linesCount > MAX_COMBOS) {
     document.getElementById('costBar').style.display = 'none';
     return;
   }
   document.getElementById('costBar').style.display = 'flex';
-  document.getElementById('costCombos').textContent = combos;
-  document.getElementById('costTotal').textContent = (combos * TICKET_PRICE).toFixed(2);
+  document.getElementById('costCombos').textContent = linesCount;
+  document.getElementById('costTotal').textContent = (linesCount * TICKET_PRICE).toFixed(2);
 }
-
-// ══════════════════════════════════════════════
-// CONDITION TEXT
-// ══════════════════════════════════════════════
 function updateCond() {
   const box = document.getElementById('condBox');
-  const n = selected.size;
-  if (n < gameK) {
-    box.innerHTML = `${T[currentLang].selectMin} <b>${gameK}</b> ${T[currentLang].numbersFor} ${T[currentLang].names[gameK]||gameK+'άδα'}.`;
+  const v = selected.size;
+  const mode = getCurrentMode();
+
+  if (v < gameK) {
+    box.innerHTML = `${tt('selectMin')} <b>${gameK}</b> ${tt('numbersFor')} <b>${namesList()[gameK] || gameK}</b>.`;
     return;
   }
-  const est = estimateCombos(gameK, guarantee, n);
-  const saving = Math.round((1 - est / comb(n, gameK)) * 100);
-  box.innerHTML =
-    `${T[currentLang].withNums} <b>${n}</b> ${T[currentLang].selectedNums} <span class="hl">${est} ${T[currentLang].lines}</span>.<br>` +
-    `${T[currentLang].guarantee2} <b>${guarantee}+</b> ${T[currentLang].drawnNums} <span class="hl">${T[currentLang].atLeast1}</span> ${T[currentLang].willHave} <b>${guarantee}/${gameK}</b> ${T[currentLang].success}<br>` +
-    `<span style="color:var(--price)">${T[currentLang].saving} ${saving > 0 ? saving : 0}% ${T[currentLang].vsFullCover} (${comb(n,gameK)} ${T[currentLang].lines})</span>`;
-  buildTypeCards();
+
+  const lower = estimateLowerBound(v, gameK, mode.trigger, mode.hit);
+  const full = comb(v, gameK);
+  const exactChance = estimateExactHitChance(v, gameK, Math.min(lower, MAX_COMBOS));
+
+  box.innerHTML = `
+    ${tt('withNums')} <b>${v}</b> ${tt('selectedNums')}<br>
+    <span class="hl">${tt('triggerHit')} <b>${mode.trigger}</b> ${tt('amongSelected')}, ${tt('weGuarantee')} <b>${mode.hit}/${gameK}</b> ${tt('onALine')}</span><br>
+    ${tt('lowerBound')}: <b>${lower}</b> ${tt('lines')} · Full cover: <b>${full}</b><br>
+    ${tt('exactHitInfo')} <b>${gameK}</b> ${currentLang === 'el' ? 'σωστά' : 'hits'}, ${tt('exactHitInfo2')} <b>${mode.hit}/${gameK}</b>: <b>${exactChance}%</b><br>
+    <span style="color:var(--muted2)">${tt('modelInfo')}</span>
+  `;
 }
 
-// ══════════════════════════════════════════════
-// GENERATE
-// ══════════════════════════════════════════════
-function generate() {
-  const pool = [...selected].sort((a,b) => a-b);
-  const n = pool.length;
-
-  if (n < gameK) {
-    showErr(`${T[currentLang].selectMin} ${gameK} ${T[currentLang].lines2}!`);
-    return;
-  }
-  const est = estimateCombos(gameK, guarantee, n);
-  if (est > MAX_COMBOS) {
-    showErr(`${T[currentLang].overLimit} ${MAX_COMBOS} ${T[currentLang].lines2} (${est}). ${T[currentLang].reduceNums}`);
-    return;
-  }
-
+function setBusy(busy) {
   const btn = document.getElementById('genBtn');
   const btnS = document.getElementById('genBtnSticky');
-  btn.disabled = true; btn.querySelector('#t-genbtn') ? btn.querySelector('#t-genbtn').textContent = T[currentLang].calculating : btn.textContent = T[currentLang].calculating;
-  btnS.disabled = true;
+  btn.disabled = busy;
+  btnS.disabled = busy;
+  btn.querySelector('#t-genbtn').textContent = busy ? T[currentLang].calculating : T[currentLang].genbtn;
+  btnS.querySelector('#t-genbtn-sticky').textContent = busy ? T[currentLang].calculating : T[currentLang]['genbtn-sticky'];
+}
+
+function generate() {
+  const pool = [...selected].sort((a,b)=>a-b);
+  const v = pool.length;
+  const mode = getCurrentMode();
+
+  if (v < gameK) {
+    showErr(`⚠️ ${tt('selectMin')} ${gameK} ${tt('numbersFor')} ${namesList()[gameK] || gameK}.`);
+    return;
+  }
+
+  const lower = estimateLowerBound(v, gameK, mode.trigger, mode.hit);
+  if (lower > MAX_COMBOS) {
+    showErr(`⚠️ ${tt('overLimit')} ${MAX_COMBOS} ${tt('lines2')}. ${tt('chooseCheaper')}`);
+    return;
+  }
+
+  setBusy(true);
 
   setTimeout(() => {
     try {
-      const combos = greedyCover(pool, gameK, guarantee);
-      currentResults = combos;
-      renderResults(combos, pool);
-    } catch(e) {
+      const lines = generateSystem(pool, gameK, mode.trigger, mode.hit, MAX_COMBOS);
+      if (!lines) {
+        showErr(`⚠️ ${tt('noValidSystem')}`);
+      } else {
+        currentResults = {
+          lines,
+          k: gameK,
+          modeKey: mode.key,
+          trigger: mode.trigger,
+          hit: mode.hit,
+          pool: [...pool]
+        };
+        updateCostBar(lines.length);
+        renderResults(currentResults);
+      }
+    } catch (e) {
       showErr('Error: ' + e.message);
     }
-    btn.disabled = false; if(btn.querySelector('#t-genbtn')) btn.querySelector('#t-genbtn').textContent = T[currentLang].genbtn; else btn.innerHTML = '<span id="t-genbtn">' + T[currentLang].genbtn + '</span>';
-    btnS.disabled = false; if(btnS.querySelector('#t-genbtn-sticky')) btnS.querySelector('#t-genbtn-sticky').textContent = T[currentLang]['genbtn-sticky']; else btnS.innerHTML = '<span id="t-genbtn-sticky">' + T[currentLang]['genbtn-sticky'] + '</span>';
+    setBusy(false);
   }, 30);
 }
-
 function showErr(msg) {
-  document.getElementById('resultsWrap').innerHTML = `<div class="err-box">⚠️ ${msg}</div>`;
+  document.getElementById('resultsWrap').innerHTML = `<div class="err-box">${msg}</div>`;
 }
 
-// ══════════════════════════════════════════════
-// RENDER RESULTS
-// ══════════════════════════════════════════════
-function renderResults(combos, pool) {
-  const n = pool.length;
-  const total = comb(n, gameK);
-  const saving = Math.round((1 - combos.length / total) * 100);
-  const cost = (combos.length * TICKET_PRICE).toFixed(2);
-  const jolla = getExpectedCombos(gameK, guarantee, n);
-  const names = T[currentLang].names;
-
-  let jollaNote = '';
-  if (jolla !== null && jolla !== combos.length) {
-    jollaNote = `<div class="jolla-note">${T[currentLang].bestJolla} <b style="color:var(--gold)">${jolla} ${T[currentLang].lines}</b> · ${T[currentLang].system} ${combos.length} ${T[currentLang].lines}</div>`;
-  } else if (jolla !== null) {
-    jollaNote = `<div class="jolla-note">${T[currentLang].bestResult} ${jolla} ${T[currentLang].lines}</div>`;
-  }
+function renderResults(resultObj) {
+  const { lines, k, trigger, hit, pool, modeKey } = resultObj;
+  const full = comb(pool.length, k);
+  const cost = (lines.length * TICKET_PRICE).toFixed(2);
+  const chance = estimateExactHitChance(pool.length, k, lines.length);
 
   let cardsHTML = '';
-  combos.forEach((combo, idx) => {
-    const balls = combo.map(num => {
+  lines.forEach((line, idx) => {
+    const balls = line.map(num => {
       const isHit = liveNumbers.includes(num);
-      return `<div class="ball${isHit?' hit':''}">${num < 10 ? '0'+num : num}</div>`;
+      return `<div class="ball${isHit ? ' hit' : ''}">${num < 10 ? '0'+num : num}</div>`;
     }).join('');
-    const hits = liveNumbers.length ? combo.filter(x => liveNumbers.includes(x)).length : '';
-    const hitBadge = hits !== '' ? `<div class="rc-hit">${hits}/${gameK} ✓</div>` : '';
+    const hits = liveNumbers.length ? line.filter(x => liveNumbers.includes(x)).length : '';
+    const hitBadge = hits !== '' ? `<div class="rc-hit">${hits}/${k} ✓</div>` : '';
     cardsHTML += `
-      <div class="res-card" style="animation-delay:${idx*0.03}s">
+      <div class="res-card" style="animation-delay:${idx * 0.03}s">
         <div class="rc-head">
-          <div class="rc-idx">${idx+1}</div>
-          <div class="rc-title">${T[currentLang].column} ${idx+1} · ${greekUpper(names[gameK]||gameK+'άδα')}</div>
+          <div class="rc-idx">${idx + 1}</div>
+          <div class="rc-title">${tt('column')} ${idx + 1} · ${greekUpper(namesList()[k] || String(k))}</div>
           ${hitBadge}
         </div>
         <div class="rc-body">${balls}</div>
-      </div>`;
+      </div>
+    `;
   });
 
   document.getElementById('resultsWrap').innerHTML = `
     <div class="res-header">
-      <div class="res-title">${T[currentLang].result}</div>
-      <div class="res-count">${combos.length} ${greekUpper(T[currentLang].columns)}</div>
+      <div class="res-title">${tt('result')}</div>
+      <div class="res-count">${lines.length} ${greekUpper(tt('columns'))}</div>
     </div>
-    <div class="summary-grid">
-      <div class="sg-item"><div class="sg-val">${combos.length}</div><div class="sg-key">${T[currentLang].columns}</div></div>
-      <div class="sg-item"><div class="sg-val gold">${guarantee}/${gameK}</div><div class="sg-key">${T[currentLang].guarantee}</div></div>
-      <div class="sg-item"><div class="sg-val blue">${saving > 0 ? saving : 0}%</div><div class="sg-key">${T[currentLang].saving}</div></div>
-      <div class="sg-item"><div class="sg-val orange">${cost}€</div><div class="sg-key">${T[currentLang].cost}</div></div>
-    </div>
-    ${jollaNote}
-    ${cardsHTML}
-  `;
 
-  // Add QR button at the end
-  const qrBtnHTML = `<button class="qr-btn" onclick="openQR()">${T[currentLang].createQR} (${Math.ceil(combos.length/6)} ${T[currentLang].tickets})</button>`;
-  document.getElementById('resultsWrap').innerHTML += qrBtnHTML;
+    <div class="summary-grid">
+      <div class="sg-item"><div class="sg-val">${lines.length}</div><div class="sg-key">${tt('columns')}</div></div>
+      <div class="sg-item"><div class="sg-val gold">${trigger}→${hit}/${k}</div><div class="sg-key">${tt('guarantee')}</div></div>
+      <div class="sg-item"><div class="sg-val blue">${chance}%</div><div class="sg-key">${tt('exactChance')} ${k}</div></div>
+      <div class="sg-item"><div class="sg-val orange">${cost}€</div><div class="sg-key">${tt('cost')}</div></div>
+    </div>
+
+    <div class="note-box">
+      ${tt('validated')} ✓<br>
+      ${tt('mode')}: <b style="color:var(--gold)">${modeLabel({key: modeKey})}</b><br>
+      ${tt('triggerHit')} <b>${trigger}</b> ${tt('amongSelected')} → <b>${hit}/${k}</b> ${tt('onALine')}<br>
+      ${tt('generated')}: <b>${lines.length}</b> ${tt('lines')} · Full cover: <b>${full}</b><br>
+      ${tt('exactHitInfo')} <b>${k}</b> ${currentLang === 'el' ? 'σωστά' : 'hits'}, ${tt('exactHitInfo2')} <b>${hit}/${k}</b>: <b>${chance}%</b>
+    </div>
+
+    ${cardsHTML}
+
+    <button class="qr-btn" onclick="openQR()">${tt('createQR')} (${Math.ceil(lines.length/6)} ${tt('tickets')})</button>
+  `;
 
   document.getElementById('genBtnSticky').style.display = 'block';
   document.getElementById('saveBtn').style.display = 'block';
   setTimeout(() => document.getElementById('resultsWrap').scrollIntoView({behavior:'smooth'}), 100);
 }
 
-// ══════════════════════════════════════════════
-// LIVE ALLWYN
-// ══════════════════════════════════════════════
 async function fetchLive() {
   try {
     const res = await fetch('https://api.opap.gr/games/v1.0/1100/last-result-and-active');
@@ -1483,25 +1377,17 @@ async function fetchLive() {
     if (!draw) return;
     const nums = draw.winningNumbers?.list || [];
     liveNumbers = nums;
-    const drawId = draw.drawId || '—';
-    document.getElementById('liveDrawNum').textContent = '#' + drawId;
-    const container = document.getElementById('liveNumbers');
-    container.innerHTML = nums.map(n =>
+    document.getElementById('liveDrawNum').textContent = '#' + (draw.drawId || '—');
+    document.getElementById('liveNumbers').innerHTML = nums.map(n =>
       `<div class="live-num${selected.has(n) ? ' match' : ''}">${n < 10 ? '0'+n : n}</div>`
     ).join('');
-    // highlight on main grid
     document.querySelectorAll('.nc').forEach(el => el.classList.remove('live-hit'));
     nums.forEach(n => document.getElementById('nc'+n)?.classList.add('live-hit'));
-    // re-render results if exist
-    if (currentResults) {
-      const pool = [...selected].sort((a,b)=>a-b);
-      renderResults(currentResults, pool);
-    }
-  } catch(e) {
-    document.getElementById('liveNumbers').innerHTML = '<span style="font-size:11px;color:var(--muted)">Δεν ήταν δυνατή η σύνδεση</span>';
+    if (currentResults) renderResults(currentResults);
+  } catch {
+    document.getElementById('liveNumbers').innerHTML = `<span style="font-size:11px;color:var(--muted)">${tt('connectionFail')}</span>`;
   }
 }
-
 function toggleLive() {
   liveVisible = !liveVisible;
   const strip = document.getElementById('liveStrip');
@@ -1509,21 +1395,8 @@ function toggleLive() {
   document.getElementById('liveBadgeText').textContent = liveVisible ? T[currentLang].close : 'LIVE';
   if (liveVisible) fetchLive();
 }
-
-// Auto-refresh live every 60s
 setInterval(() => { if (liveVisible) fetchLive(); }, 60000);
 
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
-buildNumGrid();
-buildTypeCards();
-buildGuarGrid();
-updateCond();
-
-// ══════════════════════════════════════════════
-// QR CODE GENERATION — ALLWYN FORMAT
-// ══════════════════════════════════════════════
 function buildOPAPString(combos, k, bonus, draws) {
   let s = '@ID,KINO@GM,1100@ORIGIN,0';
   combos.forEach((combo, idx) => {
@@ -1535,133 +1408,125 @@ function buildOPAPString(combos, k, bonus, draws) {
   s += '^CD,' + draws;
   return s;
 }
-
 function openQR() {
   if (!currentResults) return;
   document.getElementById('qrModal').classList.add('open');
   document.body.style.overflow = 'hidden';
   renderQRContent();
 }
-
 function renderQRContent() {
-  const combos = currentResults;
-  const k = gameK;
+  const combos = currentResults.lines;
+  const k = currentResults.k;
   const bonus = document.getElementById('qrBonus')?.checked || false;
-  const draws = parseInt(document.getElementById('qrDraws')?.value || '1');
-  const mult  = parseInt(document.getElementById('qrMult')?.value  || '1');
-  const names = T[currentLang].names;
+  const draws = parseInt(document.getElementById('qrDraws')?.value || '1', 10);
+  const mult = parseInt(document.getElementById('qrMult')?.value || '1', 10);
+
   const ticketSize = 6;
   const tickets = [];
-  for (let i = 0; i < combos.length; i += ticketSize) {
-    tickets.push(combos.slice(i, i + ticketSize));
-  }
-  const bonusCost = bonus ? TICKET_PRICE : 0; // x2 when bonus
+  for (let i = 0; i < combos.length; i += ticketSize) tickets.push(combos.slice(i, i + ticketSize));
+
+  const bonusCost = bonus ? TICKET_PRICE : 0;
   let html = '';
   tickets.forEach((ticket, ti) => {
     const startIdx = ti * ticketSize + 1;
     const endIdx = startIdx + ticket.length - 1;
     const ticketCost = (ticket.length * (TICKET_PRICE + bonusCost) * draws * mult).toFixed(2);
-    const comboRows = ticket.map((combo, ci) =>
-      `<div class="qr-combo-row">
+    const comboRows = ticket.map((combo, ci) => `
+      <div class="qr-combo-row">
         <div class="qr-combo-idx">${startIdx + ci}</div>
         <div class="qr-combo-nums">${combo.map(n => n < 10 ? '0'+n : n).join(' · ')}</div>
-      </div>`
-    ).join('');
+      </div>
+    `).join('');
+
     html += `
       <div class="qr-ticket">
         <div class="qr-ticket-head">
-          <div class="qr-ticket-title">${T[currentLang].ticket} ${ti+1} / ${tickets.length}</div>
-          <div class="qr-ticket-sub">${T[currentLang].columns} ${startIdx}–${endIdx} · ${names[k]||k+'άδα'}</div>
+          <div class="qr-ticket-title">${tt('ticket')} ${ti+1} / ${tickets.length}</div>
+          <div class="qr-ticket-sub">${tt('columns')} ${startIdx}–${endIdx} · ${namesList()[k] || k}</div>
         </div>
-        <div class="qr-box" id="qrBox_${ti}"><canvas id="qrCanvas_${ti}" width="280" height="280" style="width:280px;height:280px;display:block;border-radius:8px;background:#fff"></canvas></div>
+        <div class="qr-box" id="qrBox_${ti}">
+          <canvas id="qrCanvas_${ti}" width="280" height="280" style="width:280px;height:280px;display:block;border-radius:8px;background:#fff"></canvas>
+        </div>
         <div class="qr-combos">${comboRows}</div>
         <div class="qr-cost-row">
-          <span>${ticket.length} ${T[currentLang].klines} × ${draws} ${T[currentLang].kdraws}${bonus?' Bonus':''}${mult>1?' ×'+mult+' x':''}</span>
+          <span>${ticket.length} ${tt('klines')} × ${draws} ${tt('kdraws')}${bonus ? ' Bonus' : ''}${mult > 1 ? ' ×'+mult : ''}</span>
           <span class="qr-cost-amt">${ticketCost}€</span>
         </div>
-      </div>`;
+      </div>
+    `;
   });
   document.getElementById('qrContent').innerHTML = html;
+
   setTimeout(() => {
     tickets.forEach((ticket, ti) => {
       const canvas = document.getElementById('qrCanvas_' + ti);
-      if (canvas && window.qrcode) {
-        try {
-          const text = buildOPAPString(ticket, k, bonus, draws);
-          const qr = qrcode(0, 'M');
-          qr.addData(text);
-          qr.make();
-          const size = 280, cellSize = size / qr.getModuleCount();
-          const ctx = canvas.getContext('2d');
-          canvas.width = size; canvas.height = size;
-          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, size, size);
-          ctx.fillStyle = '#000000';
-          for (let row = 0; row < qr.getModuleCount(); row++)
-            for (let col = 0; col < qr.getModuleCount(); col++)
-              if (qr.isDark(row, col))
-                ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-        } catch(e) {
-          canvas.parentElement.innerHTML = '<div style="color:#ff5a5a;font-size:12px;padding:10px">QR Σφάλμα: ' + e.message + '</div>';
+      if (!canvas || !window.qrcode) return;
+      try {
+        const text = buildOPAPString(ticket, k, bonus, draws);
+        const qr = qrcode(0, 'M');
+        qr.addData(text);
+        qr.make();
+        const size = 280;
+        const cellSize = size / qr.getModuleCount();
+        const ctx = canvas.getContext('2d');
+        canvas.width = size;
+        canvas.height = size;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        ctx.fillStyle = '#000000';
+        for (let row = 0; row < qr.getModuleCount(); row++) {
+          for (let col = 0; col < qr.getModuleCount(); col++) {
+            if (qr.isDark(row, col)) ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+          }
         }
+      } catch (e) {
+        canvas.parentElement.innerHTML = `<div style="color:#ff5a5a;font-size:12px;padding:10px">QR Error: ${e.message}</div>`;
       }
     });
   }, 80);
 }
-
-// Additive sets for draws and multiplier
-let selectedDraws = new Set([1]);
-let selectedMult  = new Set([1]);
-
 function setDraws(n) {
   if (selectedDraws.has(n)) {
     if (selectedDraws.size > 1) selectedDraws.delete(n);
-  } else {
-    selectedDraws.add(n);
-  }
+  } else selectedDraws.add(n);
+
   const total = [...selectedDraws].reduce((a,b)=>a+b,0);
   document.getElementById('qrDraws').value = total;
   document.getElementById('drawsTotal').textContent = total;
   [1,2,5,10,20].forEach(v => {
-    const el = document.getElementById('draws_'+v); if (!el) return;
-    if (selectedDraws.has(v)) { el.style.borderColor='#4a9eff'; el.style.background='rgba(74,158,255,0.15)'; el.style.color='#7bbcff'; }
-    else { el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099'; }
+    const el = document.getElementById('draws_'+v);
+    if (!el) return;
+    if (selectedDraws.has(v)) {
+      el.style.borderColor='#4a9eff'; el.style.background='rgba(74,158,255,0.15)'; el.style.color='#7bbcff';
+    } else {
+      el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099';
+    }
   });
   renderQRContent();
 }
 function setMult(n) {
   if (selectedMult.has(n)) {
     if (selectedMult.size > 1) selectedMult.delete(n);
-  } else {
-    selectedMult.add(n);
-  }
+  } else selectedMult.add(n);
+
   const total = [...selectedMult].reduce((a,b)=>a+b,0);
   document.getElementById('qrMult').value = total;
   document.getElementById('multTotal').textContent = total;
   [1,2,5,10,20,30].forEach(v => {
-    const el = document.getElementById('mult_'+v); if (!el) return;
-    if (selectedMult.has(v)) { el.style.borderColor='#e8b84b'; el.style.background='rgba(232,184,75,0.15)'; el.style.color='#f5d080'; }
-    else { el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099'; }
+    const el = document.getElementById('mult_'+v);
+    if (!el) return;
+    if (selectedMult.has(v)) {
+      el.style.borderColor='#e8b84b'; el.style.background='rgba(232,184,75,0.15)'; el.style.color='#f5d080';
+    } else {
+      el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099';
+    }
   });
   renderQRContent();
 }
-
 function closeQR() {
   document.getElementById('qrModal').classList.remove('open');
   document.body.style.overflow = '';
 }
-
-
-
-
-// ══════════════════════════════════════════════
-// QR CODE GENERATOR — Based on kazuhikoarase/qrcode-generator
-// ══════════════════════════════════════════════
-
-// ══════════════════════════════════════════════
-// ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ
-// ══════════════════════════════════════════════
-const MAX_SAVED = 30;
-const NAMES_LIST = () => T[currentLang].names;
 
 function getSaved() {
   try { return JSON.parse(localStorage.getItem('kinoMasterSystems') || '[]'); }
@@ -1676,16 +1541,14 @@ function refreshSavedBadge() {
   const el = document.getElementById('savedBadge');
   if (el) el.textContent = n + '/30';
 }
-
-// ── MODAL: ΑΠΟΘΗΚΕΥΣΗ ──
 function openSaveModal() {
   if (!currentResults) return;
-  const pool = [...selected].sort((a,b)=>a-b);
+  const pool = currentResults.pool;
   document.getElementById('saveFormInfo').innerHTML =
-    `<b style="color:var(--gold)">${T[currentLang].numbers}:</b> ${pool.join(' · ')}<br>` +
-    `<b style="color:var(--blue2)">${T[currentLang].type}:</b> ${NAMES_LIST()[gameK]||gameK+'άδα'} &nbsp;|&nbsp; ` +
-    `<b style="color:var(--blue2)">${T[currentLang].guarantee}:</b> ${guarantee}/${gameK}<br>` +
-    `<b style="color:var(--green)">${T[currentLang].columns}:</b> ${currentResults.length}`;
+    `<b style="color:var(--gold)">${tt('numbers')}:</b> ${pool.join(' · ')}<br>` +
+    `<b style="color:var(--blue2)">${tt('type')}:</b> ${namesList()[currentResults.k] || currentResults.k} &nbsp;|&nbsp; ` +
+    `<b style="color:var(--blue2)">${tt('mode')}:</b> ${modeLabel({key: currentResults.modeKey})}<br>` +
+    `<b style="color:var(--green)">${tt('columns')}:</b> ${currentResults.lines.length}`;
   document.getElementById('saveNameInput').value = '';
   document.getElementById('saveNameInput').style.borderColor = 'var(--border)';
   document.getElementById('saveModal').classList.add('open');
@@ -1704,28 +1567,22 @@ function confirmSave() {
   }
   const saved = getSaved();
   if (saved.length >= MAX_SAVED) {
-    alert(T[currentLang].saveOver);
+    alert(tt('saveOver'));
     return;
   }
-  const pool = [...selected].sort((a,b)=>a-b);
   saved.push({
     id: Date.now(),
     name,
     date: new Date().toLocaleDateString('el-GR'),
-    pool,
-    gameK,
-    guarantee,
-    combos: currentResults
+    result: currentResults
   });
   setSaved(saved);
   closeSaveModal();
   const btn = document.getElementById('saveBtn');
   const orig = btn.textContent;
-  btn.textContent = T[currentLang].saved;
+  btn.textContent = tt('saved');
   setTimeout(() => { btn.textContent = orig; }, 2000);
 }
-
-// ── MODAL: ΛΙΣΤΑ ──
 function openSavedModal() {
   renderSavedList();
   document.getElementById('savedListModal').classList.add('open');
@@ -1739,57 +1596,59 @@ function renderSavedList() {
   const saved = getSaved();
   const body = document.getElementById('savedListBody');
   if (!saved.length) {
-    body.innerHTML = `<div class="empty-saved">${{el:T.el.noSaved,en:T.en.noSaved}[currentLang]}</div>`;
+    body.innerHTML = `<div class="empty-saved">${tt('noSaved')}</div>`;
     return;
   }
-  // Αλφαβητικά πρώτα, μετά ημερομηνία
   const sorted = [...saved].sort((a,b) => a.name.localeCompare(b.name, 'el') || a.id - b.id);
   body.innerHTML = sorted.map(s => `
     <div class="sys-item" onclick="openSysView(${s.id})">
       <div style="flex:1">
         <div class="sys-item-name">${s.name}</div>
         <div class="sys-item-meta">
-          ${NAMES_LIST()[s.gameK]||s.gameK+'άδα'} · ${T[currentLang].guarantee} ${s.guarantee}/${s.gameK} · ${s.combos.length} ${T[currentLang].lines} · 📅 ${s.date}
+          ${namesList()[s.result.k] || s.result.k} · ${tt('mode')} ${modeLabel({key: s.result.modeKey})} · ${s.result.lines.length} ${tt('lines')} · 📅 ${s.date}
         </div>
-        <div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;letter-spacing:.5px;">${s.pool.join(' · ')}</div>
+        <div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;letter-spacing:.5px;">${s.result.pool.join(' · ')}</div>
       </div>
       <button class="sys-del" onclick="event.stopPropagation();deleteSys(${s.id})">✕</button>
-    </div>`).join('');
+    </div>
+  `).join('');
 }
 function deleteSys(id) {
   setSaved(getSaved().filter(s => s.id !== id));
   renderSavedList();
 }
-
-// ── MODAL: ΠΡΟΒΟΛΗ ΣΥΣΤΗΜΑΤΟΣ ──
 function openSysView(id) {
   const sys = getSaved().find(s => s.id === id);
   if (!sys) return;
   closeSavedModal();
+  const r = sys.result;
   document.getElementById('sysViewTitle').textContent = sys.name;
-  const cardsHTML = sys.combos.map((combo, idx) => {
-    const balls = combo.map(n => `<div class="ball">${n<10?'0'+n:n}</div>`).join('');
-    return `<div class="res-card" style="animation-delay:${idx*0.02}s">
-      <div class="rc-head">
-        <div class="rc-idx">${idx+1}</div>
-        <div class="rc-title">${T[currentLang].column} ${idx+1} · ${greekUpper(NAMES_LIST()[sys.gameK]||sys.gameK+'άδα')}</div>
+  const cardsHTML = r.lines.map((line, idx) => {
+    const balls = line.map(n => `<div class="ball">${n<10?'0'+n:n}</div>`).join('');
+    return `
+      <div class="res-card" style="animation-delay:${idx*0.02}s">
+        <div class="rc-head">
+          <div class="rc-idx">${idx+1}</div>
+          <div class="rc-title">${tt('column')} ${idx+1} · ${greekUpper(namesList()[r.k] || String(r.k))}</div>
+        </div>
+        <div class="rc-body">${balls}</div>
       </div>
-      <div class="rc-body">${balls}</div>
-    </div>`;
+    `;
   }).join('');
   document.getElementById('sysViewBody').innerHTML = `
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-family:monospace;font-size:11px;color:var(--muted2);line-height:1.8;">
-      <b style="color:var(--gold)">${T[currentLang].numbers}:</b> ${sys.pool.join(' · ')}<br>
-      <b style="color:var(--blue2)">${T[currentLang].type}:</b> ${NAMES_LIST()[sys.gameK]||sys.gameK+'άδα'} &nbsp;|&nbsp;
-      <b style="color:var(--blue2)">${T[currentLang].guarantee}:</b> ${sys.guarantee}/${sys.gameK} &nbsp;|&nbsp;
-      <b style="color:var(--green)">${T[currentLang].columns}:</b> ${sys.combos.length}<br>
-      <b style="color:var(--muted)">${T[currentLang].savedOn}:</b> ${sys.date}
+      <b style="color:var(--gold)">${tt('numbers')}:</b> ${r.pool.join(' · ')}<br>
+      <b style="color:var(--blue2)">${tt('type')}:</b> ${namesList()[r.k] || r.k} &nbsp;|&nbsp;
+      <b style="color:var(--blue2)">${tt('mode')}:</b> ${modeLabel({key:r.modeKey})} &nbsp;|&nbsp;
+      <b style="color:var(--green)">${tt('columns')}:</b> ${r.lines.length}<br>
+      <b style="color:var(--muted)">${tt('savedOn')}:</b> ${sys.date}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-      <button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;letter-spacing:1px;" onclick="regenFromSaved(${sys.id})">${T[currentLang].regen}</button>
-      <button class="qr-btn" style="margin-top:0;font-size:14px;padding:14px;" onclick="qrFromSaved(${sys.id})">${T[currentLang].qrTickets}</button>
+      <button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;letter-spacing:1px;" onclick="regenFromSaved(${sys.id})">${tt('regen')}</button>
+      <button class="qr-btn" style="margin-top:0;font-size:14px;padding:14px;" onclick="qrFromSaved(${sys.id})">${tt('qrTickets')}</button>
     </div>
-    ${cardsHTML}`;
+    ${cardsHTML}
+  `;
   document.getElementById('sysViewModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -1802,137 +1661,71 @@ function regenFromSaved(id) {
   if (!sys) return;
   closeSysView();
   clearNums();
-  sys.pool.forEach(n => { selected.add(n); document.getElementById('nc'+n)?.classList.add('sel'); });
-  gameK = sys.gameK; guarantee = sys.guarantee;
-  updateSelBar(); buildTypeCards(); buildGuarGrid(); updateCond();
-  currentResults = sys.combos;
-  renderResults(sys.combos, sys.pool);
+  currentResults = JSON.parse(JSON.stringify(sys.result));
+  gameK = currentResults.k;
+  selectedModeKey = currentResults.modeKey;
+  selected = new Set(currentResults.pool);
+  syncSelectedVisuals();
+  updateSelBar();
+  buildTypeCards();
+  buildModeGrid();
+  updateCond();
+  renderResults(currentResults);
   document.getElementById('saveBtn').style.display = 'block';
-  setTimeout(() => document.getElementById('resultsWrap').scrollIntoView({behavior:'smooth'}), 150);
 }
 function qrFromSaved(id) {
   const sys = getSaved().find(s => s.id === id);
   if (!sys) return;
   closeSysView();
-  currentResults = sys.combos;
-  gameK = sys.gameK;
+  currentResults = JSON.parse(JSON.stringify(sys.result));
+  gameK = currentResults.k;
+  selectedModeKey = currentResults.modeKey;
   openQR();
 }
 
-// ══════════════════════════════════════════════
-// i18n — LANGUAGE SWITCHER
-// ══════════════════════════════════════════════
 function setLang(lang) {
   currentLang = lang;
-  const t = T[lang];
+  const tr = T[lang];
 
-  // Update lang buttons
   document.getElementById('langEl').classList.toggle('active', lang === 'el');
   document.getElementById('langEn').classList.toggle('active', lang === 'en');
-
-  // Update html lang attribute
   document.documentElement.lang = lang === 'el' ? 'el' : 'en';
 
-  // Update static text nodes
   const ids = ['subtitle','lastdraw','step1','step2','step3','howmany','lines','estcost',
     'saved-btn','genbtn','savebtn','genbtn-sticky','qr-title','bonus-sub','draws-lbl',
     'total-lbl','mult-lbl','mult-total-lbl','savemodal-title','saveconfirm','savedlist-title'];
-  // Also update the static modal titles
-  const el2 = document.getElementById('t-savemodal-title2');
-  if (el2) el2.innerHTML = t['savemodal-title'];
-  const el3 = document.getElementById('t-savedlist-title2');
-  if (el3) el3.innerHTML = t['savedlist-title'];
-  // Update save input placeholder
-  const inp2 = document.getElementById('saveNameInput');
-  if (inp2) inp2.placeholder = t.saveplaceholder;
+
   ids.forEach(id => {
     const el = document.getElementById('t-' + id);
-    if (el) el.innerHTML = t[id];
+    if (el) el.innerHTML = tr[id];
   });
 
-  // Update input placeholder
+  document.getElementById('t-savemodal-title2').innerHTML = tr['savemodal-title'];
+  document.getElementById('t-savedlist-title2').innerHTML = tr['savedlist-title'];
+
   const inp = document.getElementById('saveNameInput');
-  if (inp) inp.placeholder = t.saveplaceholder;
+  if (inp) inp.placeholder = tr.saveplaceholder;
 
-  // Update selNums if showing default text
-  const selEl = document.getElementById('selNums');
-  if (selEl && (selEl.textContent.includes('Επίλεξε') || selEl.textContent.includes('Select'))) {
-    selEl.textContent = t.selNums;
-  }
-
-  // Update condBox if showing default text
-  const condEl = document.getElementById('condBox');
-  if (condEl && (condEl.textContent.includes('Επίλεξε') || condEl.textContent.includes('Select game'))) {
-    condEl.textContent = t.condBoxDefault;
-  }
-
-  // Update empty state
   const emptyEl = document.getElementById('t-empty');
-  if (emptyEl) emptyEl.innerHTML = t.empty;
+  if (emptyEl) emptyEl.innerHTML = tr.empty;
 
-  // Update main generate buttons directly (in case span was replaced)
-  const genBtnEl = document.getElementById('genBtn');
-  if (genBtnEl) genBtnEl.innerHTML = '<span id="t-genbtn">' + t.genbtn + '</span>';
-  const genBtnStickyEl = document.getElementById('genBtnSticky');
-  if (genBtnStickyEl && genBtnStickyEl.style.display !== 'none') genBtnStickyEl.innerHTML = '<span id="t-genbtn-sticky">' + t['genbtn-sticky'] + '</span>';
-
-  // Update live badge text
   const liveTxt = document.getElementById('liveBadgeText');
-  if (liveTxt) {
-    if (liveTxt.textContent === 'LIVE') liveTxt.textContent = 'LIVE';
-    else liveTxt.textContent = liveVisible ? t.close : 'LIVE';
-  }
+  if (liveTxt) liveTxt.textContent = liveVisible ? tr.close : 'LIVE';
 
-  // Rebuild dynamic sections if already generated
   buildTypeCards();
-  buildGuarGrid();
+  buildModeGrid();
+  updateSelBar();
   updateCond();
-  if (currentResults) {
-    const pool = [...selected].sort((a,b) => a-b);
-    renderResults(currentResults, pool);
-  }
+  if (currentResults) renderResults(currentResults);
+  refreshSavedBadge();
 }
 
-function getLang() { return currentLang; }
-function t(key) { return T[currentLang][key] || T['el'][key] || key; }
-
-// Init
+buildNumGrid();
+buildTypeCards();
+buildModeGrid();
+updateSelBar();
+updateCond();
 refreshSavedBadge();
-
 </script>
-
-<!-- ══ MODAL: ΑΠΟΘΗΚΕΥΣΗ ══ -->
-<div class="sys-modal" id="saveModal">
-  <div class="sys-modal-header">
-    <div class="sys-modal-title">💾 <span id="t-savemodal-title2">ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></div>
-    <button class="qr-close" onclick="closeSaveModal()">✕</button>
-  </div>
-  <div class="sys-modal-body">
-    <div class="save-form-card">
-      <div class="save-form-info" id="saveFormInfo">—</div>
-      <input class="save-name-input" id="saveNameInput" type="text" placeholder="Δώσε όνομα στο σύστημα..." maxlength="40">
-      <button class="save-confirm-btn" onclick="confirmSave()"><span id="t-saveconfirm">✓ ΑΠΟΘΗΚΕΥΣΗ</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ MODAL: ΛΙΣΤΑ ΑΠΟΘΗΚΕΥΜΕΝΩΝ ══ -->
-<div class="sys-modal" id="savedListModal">
-  <div class="sys-modal-header">
-    <div class="sys-modal-title">📂 <span id="t-savedlist-title2">ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span></div>
-    <button class="qr-close" onclick="closeSavedModal()">✕</button>
-  </div>
-  <div class="sys-modal-body" id="savedListBody"></div>
-</div>
-
-<!-- ══ MODAL: ΠΡΟΒΟΛΗ ΣΥΣΤΗΜΑΤΟΣ ══ -->
-<div class="sys-modal" id="sysViewModal">
-  <div class="sys-modal-header">
-    <div class="sys-modal-title" id="sysViewTitle">—</div>
-    <button class="qr-close" onclick="closeSysView()">✕</button>
-  </div>
-  <div class="sys-modal-body" id="sysViewBody"></div>
-</div>
-
 </body>
 </html>
