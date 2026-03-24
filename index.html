@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<title>KINO MASTER — Allwyn</title>
+<title>KINO MASTER</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -33,13 +33,33 @@ body {
   padding-bottom:120px;
 }
 body::before {
-  content:'';
+  content: '';
   position:fixed; inset:0;
   background:
     radial-gradient(ellipse 80% 40% at 50% -10%, rgba(74,158,255,0.07) 0%, transparent 60%),
     radial-gradient(ellipse 60% 30% at 80% 110%, rgba(232,184,75,0.05) 0%, transparent 50%);
   pointer-events:none; z-index:0;
 }
+.header {
+  background:linear-gradient(180deg, #10131d 0%, #0d0f14 100%);
+  border-bottom:1px solid var(--border);
+  padding:16px 16px 12px;
+  position:sticky; top:0; z-index:100;
+}
+.header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg, #c49020, var(--gold));
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Oswald',sans-serif; font-size:18px; font-weight:700; color:#000;
+  box-shadow:0 4px 16px rgba(232,184,75,0.3);
+}
+.logo-text { font-family:'Oswald',sans-serif; }
+.logo-text .l1 { font-size:20px; font-weight:700; color:var(--gold); letter-spacing:2px; line-height:1; }
+.logo-text .l2 { font-size:10px; color:var(--muted2); letter-spacing:3px; text-transform:uppercase; }
+
 .lang-switch {
   display:flex; gap:3px; align-items:center;
   background: var(--card);
@@ -66,25 +86,7 @@ body::before {
   opacity:1;
   filter:grayscale(0%);
 }
-.header {
-  background:linear-gradient(180deg, #10131d 0%, #0d0f14 100%);
-  border-bottom:1px solid var(--border);
-  padding:16px 16px 12px;
-  position:sticky; top:0; z-index:100;
-}
-.header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-.logo { display:flex; align-items:center; gap:10px; }
-.logo-icon {
-  width:38px; height:38px;
-  background:linear-gradient(135deg, #c49020, var(--gold));
-  border-radius:10px;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Oswald',sans-serif; font-size:18px; font-weight:700; color:#000;
-  box-shadow:0 4px 16px rgba(232,184,75,0.3);
-}
-.logo-text { font-family:'Oswald',sans-serif; }
-.logo-text .l1 { font-size:20px; font-weight:700; color:var(--gold); letter-spacing:2px; line-height:1; }
-.logo-text .l2 { font-size:10px; color:var(--muted2); letter-spacing:3px; text-transform:uppercase; }
+
 .live-badge {
   display:flex; align-items:center; gap:6px;
   background:rgba(62,207,142,0.1);
@@ -99,6 +101,7 @@ body::before {
   animation:pulse 2s infinite;
 }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+
 .live-strip {
   background:rgba(62,207,142,0.06);
   border:1px solid rgba(62,207,142,0.15);
@@ -120,7 +123,9 @@ body::before {
   border-color:var(--green);
   color:#fff; font-weight:600;
 }
+
 .wrap { padding:16px; position:relative; z-index:1; max-width:480px; margin:0 auto; }
+
 .sec-title {
   font-family:'Oswald',sans-serif;
   font-size:13px; font-weight:500;
@@ -136,6 +141,7 @@ body::before {
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
+
 .type-scroll {
   display:flex; gap:8px;
   overflow-x:auto; padding-bottom:4px;
@@ -165,24 +171,20 @@ body::before {
 }
 .type-card.active .tc-k { color:var(--gold2); }
 .tc-label { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+
 .num-controls { display:flex; gap:8px; margin-bottom:10px; }
-.qpick-btn {
-  flex:1; padding:9px;
-  background:var(--card); border:1px solid var(--border);
-  border-radius:8px; color:var(--blue2);
-  font-size:12px; font-family:'Lato',sans-serif;
-  cursor:pointer; transition:all .2s;
-  display:flex; align-items:center; justify-content:center; gap:6px;
-}
-.qpick-btn:hover { border-color:var(--blue); background:rgba(74,158,255,0.08); }
-.clear-btn {
+.qpick-btn, .clear-btn {
   padding:9px 14px;
   background:var(--card); border:1px solid var(--border);
-  border-radius:8px; color:var(--muted);
+  border-radius:8px;
   font-size:12px; font-family:'Lato',sans-serif;
   cursor:pointer; transition:all .2s;
 }
+.qpick-btn { flex:1; color:var(--blue2); }
+.qpick-btn:hover { border-color:var(--blue); background:rgba(74,158,255,0.08); }
+.clear-btn { color:var(--muted); }
 .clear-btn:hover { border-color:var(--red); color:var(--red); }
+
 .qpick-row { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
 .qpick-n {
   padding:6px 12px;
@@ -193,6 +195,7 @@ body::before {
   transition:all .2s;
 }
 .qpick-n:hover { background:rgba(74,158,255,0.18); border-color:var(--blue); }
+
 .num-grid {
   display:grid;
   grid-template-columns:repeat(10,1fr);
@@ -208,7 +211,6 @@ body::before {
   font-size:11px; font-weight:600;
   cursor:pointer; transition:all .15s;
   color:var(--muted); user-select:none;
-  position:relative;
 }
 .nc:active { transform:scale(.92); }
 .nc.sel {
@@ -223,6 +225,7 @@ body::before {
   color:#fff;
   box-shadow:0 2px 8px rgba(62,207,142,.3);
 }
+
 .sel-bar {
   background:var(--surface);
   border:1px solid var(--border);
@@ -239,6 +242,7 @@ body::before {
   font-size:10px; color:var(--blue2); line-height:1.6;
   word-break:break-all;
 }
+
 .mode-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:8px; }
 .mode-card {
   background:var(--card);
@@ -263,6 +267,7 @@ body::before {
 .mc-meta { margin-top:6px; font-family:'Source Code Pro',monospace; font-size:10px; color:var(--green); }
 .mc-meta.warn { color:var(--price); }
 .mc-meta.over { color:var(--red); }
+
 .cond-box {
   background:rgba(74,158,255,0.05);
   border:1px solid rgba(74,158,255,0.15);
@@ -272,6 +277,7 @@ body::before {
 }
 .cond-box b { color:var(--blue2); }
 .cond-box .hl { color:var(--green); font-weight:700; }
+
 .cost-bar {
   background:linear-gradient(135deg, rgba(255,159,63,0.08), rgba(232,184,75,0.05));
   border:1px solid rgba(255,159,63,0.25);
@@ -280,13 +286,13 @@ body::before {
   margin-bottom:20px;
 }
 .cost-left { font-size:12px; color:var(--muted2); line-height:1.6; }
-.cost-left span { color:var(--text); }
 .cost-total {
   font-family:'Oswald',sans-serif; font-size:34px;
   color:var(--price); line-height:1;
   text-align:right;
 }
 .cost-total small { font-size:14px; color:var(--muted2); font-family:'Lato',sans-serif; }
+
 .gen-btn {
   width:100%; padding:18px;
   background:linear-gradient(135deg,#b8860b,var(--gold),var(--gold2));
@@ -297,13 +303,9 @@ body::before {
   box-shadow:0 6px 24px rgba(232,184,75,0.25);
   margin-bottom:24px; position:relative; overflow:hidden;
 }
-.gen-btn::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.15));
-}
 .gen-btn:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(232,184,75,0.35); }
-.gen-btn:active { transform:translateY(0); }
-.gen-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+.gen-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+
 .results-wrap { margin-top:4px; }
 .res-header {
   display:flex; align-items:center; justify-content:space-between;
@@ -317,6 +319,7 @@ body::before {
   font-family:'Source Code Pro',monospace;
   font-size:11px; color:var(--green);
 }
+
 .summary-grid {
   display:grid; grid-template-columns:repeat(4,1fr);
   gap:8px; margin-bottom:16px;
@@ -330,6 +333,7 @@ body::before {
 .sg-val.blue { color:var(--blue2); }
 .sg-val.orange { color:var(--price); }
 .sg-key { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
+
 .note-box {
   background:rgba(74,158,255,0.05);
   border:1px solid rgba(74,158,255,0.15);
@@ -337,6 +341,7 @@ body::before {
   font-size:11px; color:var(--blue2);
   margin-bottom:14px; font-family:'Source Code Pro',monospace;
 }
+
 .res-card {
   background:var(--card);
   border:1px solid var(--border);
@@ -376,15 +381,14 @@ body::before {
   border:2px solid var(--border2);
   background:linear-gradient(135deg,#181c2e,#1c2035);
   color:var(--blue2);
-  box-shadow:0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-  transition:all .2s;
 }
 .ball.hit {
-  background:linear-gradient(135deg,#1a3a2a,#1e4030);
-  border-color:var(--green);
-  color:var(--green);
-  box-shadow:0 2px 12px rgba(62,207,142,0.25);
+  background:linear-gradient(135deg,#3a2800,#5a3e00);
+  border-color:var(--gold);
+  color:var(--gold2);
+  box-shadow:0 0 8px rgba(232,184,75,0.5);
 }
+
 .empty {
   text-align:center; padding:40px 20px;
   border:1px dashed var(--border);
@@ -393,6 +397,7 @@ body::before {
 .empty-icon { font-size:44px; margin-bottom:12px; opacity:.4; display:block; }
 .empty p { font-size:13px; line-height:1.6; }
 .empty b { color:var(--gold); }
+
 .err-box {
   background:rgba(255,90,90,0.08);
   border:1px solid rgba(255,90,90,0.25);
@@ -400,6 +405,7 @@ body::before {
   font-size:13px; color:var(--red);
   margin-bottom:16px;
 }
+
 .sticky-bottom {
   position:fixed; bottom:0; left:0; right:0;
   background:linear-gradient(180deg,transparent 0%,var(--bg) 30%);
@@ -408,6 +414,7 @@ body::before {
   pointer-events:none;
 }
 .sticky-bottom .gen-btn { pointer-events:all; max-width:480px; margin:0 auto; display:block; }
+
 .qr-btn {
   width:100%; padding:16px;
   background:linear-gradient(135deg,#1a3a2a,#1e4a30);
@@ -416,71 +423,9 @@ body::before {
   font-family:'Oswald',sans-serif; font-size:18px;
   font-weight:600; letter-spacing:2px; color:var(--green);
   cursor:pointer; transition:all .2s;
-  margin-top:16px; display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-top:16px;
 }
-.qr-btn:hover { background:rgba(62,207,142,0.15); box-shadow:0 6px 20px rgba(62,207,142,0.2); }
-.qr-modal {
-  position:fixed; inset:0; z-index:200;
-  background:rgba(0,0,0,0.92);
-  display:none; flex-direction:column;
-  overflow-y:auto;
-}
-.qr-modal.open { display:flex; }
-.qr-modal-header {
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:16px;
-  display:flex; align-items:center; justify-content:space-between;
-  position:sticky; top:0; z-index:10;
-}
-.qr-modal-title { font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:2px; color:var(--green); }
-.qr-close {
-  width:36px; height:36px; border-radius:50%;
-  background:var(--card); border:1px solid var(--border);
-  color:var(--text); font-size:18px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-}
-.qr-content { padding:16px; max-width:480px; margin:0 auto; width:100%; }
-.qr-ticket {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px; overflow:hidden;
-  margin-bottom:20px;
-}
-.qr-ticket-head {
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:12px 16px;
-  display:flex; align-items:center; justify-content:space-between;
-}
-.qr-ticket-title { font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:1px; color:var(--green); }
-.qr-ticket-sub { font-size:11px; color:var(--muted); font-family:'Source Code Pro',monospace; }
-.qr-box {
-  display:flex; justify-content:center; align-items:center;
-  padding:20px; background:#fff; margin:16px;
-  border-radius:10px;
-}
-.qr-combos {
-  padding:0 16px 16px;
-  display:flex; flex-direction:column; gap:6px;
-}
-.qr-combo-row {
-  display:flex; align-items:center; gap:8px;
-  font-family:'Source Code Pro',monospace; font-size:12px;
-}
-.qr-combo-idx {
-  width:22px; height:22px; border-radius:50%;
-  background:rgba(62,207,142,0.1); border:1px solid rgba(62,207,142,0.3);
-  display:flex; align-items:center; justify-content:center;
-  font-size:10px; color:var(--green); flex-shrink:0;
-}
-.qr-combo-nums { color:var(--blue2); letter-spacing:1px; }
-.qr-cost-row {
-  padding:10px 16px 16px;
-  font-size:12px; color:var(--muted);
-  display:flex; justify-content:space-between; align-items:center;
-}
-.qr-cost-amt { font-family:'Oswald',sans-serif; font-size:22px; color:var(--price); }
+
 .save-btn {
   width:100%; padding:15px;
   background:linear-gradient(135deg,#0d1f35,#122840);
@@ -489,7 +434,7 @@ body::before {
   font-weight:600; letter-spacing:2px; color:var(--blue2);
   cursor:pointer; margin-bottom:16px; display:none;
 }
-.save-btn:hover { background:rgba(74,158,255,0.12); }
+
 .saved-list-btn {
   width:100%; padding:13px 16px; margin-bottom:20px;
   background:var(--card); border:1.5px solid var(--border);
@@ -497,9 +442,8 @@ body::before {
   font-size:14px; font-weight:500; letter-spacing:2px;
   color:var(--muted2); cursor:pointer;
   display:flex; align-items:center; justify-content:space-between;
-  transition:all .2s;
 }
-.saved-list-btn:hover { border-color:var(--gold); color:var(--gold); }
+
 .sys-modal {
   position:fixed; inset:0; z-index:300;
   background:rgba(0,0,0,0.96);
@@ -513,23 +457,11 @@ body::before {
 }
 .sys-modal-title { font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); }
 .sys-modal-body { padding:16px; max-width:480px; margin:0 auto; width:100%; }
-.sys-item {
+.qr-close {
+  width:36px; height:36px; border-radius:50%;
   background:var(--card); border:1px solid var(--border);
-  border-radius:12px; padding:14px 16px; margin-bottom:10px;
-  cursor:pointer; transition:border-color .2s;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px;
+  color:var(--text); font-size:18px; cursor:pointer;
 }
-.sys-item:hover { border-color:var(--gold); }
-.sys-item-name { font-family:'Oswald',sans-serif; font-size:16px; color:var(--gold); margin-bottom:3px; }
-.sys-item-meta { font-size:11px; color:var(--muted); font-family:monospace; line-height:1.5; }
-.sys-del {
-  width:32px; height:32px; border-radius:50%; flex-shrink:0;
-  background:rgba(255,90,90,0.1); border:1px solid rgba(255,90,90,0.3);
-  color:var(--red); font-size:15px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-}
-.sys-del:hover { background:rgba(255,90,90,0.25); }
 .save-form-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; }
 .save-form-info { font-size:12px; color:var(--muted2); font-family:monospace; line-height:1.8; margin-bottom:14px; padding:10px 12px; background:var(--surface); border-radius:8px; }
 .save-name-input {
@@ -538,16 +470,207 @@ body::before {
   border-radius:10px; color:var(--text);
   font-family:'Lato',sans-serif; font-size:15px; outline:none;
 }
-.save-name-input:focus { border-color:var(--gold); }
 .save-confirm-btn {
   width:100%; padding:14px; border:none; border-radius:10px;
   background:linear-gradient(135deg,#b8860b,var(--gold));
   font-family:'Oswald',sans-serif; font-size:18px;
   font-weight:600; letter-spacing:2px; color:#000; cursor:pointer;
 }
+.sys-item {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:14px 16px; margin-bottom:10px;
+  cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.sys-item-name { font-family:'Oswald',sans-serif; font-size:16px; color:var(--gold); margin-bottom:3px; }
+.sys-item-meta { font-size:11px; color:var(--muted); font-family:monospace; line-height:1.5; }
+.sys-del {
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,90,90,0.1); border:1px solid rgba(255,90,90,0.3);
+  color:var(--red); font-size:15px; cursor:pointer;
+}
 .empty-saved { text-align:center; padding:50px 20px; color:var(--muted); font-size:13px; line-height:1.8; }
+
+.th-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.th-box {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:10px; padding:10px; text-align:center;
+}
+.th-label { font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+.th-val { font-family:'Oswald',sans-serif; font-size:34px; line-height:1; }
+.th-val.gold { color:var(--gold); }
+.th-val.blue { color:var(--blue2); }
+.th-controls { display:flex; gap:6px; margin-top:8px; justify-content:center; }
+.th-btn {
+  width:36px; height:36px; border-radius:8px;
+  background:var(--card); border:1px solid var(--border);
+  color:var(--text); font-size:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.th-summary {
+  margin-top:10px; font-size:12px; color:var(--muted2);
+  text-align:center; line-height:1.7;
+  background:rgba(74,158,255,0.05); border:1px solid rgba(74,158,255,0.12);
+  border-radius:8px; padding:10px 12px;
+}
+.lb-bar {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.lb-left { font-size:12px; color:var(--muted2); line-height:1.7; }
+.lb-val { font-family:'Oswald',sans-serif; font-size:30px; color:var(--green); }
+.lb-val.warn { color:var(--price); }
+.lb-val.over { color:var(--red); }
+
+.toggle-bar {
+  display:flex; gap:8px; margin-bottom:14px;
+}
+.toggle-btn {
+  flex:1; padding:11px 8px;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:10px; font-family:'Oswald',sans-serif;
+  font-size:13px; font-weight:600; letter-spacing:1px;
+  color:var(--muted2); cursor:pointer; text-align:center;
+  transition:all .2s;
+}
+.toggle-btn.active-win {
+  border-color:var(--green); color:var(--green);
+  background:rgba(62,207,142,0.08);
+}
+.toggle-btn.active-draw {
+  border-color:var(--gold); color:var(--gold);
+  background:rgba(232,184,75,0.08);
+}
+.clear-winner-btn {
+  width:100%; padding:10px;
+  background:rgba(62,207,142,0.08); border:1.5px solid var(--green);
+  border-radius:10px; font-family:'Oswald',sans-serif;
+  font-size:13px; font-weight:600; letter-spacing:1px;
+  color:var(--green); cursor:pointer; margin-bottom:10px;
+  display:none;
+}
+.nc.locked { opacity:1; }
+.nc.winner {
+  position:relative;
+}
+.nc.winner::after {
+  content:'';
+  position:absolute; inset:-3px;
+  border-radius:8px; border:2.5px solid var(--green);
+  background:rgba(62,207,142,0.1);
+  pointer-events:none;
+}
+.nc.sel.winner::after {
+  border-radius:8px;
+  border-color:#00aa55;
+  background:transparent;
+  box-shadow:0 0 0 2px #00aa55, 0 0 10px rgba(0,170,85,0.6);
+}
+.draw-badge {
+  font-family:'Source Code Pro',monospace;
+  font-size:11px; font-weight:600;
+  padding:2px 8px; border-radius:6px;
+  margin-left:6px;
+}
+.draw-badge.hit-full { background:rgba(62,207,142,0.2); color:var(--green); border:1px solid var(--green); }
+.draw-badge.hit-good { background:rgba(74,158,255,0.15); color:var(--blue2); border:1px solid var(--blue); }
+.draw-badge.hit-low  { background:rgba(107,112,153,0.15); color:var(--muted2); border:1px solid var(--border); }
+.payout-badge {
+  font-family:'Oswald',sans-serif;
+  font-size:12px; font-weight:600;
+  padding:2px 8px; border-radius:6px;
+  margin-left:4px; letter-spacing:1px;
+}
+.payout-badge.win    { background:rgba(232,184,75,0.15); color:var(--gold); border:1px solid var(--gold); }
+.payout-badge.nowin  { background:rgba(107,112,153,0.1); color:var(--muted); border:1px solid var(--border); }
+.payout-badge.big    { background:rgba(62,207,142,0.15); color:var(--green); border:1px solid var(--green); }
+.total-winnings {
+  background:linear-gradient(135deg,rgba(232,184,75,0.1),rgba(255,159,63,0.08));
+  border:1.5px solid rgba(232,184,75,0.4);
+  border-radius:12px; padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px;
+}
+.total-winnings-label { font-size:12px; color:var(--muted2); line-height:1.6; }
+.total-winnings-label b { color:var(--gold); }
+.total-winnings-amount {
+  font-family:'Oswald',sans-serif; font-size:36px;
+  color:var(--gold); line-height:1; text-align:right;
+}
+.total-winnings-amount small { font-size:14px; color:var(--muted2); font-family:'Lato',sans-serif; }
+.verified-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:12px 14px;
+  margin-bottom:14px;
+}
+.verified-title {
+  font-family:'Oswald',sans-serif; font-size:12px;
+  letter-spacing:2px; color:var(--muted2);
+  text-transform:uppercase; margin-bottom:10px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.verified-count {
+  font-family:'Source Code Pro',monospace;
+  font-size:13px; font-weight:600;
+  color:var(--green);
+}
+.verified-balls { display:flex; flex-wrap:wrap; gap:6px; }
+.vball {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Source Code Pro',monospace;
+  font-size:11px; font-weight:600;
+  border:1.5px solid var(--border2);
+  background:linear-gradient(135deg,#181c2e,#1c2035);
+  color:var(--muted2);
+}
+.vball.hit {
+  background:linear-gradient(135deg,#3a2800,#5a3e00);
+  border-color:var(--gold);
+  color:var(--gold2);
+  box-shadow:0 0 8px rgba(232,184,75,0.4);
+}
+.bonus-btn {
+  padding:9px 12px;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:8px; font-size:11px; font-family:'Lato',sans-serif;
+  cursor:pointer; transition:all .2s; color:var(--muted2);
+  white-space:nowrap;
+}
+.bonus-btn.active {
+  border-color:var(--price); color:var(--price);
+  background:rgba(255,159,63,0.1);
+}
+.qr-btn {
+  width:100%; padding:18px;
+  background:linear-gradient(135deg,#1a3a2a,#1e4a30);
+  border:1.5px solid var(--green); border-radius:14px;
+  font-family:'Oswald',sans-serif; font-size:18px;
+  font-weight:600; letter-spacing:2px; color:var(--green);
+  cursor:pointer; transition:all .2s;
+  box-shadow:0 4px 20px rgba(62,207,142,0.15);
+  margin-bottom:8px; display:block;
+}
+.qr-btn:hover { background:rgba(62,207,142,0.12); }
+.qr-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:16px; margin-bottom:14px;
+  text-align:center;
+}
+.qr-card-title {
+  font-family:'Oswald',sans-serif; font-size:14px;
+  color:var(--muted2); letter-spacing:2px;
+  margin-bottom:12px;
+}
+.qr-card canvas { border-radius:8px; }
+.qr-nums {
+  margin-top:10px; font-family:'Source Code Pro',monospace;
+  font-size:12px; color:var(--blue2);
+  letter-spacing:1px;
+}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 <div class="header">
@@ -556,13 +679,13 @@ body::before {
       <div class="logo-icon">K</div>
       <div class="logo-text">
         <div class="l1">KINO MASTER</div>
-        <div class="l2"><span id="t-subtitle">Allwyn · Συστήματα Κάλυψης</span></div>
+        <div class="l2"><span id="t-subtitle">Auto Correcting Systems</span></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
       <div class="lang-switch">
-        <button class="lang-btn active" id="langEl" onclick="setLang('el')" title="Ελληνικά">🇬🇷</button>
-        <button class="lang-btn" id="langEn" onclick="setLang('en')" title="English">🇬🇧</button>
+        <button class="lang-btn active" id="langEl" onclick="setLang('el')">&#x1F1EC;&#x1F1F7;</button>
+        <button class="lang-btn" id="langEn" onclick="setLang('en')">&#x1F1EC;&#x1F1E7;</button>
       </div>
       <div class="live-badge" onclick="toggleLive()">
         <div class="live-dot"></div>
@@ -582,8 +705,9 @@ body::before {
 
   <div class="sec-title"><div class="step-dot">2</div><span id="t-step2">Επιλογή Αριθμών</span></div>
   <div class="num-controls">
-    <button class="qpick-btn" onclick="showQPick()">🎲 Quick Pick</button>
-    <button class="clear-btn" onclick="clearNums()">✕ Καθαρισμός</button>
+    <button class="bonus-btn" id="bonusBtn" onclick="toggleBonus()">&#x2B50; BONUS</button>
+    <button class="qpick-btn" onclick="showQPick()">&#x1F3B2; Quick Pick</button>
+    <button class="clear-btn" onclick="clearNums()">&#x2715;</button>
   </div>
   <div class="qpick-row" id="qpickRow" style="display:none">
     <span style="font-size:11px;color:var(--muted);align-self:center" id="t-howmany">Πόσους;</span>
@@ -596,108 +720,96 @@ body::before {
     <div class="qpick-n" onclick="quickPick(15)">15</div>
     <div class="qpick-n" onclick="quickPick(20)">20</div>
   </div>
+  <div class="toggle-bar" id="toggleBar" style="display:none">
+    <div class="toggle-btn" id="btnWinner" onclick="toggleMode('winner')">🏆 ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ</div>
+    <div class="toggle-btn" id="btnDraw" onclick="toggleMode('draw')">🎯 ΔΙΑΛΟΓΗ</div>
+  </div>
+
   <div class="num-grid" id="numGrid"></div>
   <div class="sel-bar">
     <div class="sel-count-big" id="selCount">0</div>
     <div class="sel-nums-text" id="selNums">Επίλεξε αριθμούς από τον πίνακα...</div>
   </div>
 
-  <div class="sec-title"><div class="step-dot">3</div><span id="t-step3">Λογική Συστήματος</span></div>
-  <div class="mode-grid" id="modeGrid"></div>
-  <div class="cond-box" id="condBox">Επίλεξε κατηγορία, αριθμούς και λογική συστήματος.</div>
+  <div class="sec-title"><div class="step-dot">3</div><span id="t-step3">Σύστημα</span></div>
 
-  <div class="cost-bar" id="costBar" style="display:none">
-    <div class="cost-left">
-      <span id="costCombos">0</span> <span id="t-lines">στήλες</span> × 0.50€<br>
+  <div class="th-grid">
+    <div class="th-box">
+      <div class="th-label">TRIGGER (αν βγουν)</div>
+      <div class="th-val gold" id="triggerDisplay">4</div>
+      <div class="th-controls">
+        <button class="th-btn" id="trigMinus">&#x2212;</button>
+        <button class="th-btn" id="trigPlus">&#x2B;</button>
+      </div>
+    </div>
+    <div class="th-box">
+      <div class="th-label">HIT (εγγυόμαστε)</div>
+      <div class="th-val blue" id="hitDisplay">3</div>
+      <div class="th-controls">
+        <button class="th-btn" id="hitMinus">&#x2212;</button>
+        <button class="th-btn" id="hitPlus">&#x2B;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="th-summary" id="thSummary">
+    Επίλεξε αριθμούς για να δεις τις επιλογές.
+  </div>
+
+  <div class="lb-bar" id="lbBar" style="display:none">
+    <div class="lb-left">
+      <span id="t-lbcombos">0</span> <span id="t-lines">στήλες</span> × 0.50€<br>
       <span style="font-size:11px;color:var(--muted)" id="t-estcost">Εκτιμώμενο κόστος</span>
     </div>
+    <div style="text-align:center;padding:0 12px;border-left:1px solid var(--border);border-right:1px solid var(--border);">
+      <div style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--gold);line-height:1;" id="lbCost">0.00€</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px;">ΚΟΣΤΟΣ</div>
+    </div>
     <div>
-      <div class="cost-total"><span id="costTotal">0.00</span><small>€</small></div>
+      <div class="lb-val" id="lbVal">0</div>
+      <div style="font-size:10px;color:var(--muted);text-align:right">lower bound</div>
     </div>
   </div>
 
   <button class="saved-list-btn" onclick="openSavedModal()">
-    <span id="t-saved-btn">📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span>
+    <span id="t-saved-btn">&#x1F4C2; ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span>
     <span id="savedBadge" style="font-size:12px;background:var(--border);border-radius:20px;padding:2px 10px;">0/30</span>
   </button>
 
-  <button class="gen-btn" id="genBtn" onclick="generate()"><span id="t-genbtn">⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</span></button>
-  <button class="save-btn" id="saveBtn" onclick="openSaveModal()"><span id="t-savebtn">💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></button>
+  <button class="gen-btn" id="genBtn" onclick="generate()"><span id="t-genbtn">&#x26A1; ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</span></button>
+  <button class="save-btn" id="saveBtn" onclick="openSaveModal()"><span id="t-savebtn">&#x1F4BE; ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></button>
 
   <div class="results-wrap" id="resultsWrap">
     <div class="empty">
-      <span class="empty-icon">🎰</span>
-      <p><span id="t-empty">Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και λογική, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b></span></p>
+      <span class="empty-icon">&#x1F3B0;</span>
+      <p><span id="t-empty">Επίλεξε αριθμούς, τύπο παιχνιδιού και σύστημα, μετά πάτα ΔΗΜΙΟΥΡΓΙΑ</span></p>
     </div>
   </div>
 </div>
 
 <div class="sticky-bottom">
-  <button class="gen-btn" id="genBtnSticky" onclick="generate()" style="display:none"><span id="t-genbtn-sticky">⚡ ΔΗΜΙΟΥΡΓΙΑ</span></button>
-</div>
-
-<div class="qr-modal" id="qrModal">
-  <div class="qr-modal-header">
-    <div class="qr-modal-title"><span id="t-qr-title">📱 ΔΕΛΤΙΑ QR — ALLWYN</span></div>
-    <button class="qr-close" onclick="closeQR()">✕</button>
-  </div>
-  <div style="background:#151720;border-bottom:1px solid #252840;padding:14px 16px;max-width:480px;width:100%;margin:0 auto;">
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:8px;background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;flex:1;min-width:130px;">
-        <input type="checkbox" id="qrBonus" onchange="renderQRContent()" style="width:18px;height:18px;accent-color:#3ecf8e;cursor:pointer;">
-        <div>
-          <div style="font-size:12px;font-weight:600;color:#3ecf8e;">KINO Bonus</div>
-          <div style="font-size:10px;color:#6b7099;"><span id="t-bonus-sub">x2 τιμή στήλης</span></div>
-        </div>
-      </div>
-      <div style="background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;flex:1;min-width:130px;">
-        <div style="font-size:10px;color:#8890bb;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;"><span id="t-draws-lbl">Κληρώσεις</span></div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          <span id="draws_1" onclick="setDraws(1)" style="padding:4px 9px;border-radius:6px;border:1px solid #4a9eff;background:rgba(74,158,255,0.15);color:#7bbcff;font-family:monospace;font-size:12px;cursor:pointer;">1</span>
-          <span id="draws_2" onclick="setDraws(2)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">2</span>
-          <span id="draws_5" onclick="setDraws(5)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">5</span>
-          <span id="draws_10" onclick="setDraws(10)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">10</span>
-          <span id="draws_20" onclick="setDraws(20)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">20</span>
-        </div>
-        <input type="hidden" id="qrDraws" value="1">
-        <div style="font-size:10px;color:#3ecf8e;margin-top:5px;"><span id="t-total-lbl">Σύνολο</span>: <b id="drawsTotal">1</b></div>
-      </div>
-      <div style="background:#1c1f2e;border:1px solid #252840;border-radius:10px;padding:10px 14px;width:100%;">
-        <div style="font-size:10px;color:#8890bb;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;"><span id="t-mult-lbl">Πολλαπλασιαστής</span></div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          <span id="mult_1" onclick="setMult(1)" style="padding:4px 9px;border-radius:6px;border:1px solid #e8b84b;background:rgba(232,184,75,0.15);color:#f5d080;font-family:monospace;font-size:12px;cursor:pointer;">x1</span>
-          <span id="mult_2" onclick="setMult(2)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">x2</span>
-          <span id="mult_5" onclick="setMult(5)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">x5</span>
-          <span id="mult_10" onclick="setMult(10)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">x10</span>
-          <span id="mult_20" onclick="setMult(20)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">x20</span>
-          <span id="mult_30" onclick="setMult(30)" style="padding:4px 9px;border-radius:6px;border:1px solid #252840;background:#151720;color:#6b7099;font-family:monospace;font-size:12px;cursor:pointer;">x30</span>
-        </div>
-        <input type="hidden" id="qrMult" value="1">
-        <div style="font-size:10px;color:#e8b84b;margin-top:5px;"><span id="t-mult-total-lbl">Σύνολο</span>: x<b id="multTotal">1</b></div>
-      </div>
-    </div>
-  </div>
-  <div class="qr-content" id="qrContent"></div>
+  <button class="gen-btn" id="genBtnSticky" onclick="generate()" style="display:none"><span id="t-genbtn-sticky">&#x26A1; ΔΗΜΙΟΥΡΓΙΑ</span></button>
+  <button class="qr-btn" id="qrBtnSticky" onclick="openQRModal()" style="display:none">📱 ΔΗΜΙΟΥΡΓΙΑ QR ΔΕΛΤΙΩΝ</button>
 </div>
 
 <div class="sys-modal" id="saveModal">
   <div class="sys-modal-header">
-    <div class="sys-modal-title">💾 <span id="t-savemodal-title2">ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></div>
-    <button class="qr-close" onclick="closeSaveModal()">✕</button>
+    <div class="sys-modal-title">&#x1F4BE; <span id="t-savemodal-title2">ΑΠΟΘΗΚΕΥΣΗ</span></div>
+    <button class="qr-close" onclick="closeSaveModal()">&#x2715;</button>
   </div>
   <div class="sys-modal-body">
     <div class="save-form-card">
       <div class="save-form-info" id="saveFormInfo">—</div>
-      <input class="save-name-input" id="saveNameInput" type="text" placeholder="Δώσε όνομα στο σύστημα..." maxlength="40">
-      <button class="save-confirm-btn" onclick="confirmSave()"><span id="t-saveconfirm">✓ ΑΠΟΘΗΚΕΥΣΗ</span></button>
+      <input class="save-name-input" id="saveNameInput" type="text" maxlength="40" placeholder="Δώσε όνομα στο σύστημα..." />
+      <button class="save-confirm-btn" onclick="confirmSave()"><span id="t-saveconfirm">&#x2713; ΑΠΟΘΗΚΕΥΣΗ</span></button>
     </div>
   </div>
 </div>
 
 <div class="sys-modal" id="savedListModal">
   <div class="sys-modal-header">
-    <div class="sys-modal-title">📂 <span id="t-savedlist-title2">ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ</span></div>
-    <button class="qr-close" onclick="closeSavedModal()">✕</button>
+    <div class="sys-modal-title">&#x1F4C2; <span id="t-savedlist-title2">ΑΠΟΘΗΚΕΥΜΕΝΑ</span></div>
+    <button class="qr-close" onclick="closeSavedModal()">&#x2715;</button>
   </div>
   <div class="sys-modal-body" id="savedListBody"></div>
 </div>
@@ -705,1027 +817,1072 @@ body::before {
 <div class="sys-modal" id="sysViewModal">
   <div class="sys-modal-header">
     <div class="sys-modal-title" id="sysViewTitle">—</div>
-    <button class="qr-close" onclick="closeSysView()">✕</button>
+    <button class="qr-close" onclick="closeSysView()">&#x2715;</button>
   </div>
   <div class="sys-modal-body" id="sysViewBody"></div>
 </div>
 
+<div class="sys-modal" id="qrModal">
+  <div class="sys-modal-header">
+    <div class="sys-modal-title">📱 QR ΔΕΛΤΙΑ</div>
+    <button class="qr-close" onclick="closeQRModal()">&#x2715;</button>
+  </div>
+  <div class="sys-modal-body" id="qrModalBody"></div>
+</div>
+
 <script>
-const T = {
+var currentLang = 'el';
+var gameK = 6;
+var triggerVal = 7;
+var hitVal = 6;
+var selected = new Set();
+var liveVisible = false;
+var liveNumbers = [];
+var currentResults = null;
+var MAX_COMBOS = 300;
+var TICKET_PRICE = 0.50;
+var MAX_SAVED = 30;
+
+var T = {
   el: {
-    subtitle: 'Allwyn · Συστήματα Κάλυψης',
-    lastdraw: 'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
-    step1: 'Τύπος Παιχνιδιού',
-    step2: 'Επιλογή Αριθμών',
-    step3: 'Λογική Συστήματος',
-    howmany: 'Πόσους;',
-    lines: 'στήλες',
-    estcost: 'Εκτιμώμενο κόστος',
-    'saved-btn': '📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',
-    genbtn: '⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ',
-    savebtn: '💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
-    'genbtn-sticky': '⚡ ΔΗΜΙΟΥΡΓΙΑ',
-    empty: 'Επίλεξε αριθμούς, τύπο παιχνιδιού<br>και λογική, μετά πάτα<br><b>ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</b>',
-    'qr-title': '📱 ΔΕΛΤΙΑ QR — ALLWYN',
-    'bonus-sub': 'x2 τιμή στήλης',
-    'draws-lbl': 'Κληρώσεις',
-    'total-lbl': 'Σύνολο',
-    'mult-lbl': 'Πολλαπλασιαστής',
-    'mult-total-lbl': 'Σύνολο',
-    'savemodal-title': 'ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
-    saveconfirm: '✓ ΑΠΟΘΗΚΕΥΣΗ',
-    'savedlist-title': 'ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',
-    saveplaceholder: 'Δώσε όνομα στο σύστημα...',
-    selNums: 'Επίλεξε αριθμούς από τον πίνακα...',
-    condBoxDefault: 'Επίλεξε κατηγορία, αριθμούς και λογική συστήματος.',
-    calculating: '⏳ Υπολογισμός...',
-    close: 'ΚΛΕΙΣΙΜΟ',
-    names: ['','','','Τριάδα','Τετράδα','Πεντάδα','Εξάδα','Επτάδα','Οκτάδα','Εννιάδα','Δεκάδα','Ενδεκάδα','Δωδεκάδα'],
-    modeNames: {
-      absolute: 'Απόλυτο',
-      strong: 'Δυνατό',
-      medium: 'Μεσαίο',
-      relaxed: 'Χαλαρό',
-      budget: 'Οικονομικό'
-    },
-    guarantee: 'Εγγύηση',
-    saving: 'Εξοικονόμηση',
-    columns: 'Στήλες',
-    cost: 'Κόστος',
-    result: 'ΑΠΟΤΕΛΕΣΜΑ',
-    column: 'ΣΤΗΛΗ',
-    system: 'Σύστημα',
-    tickets: 'δελτία',
-    ticket: 'ΔΕΛΤΙΟ',
-    klines: 'στήλες',
-    kdraws: 'κλήρ.',
-    createQR: '📱 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΩΝ QR',
-    selectMin: 'Επίλεξε τουλάχιστον',
-    numbersFor: 'αριθμούς για',
-    withNums: 'Με',
-    selectedNums: 'επιλεγμένους αριθμούς, ο στόχος είναι:',
-    saveOver: 'Έχεις φτάσει το όριο των 30 αποθηκευμένων συστημάτων. Διάγραψε κάποιο για να συνεχίσεις.',
-    noSaved: 'Δεν υπάρχουν αποθηκευμένα συστήματα ακόμα.<br><br>Δημιούργησε ένα σύστημα και πάτα<br><b style="color:var(--gold)">💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</b>',
-    numbers: 'Αριθμοί',
-    type: 'Τύπος',
-    savedOn: 'Αποθηκεύτηκε',
-    regen: '⚡ ΕΠΑΝΑΔΗΜΙΟΥΡΓΙΑ',
-    qrTickets: '📱 QR ΔΕΛΤΙΑ',
-    saved: '✅ ΑΠΟΘΗΚΕΥΤΗΚΕ!',
-    overLimit: 'Το σύστημα ξεπερνά το όριο των',
-    lines2: 'στηλών',
-    reduceNums: 'Μείωσε αριθμούς ή διάλεξε πιο οικονομική λογική.',
-    mode: 'Λογική',
-    triggerHit: 'αν πιάσουμε',
-    amongSelected: 'στους επιλεγμένους',
-    weGuarantee: 'εγγυάται τουλάχιστον',
-    onALine: 'σε 1 στήλη',
-    exactChance: 'Πιθανότητα με ακριβώς',
-    validated: 'Επαληθευμένο',
-    generated: 'Παραγόμενες',
-    lowerBound: 'Κατώτατο',
-    noValidSystem: 'Δεν βρέθηκε έγκυρο σύστημα μέσα στο όριο των 300 στηλών.',
-    modelInfo: 'Η δημιουργία γίνεται με heuristic covering και μετά αυστηρό validation.',
-    maxReached: 'Έφτασες το μέγιστο επιτρεπόμενο πλήθος επιλεγμένων αριθμών.',
-    selectedTooManyForMode: 'Με αυτή τη λογική δεν βρέθηκε σύστημα έως 300 στήλες για τόσο μεγάλο πλήθος αριθμών.',
-    chooseCheaper: 'Δοκίμασε πιο οικονομική λογική ή λιγότερους αριθμούς.',
-    note: 'Σημείωση',
-    successLine: 'γραμμή επιτυχίας',
-    exactHitInfo: 'Με ακριβώς',
-    exactHitInfo2: 'σωστά στους επιλεγμένους, η πιθανότητα να έχεις τουλάχιστον μία γραμμή με',
-    modeShort: 'Mode',
-    connectionFail: 'Δεν ήταν δυνατή η σύνδεση',
+    subtitle:'Αυτόματη Διόρθωση Συστημάτων',lastdraw:'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
+    step1:'Τύπος Παιχνιδιού',step2:'Επιλογή Αριθμών',step3:'Σύστημα',
+    howmany:'Πόσους;',lines:'στήλες',estcost:'Εκτιμώμενο κόστος',
+    genbtn:'⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ',savebtn:'💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
+    empty:'Επίλεξε αριθμούς, τύπο παιχνιδιού και σύστημα, μετά πάτα ΔΗΜΙΟΥΡΓΙΑ',
+    names:['','','','Τριάδα','Τετράδα','Πεντάδα','Εξάδα','Επτάδα','Οκτάδα','Εννιάδα','Δεκάδα','Ενδεκάδα','Δωδεκάδα'],
+    guarantee:'Στόχος',columns:'Στήλες',cost:'Κόστος',result:'ΑΠΟΤΕΛΕΣΜΑ',
+    column:'ΣΤΗΛΗ',validated:'Επαληθευμένο',lowerBound:'Κατώτατο',
+    exactChance:'Πιθανότητα',triggerHit:'αν πιάσουμε',
+    amongSelected:'στους επιλεγμένους',weGuarantee:'εγγυόμαστε',onALine:'σε 1 στήλη',
+    noValidSystem:'Δεν βρέθηκε έγκυρο σύστημα μέχρι 300 στήλες.',
+    tooExpensive:'Πολύ ακριβό (>300 στήλες). Μείωσε trigger ή hit.',
+    noSaved:'Δεν υπάρχουν αποθηκευμένα συστήματα ακόμα.',
+    numbers:'Αριθμοί',type:'Τύπος',savedOn:'Αποθηκεύτηκε',
+    regen:'⚡ ΕΠΑΝΑΦΟΡΑ',saved:'✅ ΑΠΟΘΗΚΕΥΤΗΚΕ!',
+    saveOver:'Έχεις φτάσει το όριο των 30 αποθηκευμένων συστημάτων.',
+    savedBtn:'📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',saveConfirm:'✓ ΑΠΟΘΗΚΕΥΣΗ',
+    placeholder:'Δώσε όνομα στο σύστημα...',selectMin:'Επίλεξε τουλάχιστον',
+    numbersFor:'αριθμούς για',connectionFail:'Δεν ήταν δυνατή η σύνδεση',
+    selectNums:'Επίλεξε αριθμούς για να δεις τις επιλογές.',
+    trigMin:'Trigger πρέπει > Hit και > k',
+    hitMax:'Hit δεν μπορεί να ξεπερνά k'
   },
   en: {
-    subtitle: 'Allwyn · Covering Systems',
-    lastdraw: 'LAST DRAW',
-    step1: 'Game Type',
-    step2: 'Number Selection',
-    step3: 'System Logic',
-    howmany: 'How many?',
-    lines: 'lines',
-    estcost: 'Estimated cost',
-    'saved-btn': '📂 SAVED SYSTEMS',
-    genbtn: '⚡ GENERATE SYSTEM',
-    savebtn: '💾 SAVE SYSTEM',
-    'genbtn-sticky': '⚡ GENERATE',
-    empty: 'Select numbers, game type<br>and logic, then press<br><b>GENERATE SYSTEM</b>',
-    'qr-title': '📱 QR TICKETS — ALLWYN',
-    'bonus-sub': 'x2 ticket price',
-    'draws-lbl': 'Draws',
-    'total-lbl': 'Total',
-    'mult-lbl': 'Multiplier',
-    'mult-total-lbl': 'Total',
-    'savemodal-title': 'SAVE SYSTEM',
-    saveconfirm: '✓ SAVE',
-    'savedlist-title': 'SAVED SYSTEMS',
-    saveplaceholder: 'Give your system a name...',
-    selNums: 'Select numbers from the grid...',
-    condBoxDefault: 'Select category, numbers and system logic.',
-    calculating: '⏳ Calculating...',
-    close: 'CLOSE',
-    names: ['','','','Triple','Quad','Quintuple','Sextuple','Septuple','Octuple','Nonuple','Decuple','Undecuple','Duodecuple'],
-    modeNames: {
-      absolute: 'Absolute',
-      strong: 'Strong',
-      medium: 'Medium',
-      relaxed: 'Relaxed',
-      budget: 'Budget'
-    },
-    guarantee: 'Guarantee',
-    saving: 'Saving',
-    columns: 'Lines',
-    cost: 'Cost',
-    result: 'RESULT',
-    column: 'LINE',
-    system: 'System',
-    tickets: 'tickets',
-    ticket: 'TICKET',
-    klines: 'lines',
-    kdraws: 'draws',
-    createQR: '📱 CREATE QR TICKETS',
-    selectMin: 'Select at least',
-    numbersFor: 'numbers for',
-    withNums: 'With',
-    selectedNums: 'selected numbers, the target is:',
-    saveOver: 'You have reached the 30 saved systems limit. Delete one to continue.',
-    noSaved: 'No saved systems yet.<br><br>Create a system and press<br><b style="color:var(--gold)">💾 SAVE SYSTEM</b>',
-    numbers: 'Numbers',
-    type: 'Type',
-    savedOn: 'Saved',
-    regen: '⚡ REGENERATE',
-    qrTickets: '📱 QR TICKETS',
-    saved: '✅ SAVED!',
-    overLimit: 'The system exceeds the limit of',
-    lines2: 'lines',
-    reduceNums: 'Reduce numbers or choose a cheaper logic.',
-    mode: 'Mode',
-    triggerHit: 'if we hit',
-    amongSelected: 'among selected',
-    weGuarantee: 'guarantees at least',
-    onALine: 'on 1 line',
-    exactChance: 'Chance with exactly',
-    validated: 'Validated',
-    generated: 'Generated',
-    lowerBound: 'Lower bound',
-    noValidSystem: 'No valid system was found within the 300-line limit.',
-    modelInfo: 'Generation uses heuristic covering followed by strict validation.',
-    maxReached: 'You reached the maximum allowed selected numbers.',
-    selectedTooManyForMode: 'No system up to 300 lines was found for this many numbers with this mode.',
-    chooseCheaper: 'Try a cheaper mode or fewer numbers.',
-    note: 'Note',
-    successLine: 'successful line',
-    exactHitInfo: 'With exactly',
-    exactHitInfo2: 'hits among selected numbers, the chance to have at least one line with',
-    modeShort: 'Mode',
-    connectionFail: 'Connection failed',
+    subtitle:'Auto Correcting Systems',lastdraw:'LAST DRAW',
+    step1:'Game Type',step2:'Number Selection',step3:'System',
+    howmany:'How many?',lines:'lines',estcost:'Estimated cost',
+    genbtn:'⚡ GENERATE SYSTEM',savebtn:'💾 SAVE SYSTEM',
+    empty:'Select numbers, game type and system, then press GENERATE',
+    names:['','','','Triple','Quad','Quintuple','Sextuple','Septuple','Octuple','Nonuple','Decuple','Undecuple','Duodecuple'],
+    guarantee:'Target',columns:'Lines',cost:'Cost',result:'RESULT',
+    column:'LINE',validated:'Validated',lowerBound:'Lower bound',
+    exactChance:'Chance',triggerHit:'if we hit',
+    amongSelected:'among selected',weGuarantee:'we guarantee',onALine:'on 1 line',
+    noValidSystem:'No valid system found up to 300 lines.',
+    tooExpensive:'Too expensive (>300 lines). Reduce trigger or hit.',
+    noSaved:'No saved systems yet.',
+    numbers:'Numbers',type:'Type',savedOn:'Saved',
+    regen:'⚡ RESTORE',saved:'✅ SAVED!',
+    saveOver:'You reached the 30 saved systems limit.',
+    savedBtn:'📂 SAVED SYSTEMS',saveConfirm:'✓ SAVE',
+    placeholder:'Give your system a name...',selectMin:'Select at least',
+    numbersFor:'numbers for',connectionFail:'Connection failed',
+    selectNums:'Select numbers to see options.',
+    trigMin:'Trigger must be > Hit and > k',
+    hitMax:'Hit cannot exceed k'
   }
 };
 
-const MODES_BY_K = {
-  3: [
-    { key: 'absolute', trigger: 4, hit: 3 },
-    { key: 'strong',   trigger: 4, hit: 2 }
-  ],
-  4: [
-    { key: 'absolute', trigger: 5, hit: 4 },
-    { key: 'strong',   trigger: 5, hit: 3 },
-    { key: 'budget',   trigger: 5, hit: 2 }
-  ],
-  5: [
-    { key: 'absolute', trigger: 6, hit: 5 },
-    { key: 'strong',   trigger: 6, hit: 4 },
-    { key: 'budget',   trigger: 6, hit: 3 }
-  ],
-  6: [
-    { key: 'absolute', trigger: 7, hit: 6 },
-    { key: 'strong',   trigger: 7, hit: 5 },
-    { key: 'medium',   trigger: 7, hit: 4 },
-    { key: 'budget',   trigger: 7, hit: 3 }
-  ],
-  7: [
-    { key: 'absolute', trigger: 8, hit: 7 },
-    { key: 'strong',   trigger: 8, hit: 6 },
-    { key: 'medium',   trigger: 8, hit: 5 },
-    { key: 'budget',   trigger: 8, hit: 4 }
-  ],
-  8: [
-    { key: 'absolute', trigger: 9, hit: 8 },
-    { key: 'strong',   trigger: 9, hit: 7 },
-    { key: 'medium',   trigger: 9, hit: 6 },
-    { key: 'relaxed',  trigger: 9, hit: 5 },
-    { key: 'budget',   trigger: 9, hit: 4 }
-  ],
-  9: [
-    { key: 'strong',   trigger: 10, hit: 8 },
-    { key: 'medium',   trigger: 10, hit: 7 },
-    { key: 'relaxed',  trigger: 10, hit: 6 },
-    { key: 'budget',   trigger: 10, hit: 5 }
-  ],
-  10: [
-    { key: 'strong',   trigger: 11, hit: 8 },
-    { key: 'medium',   trigger: 11, hit: 7 },
-    { key: 'relaxed',  trigger: 11, hit: 6 },
-    { key: 'budget',   trigger: 11, hit: 5 }
-  ],
-  11: [
-    { key: 'strong',   trigger: 12, hit: 8 },
-    { key: 'medium',   trigger: 12, hit: 7 },
-    { key: 'relaxed',  trigger: 12, hit: 6 },
-    { key: 'budget',   trigger: 12, hit: 5 }
-  ],
-  12: [
-    { key: 'strong',   trigger: 13, hit: 8 },
-    { key: 'medium',   trigger: 13, hit: 7 },
-    { key: 'relaxed',  trigger: 13, hit: 6 },
-    { key: 'budget',   trigger: 13, hit: 5 }
-  ]
-};
-
-const MAX_COMBOS = 300;
-const TICKET_PRICE = 0.50;
-const MAX_SAVED = 30;
-
-let currentLang = 'el';
-let gameK = 6;
-let selectedModeKey = MODES_BY_K[6][0].key;
-let selected = new Set();
-let liveVisible = false;
-let liveNumbers = [];
-let currentResults = null;
-let selectedDraws = new Set([1]);
-let selectedMult = new Set([1]);
+function tt(k) { return (T[currentLang] && T[currentLang][k]) ? T[currentLang][k] : k; }
+function namesList() { return T[currentLang].names; }
 
 function greekUpper(s) {
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
-}
-function getLang() { return currentLang; }
-function tt(key) { return T[currentLang][key] || T.el[key] || key; }
-function namesList() { return T[currentLang].names; }
-function modeLabel(mode) { return T[currentLang].modeNames[mode.key] || mode.key; }
-function getModes(k) { return MODES_BY_K[k] || []; }
-function getCurrentMode() {
-  const modes = getModes(gameK);
-  return modes.find(m => m.key === selectedModeKey) || modes[0];
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 }
 
 function comb(n, r) {
   if (r > n || r < 0) return 0;
   if (r === 0 || r === n) return 1;
   r = Math.min(r, n - r);
-  let res = 1;
-  for (let i = 1; i <= r; i++) res = (res * (n - r + i)) / i;
+  var res = 1;
+  for (var i = 1; i <= r; i++) res = (res * (n - r + i)) / i;
   return Math.round(res);
 }
+
+function estimateLowerBound(v, k, t, h) {
+  var total = comb(v, t);
+  var perLine = 0;
+  for (var i = h; i <= Math.min(k, t); i++) perLine += comb(k, i) * comb(v - k, t - i);
+  if (!perLine) return total;
+  return Math.ceil(total / perLine);
+}
+
+function minHit(k) {
+  if (k <= 5) return 2;
+  if (k <= 8) return 3;
+  if (k <= 10) return 4;
+  return 6;
+}
+
+// ---- NUM GRID ----
+function buildNumGrid() {
+  var g = document.getElementById('numGrid');
+  g.innerHTML = '';
+  for (var i = 1; i <= 80; i++) {
+    var d = document.createElement('div');
+    d.className = 'nc';
+    d.id = 'nc'+i;
+    d.textContent = i < 10 ? '0'+i : ''+i;
+    (function(n){ d.onclick = function(){ toggleNum(n); }; })(i);
+    g.appendChild(d);
+  }
+}
+
+function syncSelectedVisuals() {
+  for (var i = 1; i <= 80; i++) {
+    var el = document.getElementById('nc'+i);
+    if (!el) continue;
+    var cls = 'nc';
+    if (selected.has(i)) cls += ' sel';
+    if (liveNumbers.indexOf(i) >= 0) cls += ' live-hit';
+    el.className = cls;
+  }
+}
+
+function updateSelBar() {
+  var sorted = [];
+  selected.forEach(function(n){ sorted.push(n); });
+  sorted.sort(function(a,b){return a-b;});
+  document.getElementById('selCount').textContent = sorted.length;
+  document.getElementById('selNums').textContent = sorted.length
+    ? sorted.join(' · ')
+    : (currentLang === 'el' ? 'Επίλεξε αριθμούς από τον πίνακα...' : 'Select numbers from the grid...');
+}
+
+function toggleNum(n) {
+  if (selected.has(n)) selected.delete(n); else selected.add(n);
+  syncSelectedVisuals();
+  updateSelBar();
+  clampTriggerHit();
+  updateSystem();
+}
+
+function clearNums() {
+  selected.clear();
+  currentResults = null;
+  var els = document.querySelectorAll('.nc');
+  for (var i = 0; i < els.length; i++) els[i].className = 'nc';
+  updateSelBar();
+  updateSystem();
+  document.getElementById('lbBar').style.display = 'none';
+  document.getElementById('resultsWrap').innerHTML =
+    '<div class="empty"><span class="empty-icon">🎰</span><p><span id="t-empty">'+tt('empty')+'</span></p></div>';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('genBtnSticky').style.display = 'none';
+  showToggleBar(false);
+  winnerMode = false;
+  winnerNums.clear();
+  document.getElementById('btnWinner').className = 'toggle-btn';
+  document.getElementById('btnDraw').className = 'toggle-btn';
+  document.getElementById('qrBtnSticky').style.display = 'none';
+  document.getElementById('genBtnSticky').style.display = 'none';
+}
+
+function showQPick() {
+  var r = document.getElementById('qpickRow');
+  r.style.display = r.style.display === 'none' ? 'flex' : 'none';
+}
+
+function quickPick(n) {
+  clearNums();
+  var pool = [];
+  for (var i = 1; i <= 80; i++) pool.push(i);
+  pool = shuffle(pool);
+  for (var j = 0; j < n && j < pool.length; j++) selected.add(pool[j]);
+  syncSelectedVisuals();
+  updateSelBar();
+  clampTriggerHit();
+  updateSystem();
+  document.getElementById('qpickRow').style.display = 'none';
+}
+
+// ---- TYPE CARDS ----
+function buildTypeCards() {
+  var sc = document.getElementById('typeScroll');
+  sc.innerHTML = '';
+  for (var k = 3; k <= 12; k++) {
+    var d = document.createElement('div');
+    d.className = 'type-card' + (k === gameK ? ' active' : '');
+    (function(kk){ d.onclick = function(){ setGameType(kk); }; })(k);
+    d.innerHTML = '<span class="tc-k">'+k+'</span><div class="tc-label">'+namesList()[k]+'</div>';
+    sc.appendChild(d);
+  }
+}
+
+function setGameType(k) {
+  gameK = k;
+  // Reset trigger/hit to sensible defaults for new k
+  triggerVal = k + 1;
+  hitVal = k;
+  clampTriggerHit();
+  buildTypeCards();
+  updateTHDisplay();
+  updateSystem();
+}
+
+// ---- TRIGGER / HIT ----
+function clampTriggerHit() {
+  var v = selected.size || (gameK + 2);
+  var minH = minHit(gameK);
+  // hit: between minHit and k
+  if (hitVal > gameK) hitVal = gameK;
+  if (hitVal < minH) hitVal = minH;
+  // trigger: must be > hit AND > k AND <= pool
+  if (triggerVal <= hitVal) triggerVal = hitVal + 1;
+  if (triggerVal <= gameK) triggerVal = gameK + 1;
+  if (triggerVal > v) triggerVal = v;
+  // re-check hit after trigger clamp
+  if (hitVal >= triggerVal) hitVal = triggerVal - 1;
+  if (hitVal < minH) hitVal = minH;
+}
+
+function updateTHDisplay() {
+  document.getElementById('triggerDisplay').textContent = triggerVal;
+  document.getElementById('hitDisplay').textContent = hitVal;
+}
+
+document.getElementById('trigMinus').addEventListener('click', function() {
+  if (triggerVal - 1 > hitVal && triggerVal - 1 > gameK) {
+    triggerVal--;
+    updateTHDisplay();
+    updateSystem();
+  }
+});
+document.getElementById('trigPlus').addEventListener('click', function() {
+  var v = selected.size || (gameK + 2);
+  if (triggerVal + 1 <= v) {
+    triggerVal++;
+    updateTHDisplay();
+    updateSystem();
+  }
+});
+document.getElementById('hitMinus').addEventListener('click', function() {
+  var minH = minHit(gameK);
+  if (hitVal - 1 >= minH) {
+    hitVal--;
+    updateTHDisplay();
+    updateSystem();
+  }
+});
+document.getElementById('hitPlus').addEventListener('click', function() {
+  if (hitVal + 1 < triggerVal && hitVal + 1 <= gameK) {
+    hitVal++;
+    updateTHDisplay();
+    updateSystem();
+  }
+});
+
+function updateSystem() {
+  var v = selected.size;
+  var summary = document.getElementById('thSummary');
+  var lbBar = document.getElementById('lbBar');
+
+  if (v < gameK) {
+    summary.innerHTML = tt('selectMin')+' <b>'+gameK+'</b> '+tt('numbersFor')+' <b>'+namesList()[gameK]+'</b>.';
+    lbBar.style.display = 'none';
+    return;
+  }
+
+  clampTriggerHit();
+  updateTHDisplay();
+
+  var lb = estimateLowerBound(v, gameK, triggerVal, hitVal);
+  var cost = (lb * TICKET_PRICE).toFixed(2);
+  var isOver = lb > MAX_COMBOS;
+  var isWarn = lb > 150 && !isOver;
+
+  summary.innerHTML =
+    tt('triggerHit')+' <b>'+triggerVal+'</b> '+tt('amongSelected')+' → '+tt('weGuarantee')+' <b style="color:var(--green)">'+hitVal+'/'+gameK+'</b> '+tt('onALine')+'<br>'+
+    tt('lowerBound')+': <b>'+(isOver ? '<span style="color:var(--red)">'+lb+'</span>' : lb)+'</b> &nbsp;·&nbsp; Full cover: <b>'+comb(v,gameK)+'</b>';
+
+  lbBar.style.display = 'flex';
+  document.getElementById('t-lbcombos').textContent = isOver ? '∞' : lb;
+  document.getElementById('lbVal').textContent = isOver ? '∞' : lb;
+  document.getElementById('lbVal').className = 'lb-val' + (isOver ? ' over' : isWarn ? ' warn' : '');
+  var costEl = document.getElementById('lbCost');
+  if (costEl) {
+    costEl.textContent = isOver ? '∞' : (lb * 0.5).toFixed(2) + '€';
+    costEl.style.color = isOver ? 'var(--red)' : isWarn ? 'var(--price)' : 'var(--gold)';
+  }
+
+  var costEl = document.querySelector('.cost-total');
+  if (costEl) {
+    document.getElementById('costTotal') && (document.getElementById('costTotal').textContent = isOver ? '∞' : cost);
+  }
+}
+
+// ---- MATH ----
 function combinations(arr, r) {
-  const result = [];
-  const combo = [];
+  var result = [], combo = [];
   function bt(start) {
-    if (combo.length === r) {
-      result.push([...combo]);
-      return;
-    }
-    for (let i = start; i <= arr.length - (r - combo.length); i++) {
-      combo.push(arr[i]);
-      bt(i + 1);
-      combo.pop();
+    if (combo.length === r) { result.push(combo.slice()); return; }
+    for (var i = start; i <= arr.length - (r - combo.length); i++) {
+      combo.push(arr[i]); bt(i+1); combo.pop();
     }
   }
   bt(0);
   return result;
 }
+
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+  var a = arr.slice();
+  for (var i = a.length-1; i > 0; i--) {
+    var j = Math.floor(Math.random()*(i+1));
+    var tmp = a[i]; a[i]=a[j]; a[j]=tmp;
   }
   return a;
 }
-function countIntersectionSorted(a, b) {
-  let i = 0, j = 0, count = 0;
-  while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) { count++; i++; j++; }
-    else if (a[i] < b[j]) i++;
-    else j++;
-  }
-  return count;
+
+function intersectionCount(a, b) {
+  var c = 0;
+  for (var i = 0; i < a.length; i++) if (b.indexOf(a[i]) >= 0) c++;
+  return c;
 }
-function validateSystem(lines, pool, k, trigger, hit) {
-  const triggerSets = combinations(pool, trigger);
-  return triggerSets.every(set => lines.some(line => countIntersectionSorted(line, set) >= hit));
-}
-function lineSuccessOnSet(line, set, hit) {
-  return countIntersectionSorted(line, set) >= hit;
-}
-function estimateLowerBound(v, k, trigger, hit) {
-  const total = comb(v, trigger);
-  let coverPerLine = 0;
-  for (let i = hit; i <= k; i++) {
-    coverPerLine += comb(k, i) * comb(Math.max(0, v - k), trigger - i);
-  }
-  if (!coverPerLine) return total;
-  return Math.ceil(total / coverPerLine);
-}
-function estimateExactHitChance(v, k, linesCount) {
-  const total = comb(v, k);
-  if (!total) return 0;
-  return Math.round((linesCount / total) * 100);
-}
-function uniqueLines(lines) {
-  const seen = new Set();
-  const out = [];
-  for (const line of lines) {
-    const key = line.join(',');
-    if (!seen.has(key)) {
-      seen.add(key);
-      out.push(line);
+
+function validateSystem(lines, pool, trigger, hit) {
+  var subsets = combinations(pool, trigger);
+  for (var i = 0; i < subsets.length; i++) {
+    var ok = false;
+    for (var j = 0; j < lines.length; j++) {
+      if (intersectionCount(lines[j], subsets[i]) >= hit) { ok=true; break; }
     }
+    if (!ok) return false;
+  }
+  return true;
+}
+
+function buildLineFromSubset(subset, pool, k, hit) {
+  var mustTake = shuffle(subset).slice(0, hit);
+  var remain = shuffle(pool.filter(function(x){ return mustTake.indexOf(x) < 0; }));
+  return mustTake.concat(remain.slice(0, k-hit)).sort(function(a,b){return a-b;});
+}
+
+function uniqueLines(lines) {
+  var seen = {}, out = [];
+  for (var i = 0; i < lines.length; i++) {
+    var key = lines[i].join(',');
+    if (!seen[key]) { seen[key]=true; out.push(lines[i]); }
   }
   return out;
 }
-function buildCandidateFromTrigger(triggerSet, pool, k, hit) {
-  const picked = shuffle(triggerSet).slice(0, hit);
-  const available = shuffle(pool.filter(x => !picked.includes(x)));
-  const line = [...picked, ...available.slice(0, k - hit)].sort((a,b)=>a-b);
-  return line;
-}
-function scoreCandidate(line, uncoveredSets, hit) {
-  let score = 0;
-  for (const s of uncoveredSets) if (lineSuccessOnSet(line, s, hit)) score++;
+
+function lineCoverageCount(line, subsets, hit) {
+  var score = 0;
+  for (var i = 0; i < subsets.length; i++)
+    if (intersectionCount(line, subsets[i]) >= hit) score++;
   return score;
 }
-function removeCoveredByLine(uncoveredSets, line, hit) {
-  return uncoveredSets.filter(s => !lineSuccessOnSet(line, s, hit));
-}
-function pruneLines(lines, pool, k, trigger, hit) {
-  let current = [...lines];
-  for (let i = current.length - 1; i >= 0; i--) {
-    const test = current.slice(0, i).concat(current.slice(i + 1));
-    if (validateSystem(test, pool, k, trigger, hit)) current = test;
+
+function pruneLines(lines, pool, trigger, hit) {
+  var changed = true, current = lines.slice();
+  while (changed) {
+    changed = false;
+    for (var i = current.length-1; i >= 0; i--) {
+      var test = current.slice(0,i).concat(current.slice(i+1));
+      if (validateSystem(test, pool, trigger, hit)) { current=test; changed=true; }
+    }
   }
   return current;
 }
-function generateSystem(pool, k, trigger, hit, maxLines = MAX_COMBOS) {
-  let uncovered = combinations(pool, trigger);
-  let lines = [];
-  let guard = 0;
 
-  while (uncovered.length && lines.length < maxLines && guard < 5000) {
-    guard++;
-    const seed = uncovered[0];
-    let best = null;
-    let bestScore = -1;
-    const tries = uncovered.length > 12000 ? 10 : uncovered.length > 4000 ? 14 : 20;
-
-    for (let i = 0; i < tries; i++) {
-      const candidate = buildCandidateFromTrigger(seed, pool, k, hit);
-      const score = scoreCandidate(candidate, uncovered, hit);
-      if (score > bestScore) {
-        bestScore = score;
-        best = candidate;
-      }
+function autoCorrectingGenerate(pool, k, trigger, hit) {
+  var uncovered = combinations(pool, trigger);
+  var lines = [], loops = 0;
+  while (uncovered.length && lines.length < MAX_COMBOS && loops < 4000) {
+    loops++;
+    var seed = uncovered[0], best = null, bestScore = -1;
+    var tries = uncovered.length > 10000 ? 8 : uncovered.length > 3000 ? 12 : 18;
+    for (var t2 = 0; t2 < tries; t2++) {
+      var cand = buildLineFromSubset(seed, pool, k, hit);
+      var score = lineCoverageCount(cand, uncovered, hit);
+      if (score > bestScore) { best=cand; bestScore=score; }
     }
     if (!best) break;
     lines.push(best);
-    uncovered = removeCoveredByLine(uncovered, best, hit);
+    lines = uniqueLines(lines);
+    uncovered = uncovered.filter(function(s){
+      return !lines.some(function(l){ return intersectionCount(l,s)>=hit; });
+    });
   }
-
-  lines = uniqueLines(lines);
-
-  if (!validateSystem(lines, pool, k, trigger, hit)) {
-    let missing = combinations(pool, trigger).filter(s => !lines.some(line => lineSuccessOnSet(line, s, hit)));
-    let fixGuard = 0;
-    while (missing.length && lines.length < maxLines && fixGuard < 3000) {
-      fixGuard++;
-      const seed = missing[0];
-      const line = buildCandidateFromTrigger(seed, pool, k, hit);
-      lines.push(line);
-      lines = uniqueLines(lines);
-      missing = missing.filter(s => !lineSuccessOnSet(line, s, hit));
-    }
+  var fix = 0;
+  while (uncovered.length && lines.length < MAX_COMBOS && fix < 4000) {
+    fix++;
+    var nl = buildLineFromSubset(uncovered[0], pool, k, hit);
+    lines.push(nl);
+    lines = uniqueLines(lines);
+    uncovered = uncovered.filter(function(s){
+      return !lines.some(function(l){ return intersectionCount(l,s)>=hit; });
+    });
   }
-
-  if (!validateSystem(lines, pool, k, trigger, hit)) return null;
-  lines = pruneLines(uniqueLines(lines), pool, k, trigger, hit);
-  if (lines.length > maxLines) return null;
+  if (!validateSystem(lines, pool, trigger, hit)) return null;
+  lines = pruneLines(lines, pool, trigger, hit);
+  if (!validateSystem(lines, pool, trigger, hit)) return null;
+  if (lines.length > MAX_COMBOS) return null;
   return lines;
 }
 
-function buildNumGrid() {
-  const g = document.getElementById('numGrid');
-  g.innerHTML = '';
-  for (let i = 1; i <= 80; i++) {
-    const d = document.createElement('div');
-    d.className = 'nc';
-    d.id = 'nc' + i;
-    d.textContent = i < 10 ? '0' + i : i;
-    d.onclick = () => toggleNum(i);
-    g.appendChild(d);
-  }
-}
-function syncSelectedVisuals() {
-  for (let i = 1; i <= 80; i++) {
-    document.getElementById('nc' + i)?.classList.toggle('sel', selected.has(i));
-  }
-}
-function updateSelBar() {
-  const sorted = [...selected].sort((a,b) => a-b);
-  document.getElementById('selCount').textContent = sorted.length;
-  document.getElementById('selNums').textContent = sorted.length ? sorted.join(' · ') : T[currentLang].selNums;
-}
-function toggleNum(n) {
-  if (selected.has(n)) selected.delete(n);
-  else selected.add(n);
-  syncSelectedVisuals();
-  updateSelBar();
-  buildModeGrid();
-  updateCond();
-  document.getElementById('costBar').style.display = 'none';
-}
-function clearNums() {
-  selected.clear();
-  currentResults = null;
-  document.querySelectorAll('.nc').forEach(el => el.classList.remove('sel','live-hit'));
-  updateSelBar();
-  buildModeGrid();
-  updateCond();
-  document.getElementById('costBar').style.display = 'none';
-  document.getElementById('resultsWrap').innerHTML = `
-    <div class="empty">
-      <span class="empty-icon">🎰</span>
-      <p><span id="t-empty">${T[currentLang].empty}</span></p>
-    </div>
-  `;
-}
-function showQPick() {
-  const r = document.getElementById('qpickRow');
-  r.style.display = r.style.display === 'none' ? 'flex' : 'none';
-}
-function quickPick(n) {
-  clearNums();
-  const pool = shuffle(Array.from({length:80},(_,i)=>i+1));
-  pool.slice(0, n).forEach(num => selected.add(num));
-  syncSelectedVisuals();
-  updateSelBar();
-  buildModeGrid();
-  updateCond();
-  document.getElementById('qpickRow').style.display = 'none';
-}
-
-function buildTypeCards() {
-  const sc = document.getElementById('typeScroll');
-  sc.innerHTML = '';
-  const names = namesList();
-  for (let k = 3; k <= 12; k++) {
-    const d = document.createElement('div');
-    d.className = 'type-card' + (k === gameK ? ' active' : '');
-    d.dataset.k = k;
-    d.onclick = () => setGameType(k);
-    d.innerHTML = `<span class="tc-k">${k}</span><div class="tc-label">${names[k] || k}</div>`;
-    sc.appendChild(d);
-  }
-}
-function setGameType(k) {
-  gameK = k;
-  selectedModeKey = getModes(k)[0].key;
-  buildTypeCards();
-  buildModeGrid();
-  updateCond();
-  document.getElementById('costBar').style.display = 'none';
-}
-
-function buildModeGrid() {
-  const grid = document.getElementById('modeGrid');
-  grid.innerHTML = '';
-  const modes = getModes(gameK);
-  const v = selected.size;
-
-  modes.forEach(mode => {
-    const lower = v >= gameK ? estimateLowerBound(v, gameK, mode.trigger, mode.hit) : null;
-    const over = lower !== null && lower > MAX_COMBOS;
-    const warn = lower !== null && lower > 120 && !over;
-
-    const d = document.createElement('div');
-    d.className = 'mode-card' + (mode.key === selectedModeKey ? ' active' : '') + (v < gameK || over ? ' mc-disabled' : '');
-    d.onclick = () => {
-      if (v >= gameK && !over) {
-        selectedModeKey = mode.key;
-        buildModeGrid();
-        updateCond();
-      }
-    };
-
-    d.innerHTML = `
-      <div class="mc-title">${modeLabel(mode)}</div>
-      <div class="mc-sub">${mode.trigger} → ${mode.hit}/${gameK}</div>
-      <div class="mc-meta ${over ? 'over' : (warn ? 'warn' : '')}">
-        ${lower === null ? '' : `${tt('lowerBound')}: ${lower}`}
-      </div>
-    `;
-    grid.appendChild(d);
-  });
-}
-function updateCostBar(linesCount) {
-  if (!linesCount || linesCount > MAX_COMBOS) {
-    document.getElementById('costBar').style.display = 'none';
-    return;
-  }
-  document.getElementById('costBar').style.display = 'flex';
-  document.getElementById('costCombos').textContent = linesCount;
-  document.getElementById('costTotal').textContent = (linesCount * TICKET_PRICE).toFixed(2);
-}
-function updateCond() {
-  const box = document.getElementById('condBox');
-  const v = selected.size;
-  const mode = getCurrentMode();
-
-  if (v < gameK) {
-    box.innerHTML = `${tt('selectMin')} <b>${gameK}</b> ${tt('numbersFor')} <b>${namesList()[gameK] || gameK}</b>.`;
-    return;
-  }
-
-  const lower = estimateLowerBound(v, gameK, mode.trigger, mode.hit);
-  const full = comb(v, gameK);
-  const exactChance = estimateExactHitChance(v, gameK, Math.min(lower, MAX_COMBOS));
-
-  box.innerHTML = `
-    ${tt('withNums')} <b>${v}</b> ${tt('selectedNums')}<br>
-    <span class="hl">${tt('triggerHit')} <b>${mode.trigger}</b> ${tt('amongSelected')}, ${tt('weGuarantee')} <b>${mode.hit}/${gameK}</b> ${tt('onALine')}</span><br>
-    ${tt('lowerBound')}: <b>${lower}</b> ${tt('lines')} · Full cover: <b>${full}</b><br>
-    ${tt('exactHitInfo')} <b>${gameK}</b> ${currentLang === 'el' ? 'σωστά' : 'hits'}, ${tt('exactHitInfo2')} <b>${mode.hit}/${gameK}</b>: <b>${exactChance}%</b><br>
-    <span style="color:var(--muted2)">${tt('modelInfo')}</span>
-  `;
-}
-
-function setBusy(busy) {
-  const btn = document.getElementById('genBtn');
-  const btnS = document.getElementById('genBtnSticky');
-  btn.disabled = busy;
-  btnS.disabled = busy;
-  btn.querySelector('#t-genbtn').textContent = busy ? T[currentLang].calculating : T[currentLang].genbtn;
-  btnS.querySelector('#t-genbtn-sticky').textContent = busy ? T[currentLang].calculating : T[currentLang]['genbtn-sticky'];
-}
-
 function generate() {
-  const pool = [...selected].sort((a,b)=>a-b);
-  const v = pool.length;
-  const mode = getCurrentMode();
+  var sortedArr = [];
+  selected.forEach(function(n){ sortedArr.push(n); });
+  sortedArr.sort(function(a,b){return a-b;});
+  var pool = sortedArr;
+  var v = pool.length;
 
-  if (v < gameK) {
-    showErr(`⚠️ ${tt('selectMin')} ${gameK} ${tt('numbersFor')} ${namesList()[gameK] || gameK}.`);
-    return;
-  }
+  if (v < gameK) { showErr('⚠️ '+tt('selectMin')+' '+gameK+' '+tt('numbersFor')+' '+namesList()[gameK]+'.'); return; }
 
-  const lower = estimateLowerBound(v, gameK, mode.trigger, mode.hit);
-  if (lower > MAX_COMBOS) {
-    showErr(`⚠️ ${tt('overLimit')} ${MAX_COMBOS} ${tt('lines2')}. ${tt('chooseCheaper')}`);
-    return;
-  }
+  clampTriggerHit();
+  updateTHDisplay();
+  var lb = estimateLowerBound(v, gameK, triggerVal, hitVal);
+  if (lb > MAX_COMBOS) { showErr('⚠️ '+tt('tooExpensive')); return; }
 
   setBusy(true);
-
-  setTimeout(() => {
-    try {
-      const lines = generateSystem(pool, gameK, mode.trigger, mode.hit, MAX_COMBOS);
-      if (!lines) {
-        showErr(`⚠️ ${tt('noValidSystem')}`);
-      } else {
-        currentResults = {
-          lines,
-          k: gameK,
-          modeKey: mode.key,
-          trigger: mode.trigger,
-          hit: mode.hit,
-          pool: [...pool]
-        };
-        updateCostBar(lines.length);
-        renderResults(currentResults);
-      }
-    } catch (e) {
-      showErr('Error: ' + e.message);
+  setTimeout(function() {
+    var bestLines = null;
+    for (var r = 0; r < 5; r++) {
+      var attempt = autoCorrectingGenerate(pool, gameK, triggerVal, hitVal);
+      if (attempt && (!bestLines || attempt.length < bestLines.length)) bestLines = attempt;
     }
+    if (!bestLines) { showErr('⚠️ '+tt('noValidSystem')); setBusy(false); return; }
+
+    currentResults = {pool:pool, k:gameK, trigger:triggerVal, hit:hitVal, lines:bestLines};
+    renderResults(currentResults);
+    document.getElementById('lbBar').style.display = 'flex';
+    document.getElementById('t-lbcombos').textContent = bestLines.length;
+    document.getElementById('lbVal').textContent = bestLines.length;
+    document.getElementById('lbVal').className = 'lb-val' + (bestLines.length > 150 ? ' warn' : '');
     setBusy(false);
   }, 30);
 }
+
 function showErr(msg) {
-  document.getElementById('resultsWrap').innerHTML = `<div class="err-box">${msg}</div>`;
+  document.getElementById('resultsWrap').innerHTML = '<div class="err-box">'+msg+'</div>';
+  setBusy(false);
 }
 
-function renderResults(resultObj) {
-  const { lines, k, trigger, hit, pool, modeKey } = resultObj;
-  const full = comb(pool.length, k);
-  const cost = (lines.length * TICKET_PRICE).toFixed(2);
-  const chance = estimateExactHitChance(pool.length, k, lines.length);
+function setBusy(b) {
+  document.getElementById('genBtn').disabled = b;
+  document.getElementById('genBtnSticky').disabled = b;
+  document.getElementById('t-genbtn').textContent = b ? '⏳ ...' : tt('genbtn');
+  document.getElementById('t-genbtn-sticky').textContent = b ? '⏳' : '⚡';
+}
 
-  let cardsHTML = '';
-  lines.forEach((line, idx) => {
-    const balls = line.map(num => {
-      const isHit = liveNumbers.includes(num);
-      return `<div class="ball${isHit ? ' hit' : ''}">${num < 10 ? '0'+num : num}</div>`;
-    }).join('');
-    const hits = liveNumbers.length ? line.filter(x => liveNumbers.includes(x)).length : '';
-    const hitBadge = hits !== '' ? `<div class="rc-hit">${hits}/${k} ✓</div>` : '';
-    cardsHTML += `
-      <div class="res-card" style="animation-delay:${idx * 0.03}s">
-        <div class="rc-head">
-          <div class="rc-idx">${idx + 1}</div>
-          <div class="rc-title">${tt('column')} ${idx + 1} · ${greekUpper(namesList()[k] || String(k))}</div>
-          ${hitBadge}
-        </div>
-        <div class="rc-body">${balls}</div>
-      </div>
-    `;
-  });
+function renderResults(res) {
+  var pool=res.pool, k=res.k, trigger=res.trigger, hit=res.hit, lines=res.lines;
+  var cost = (lines.length * TICKET_PRICE).toFixed(2);
+  var totalC = comb(pool.length, k);
+  var chance = totalC ? Math.round((lines.length/totalC)*100) : 0;
 
-  document.getElementById('resultsWrap').innerHTML = `
-    <div class="res-header">
-      <div class="res-title">${tt('result')}</div>
-      <div class="res-count">${lines.length} ${greekUpper(tt('columns'))}</div>
-    </div>
+  var cardsHTML = '';
+  for (var idx = 0; idx < lines.length; idx++) {
+    var line = lines[idx];
+    var balls = '';
+    for (var bi = 0; bi < line.length; bi++) {
+      var num = line[bi];
+      var isHit = liveNumbers.indexOf(num) >= 0;
+      balls += '<div class="ball'+(isHit?' hit':'')+'">'+( num<10?'0'+num:''+num)+'</div>';
+    }
+    var hitCount = liveNumbers.length ? line.filter(function(x){ return liveNumbers.indexOf(x)>=0; }).length : '';
+    var hitBadge = hitCount !== '' ? '<div class="rc-hit">'+hitCount+'/'+k+' ✓</div>' : '';
+    cardsHTML +=
+      '<div class="res-card" data-line-idx="'+idx+'" style="animation-delay:'+(idx*0.02)+'s">'+
+        '<div class="rc-head">'+
+          '<div class="rc-idx">'+(idx+1)+'</div>'+
+          '<div class="rc-title">'+tt('column')+' '+(idx+1)+' · '+greekUpper(namesList()[k])+'</div>'+
+          hitBadge+
+        '</div>'+
+        '<div class="rc-body">'+balls+'</div>'+
+      '</div>';
+  }
 
-    <div class="summary-grid">
-      <div class="sg-item"><div class="sg-val">${lines.length}</div><div class="sg-key">${tt('columns')}</div></div>
-      <div class="sg-item"><div class="sg-val gold">${trigger}→${hit}/${k}</div><div class="sg-key">${tt('guarantee')}</div></div>
-      <div class="sg-item"><div class="sg-val blue">${chance}%</div><div class="sg-key">${tt('exactChance')} ${k}</div></div>
-      <div class="sg-item"><div class="sg-val orange">${cost}€</div><div class="sg-key">${tt('cost')}</div></div>
-    </div>
+  document.getElementById('resultsWrap').innerHTML =
+    '<div class="res-header">'+
+      '<div class="res-title">'+tt('result')+'</div>'+
+      '<div class="res-count">'+lines.length+' '+greekUpper(tt('columns'))+'</div>'+
+    '</div>'+
+    '<div class="summary-grid">'+
+      '<div class="sg-item"><div class="sg-val">'+lines.length+'</div><div class="sg-key">'+tt('columns')+'</div></div>'+
+      '<div class="sg-item"><div class="sg-val gold">'+trigger+'→'+hit+'/'+k+'</div><div class="sg-key">'+tt('guarantee')+'</div></div>'+
+      '<div class="sg-item"><div class="sg-val blue">'+chance+'%</div><div class="sg-key">'+tt('exactChance')+'</div></div>'+
+      '<div class="sg-item"><div class="sg-val orange">'+cost+'€</div><div class="sg-key">'+tt('cost')+'</div></div>'+
+    '</div>'+
+    '<div class="note-box">'+
+      tt('validated')+': <b style="color:var(--green)">✅ YES</b><br>'+
+      tt('triggerHit')+' <b>'+trigger+'</b> '+tt('amongSelected')+' → '+tt('weGuarantee')+' <b>'+hit+'/'+k+'</b> '+tt('onALine')+
+    '</div>'+
+    cardsHTML;
 
-    <div class="note-box">
-      ${tt('validated')} ✓<br>
-      ${tt('mode')}: <b style="color:var(--gold)">${modeLabel({key: modeKey})}</b><br>
-      ${tt('triggerHit')} <b>${trigger}</b> ${tt('amongSelected')} → <b>${hit}/${k}</b> ${tt('onALine')}<br>
-      ${tt('generated')}: <b>${lines.length}</b> ${tt('lines')} · Full cover: <b>${full}</b><br>
-      ${tt('exactHitInfo')} <b>${k}</b> ${currentLang === 'el' ? 'σωστά' : 'hits'}, ${tt('exactHitInfo2')} <b>${hit}/${k}</b>: <b>${chance}%</b>
-    </div>
-
-    ${cardsHTML}
-
-    <button class="qr-btn" onclick="openQR()">${tt('createQR')} (${Math.ceil(lines.length/6)} ${tt('tickets')})</button>
-  `;
-
-  document.getElementById('genBtnSticky').style.display = 'block';
   document.getElementById('saveBtn').style.display = 'block';
-  setTimeout(() => document.getElementById('resultsWrap').scrollIntoView({behavior:'smooth'}), 100);
-}
-
-async function fetchLive() {
-  try {
-    const res = await fetch('https://api.opap.gr/games/v1.0/1100/last-result-and-active');
-    const data = await res.json();
-    const draw = data.last;
-    if (!draw) return;
-    const nums = draw.winningNumbers?.list || [];
-    liveNumbers = nums;
-    document.getElementById('liveDrawNum').textContent = '#' + (draw.drawId || '—');
-    document.getElementById('liveNumbers').innerHTML = nums.map(n =>
-      `<div class="live-num${selected.has(n) ? ' match' : ''}">${n < 10 ? '0'+n : n}</div>`
-    ).join('');
-    document.querySelectorAll('.nc').forEach(el => el.classList.remove('live-hit'));
-    nums.forEach(n => document.getElementById('nc'+n)?.classList.add('live-hit'));
-    if (currentResults) renderResults(currentResults);
-  } catch {
-    document.getElementById('liveNumbers').innerHTML = `<span style="font-size:11px;color:var(--muted)">${tt('connectionFail')}</span>`;
+  document.getElementById('genBtnSticky').style.display = 'none';
+  document.getElementById('qrBtnSticky').style.display = 'block';
+  showToggleBar(true);
+  // Update cost bar with actual line count
+  var lbCostEl = document.getElementById('lbCost');
+  if (lbCostEl && currentResults) {
+    var lc = currentResults.lines.length;
+    document.getElementById('t-lbcombos').textContent = lc;
+    document.getElementById('lbVal').textContent = lc;
+    document.getElementById('lbVal').className = 'lb-val' + (lc > 150 ? ' warn' : '');
+    lbCostEl.textContent = (lc * 0.5).toFixed(2) + '€';
+    lbCostEl.style.color = lc > 150 ? 'var(--price)' : 'var(--gold)';
   }
 }
+
+// ---- LIVE ----
+function parseLiveData(data) {
+  var nums = [], drawId = '';
+  // Format 1: { last: { winningNumbers: { list: [] }, drawId: X } }
+  if (data && data.last && data.last.winningNumbers) {
+    nums = data.last.winningNumbers.list || [];
+    drawId = data.last.drawId || '';
+  }
+  // Format 2: { winningNumbers: { list: [] }, drawId: X }
+  else if (data && data.winningNumbers) {
+    nums = data.winningNumbers.list || [];
+    drawId = data.drawId || '';
+  }
+  // Format 3: array of draws, take last
+  else if (Array.isArray(data) && data.length) {
+    var d = data[data.length-1];
+    nums = (d.winningNumbers && d.winningNumbers.list) ? d.winningNumbers.list : [];
+    drawId = d.drawId || '';
+  }
+  return { nums: nums, drawId: drawId };
+}
+
+function applyLiveData(nums, drawId) {
+  if (!nums || !nums.length) return;
+  liveNumbers = nums;
+  document.getElementById('liveDrawNum').textContent = '#'+drawId;
+  var html = '';
+  for (var i = 0; i < nums.length; i++) {
+    var n = nums[i];
+    html += '<div class="live-num'+(selected.has(n)?' match':'')+'">'+( n<10?'0'+n:''+n)+'</div>';
+  }
+  document.getElementById('liveNumbers').innerHTML = html;
+  var els = document.querySelectorAll('.nc');
+  for (var j = 0; j < els.length; j++) els[j].classList.remove('live-hit');
+  for (var k2 = 0; k2 < nums.length; k2++) {
+    var el = document.getElementById('nc'+nums[k2]);
+    if (el) el.classList.add('live-hit');
+  }
+  if (currentResults) renderResults(currentResults);
+}
+
+// Direct URLs (work when hosted on server - GitHub Pages etc)
+// Proxy URLs (work when opening HTML file locally)
+var LIVE_APIS = [
+  'https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
+  'https://corsproxy.io/?https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
+  'https://api.allorigins.win/raw?url=https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
+  'https://api.opap.gr/games/v1.0/1100/last-result-and-active',
+  'https://corsproxy.io/?https://api.opap.gr/games/v1.0/1100/last-result-and-active'
+];
+var liveApiIdx = 0;
+
+function fetchLive() {
+  tryLiveApi(0);
+}
+
+function tryLiveApi(idx) {
+  if (idx >= LIVE_APIS.length) {
+    document.getElementById('liveNumbers').innerHTML =
+      '<span style="font-size:11px;color:var(--muted)">'+tt('connectionFail')+'</span>';
+    return;
+  }
+  fetch(LIVE_APIS[idx])
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      var parsed = parseLiveData(data);
+      if (!parsed.nums.length) throw new Error('empty');
+      liveApiIdx = idx; // remember which one worked
+      applyLiveData(parsed.nums, parsed.drawId);
+    })
+    .catch(function() {
+      tryLiveApi(idx + 1); // try next
+    });
+}
+
 function toggleLive() {
   liveVisible = !liveVisible;
-  const strip = document.getElementById('liveStrip');
-  strip.classList.toggle('visible', liveVisible);
-  document.getElementById('liveBadgeText').textContent = liveVisible ? T[currentLang].close : 'LIVE';
+  document.getElementById('liveStrip').className = 'live-strip'+(liveVisible?' visible':'');
+  document.getElementById('liveBadgeText').textContent = liveVisible ? 'CLOSE' : 'LIVE';
   if (liveVisible) fetchLive();
 }
-setInterval(() => { if (liveVisible) fetchLive(); }, 60000);
+// Poll every 5 seconds when live is active (KINO draw every 5 min, but results update faster)
+setInterval(function(){ if (liveVisible) fetchLive(); }, 5000);
 
-function buildOPAPString(combos, k, bonus, draws) {
-  let s = '@ID,KINO@GM,1100@ORIGIN,0';
-  combos.forEach((combo, idx) => {
-    s += (idx === 0 ? '^' : '@') + 'A,' + idx;
-    s += '@S,' + k;
-    s += '@U,' + combo.join(',');
-    if (bonus) s += '@SK';
-  });
-  s += '^CD,' + draws;
-  return s;
-}
-function openQR() {
-  if (!currentResults) return;
-  document.getElementById('qrModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  renderQRContent();
-}
-function renderQRContent() {
-  const combos = currentResults.lines;
-  const k = currentResults.k;
-  const bonus = document.getElementById('qrBonus')?.checked || false;
-  const draws = parseInt(document.getElementById('qrDraws')?.value || '1', 10);
-  const mult = parseInt(document.getElementById('qrMult')?.value || '1', 10);
-
-  const ticketSize = 6;
-  const tickets = [];
-  for (let i = 0; i < combos.length; i += ticketSize) tickets.push(combos.slice(i, i + ticketSize));
-
-  const bonusCost = bonus ? TICKET_PRICE : 0;
-  let html = '';
-  tickets.forEach((ticket, ti) => {
-    const startIdx = ti * ticketSize + 1;
-    const endIdx = startIdx + ticket.length - 1;
-    const ticketCost = (ticket.length * (TICKET_PRICE + bonusCost) * draws * mult).toFixed(2);
-    const comboRows = ticket.map((combo, ci) => `
-      <div class="qr-combo-row">
-        <div class="qr-combo-idx">${startIdx + ci}</div>
-        <div class="qr-combo-nums">${combo.map(n => n < 10 ? '0'+n : n).join(' · ')}</div>
-      </div>
-    `).join('');
-
-    html += `
-      <div class="qr-ticket">
-        <div class="qr-ticket-head">
-          <div class="qr-ticket-title">${tt('ticket')} ${ti+1} / ${tickets.length}</div>
-          <div class="qr-ticket-sub">${tt('columns')} ${startIdx}–${endIdx} · ${namesList()[k] || k}</div>
-        </div>
-        <div class="qr-box" id="qrBox_${ti}">
-          <canvas id="qrCanvas_${ti}" width="280" height="280" style="width:280px;height:280px;display:block;border-radius:8px;background:#fff"></canvas>
-        </div>
-        <div class="qr-combos">${comboRows}</div>
-        <div class="qr-cost-row">
-          <span>${ticket.length} ${tt('klines')} × ${draws} ${tt('kdraws')}${bonus ? ' Bonus' : ''}${mult > 1 ? ' ×'+mult : ''}</span>
-          <span class="qr-cost-amt">${ticketCost}€</span>
-        </div>
-      </div>
-    `;
-  });
-  document.getElementById('qrContent').innerHTML = html;
-
-  setTimeout(() => {
-    tickets.forEach((ticket, ti) => {
-      const canvas = document.getElementById('qrCanvas_' + ti);
-      if (!canvas || !window.qrcode) return;
-      try {
-        const text = buildOPAPString(ticket, k, bonus, draws);
-        const qr = qrcode(0, 'M');
-        qr.addData(text);
-        qr.make();
-        const size = 280;
-        const cellSize = size / qr.getModuleCount();
-        const ctx = canvas.getContext('2d');
-        canvas.width = size;
-        canvas.height = size;
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, size, size);
-        ctx.fillStyle = '#000000';
-        for (let row = 0; row < qr.getModuleCount(); row++) {
-          for (let col = 0; col < qr.getModuleCount(); col++) {
-            if (qr.isDark(row, col)) ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-          }
-        }
-      } catch (e) {
-        canvas.parentElement.innerHTML = `<div style="color:#ff5a5a;font-size:12px;padding:10px">QR Error: ${e.message}</div>`;
-      }
-    });
-  }, 80);
-}
-function setDraws(n) {
-  if (selectedDraws.has(n)) {
-    if (selectedDraws.size > 1) selectedDraws.delete(n);
-  } else selectedDraws.add(n);
-
-  const total = [...selectedDraws].reduce((a,b)=>a+b,0);
-  document.getElementById('qrDraws').value = total;
-  document.getElementById('drawsTotal').textContent = total;
-  [1,2,5,10,20].forEach(v => {
-    const el = document.getElementById('draws_'+v);
-    if (!el) return;
-    if (selectedDraws.has(v)) {
-      el.style.borderColor='#4a9eff'; el.style.background='rgba(74,158,255,0.15)'; el.style.color='#7bbcff';
-    } else {
-      el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099';
-    }
-  });
-  renderQRContent();
-}
-function setMult(n) {
-  if (selectedMult.has(n)) {
-    if (selectedMult.size > 1) selectedMult.delete(n);
-  } else selectedMult.add(n);
-
-  const total = [...selectedMult].reduce((a,b)=>a+b,0);
-  document.getElementById('qrMult').value = total;
-  document.getElementById('multTotal').textContent = total;
-  [1,2,5,10,20,30].forEach(v => {
-    const el = document.getElementById('mult_'+v);
-    if (!el) return;
-    if (selectedMult.has(v)) {
-      el.style.borderColor='#e8b84b'; el.style.background='rgba(232,184,75,0.15)'; el.style.color='#f5d080';
-    } else {
-      el.style.borderColor='#252840'; el.style.background='#151720'; el.style.color='#6b7099';
-    }
-  });
-  renderQRContent();
-}
-function closeQR() {
-  document.getElementById('qrModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
+// ---- SAVED ----
 function getSaved() {
-  try { return JSON.parse(localStorage.getItem('kinoMasterSystems') || '[]'); }
-  catch { return []; }
+  try { return JSON.parse(localStorage.getItem('kinoMasterSystems')||'[]'); } catch(e){ return []; }
 }
 function setSaved(arr) {
   localStorage.setItem('kinoMasterSystems', JSON.stringify(arr));
   refreshSavedBadge();
 }
 function refreshSavedBadge() {
-  const n = getSaved().length;
-  const el = document.getElementById('savedBadge');
-  if (el) el.textContent = n + '/30';
+  document.getElementById('savedBadge').textContent = getSaved().length+'/30';
 }
 function openSaveModal() {
   if (!currentResults) return;
-  const pool = currentResults.pool;
   document.getElementById('saveFormInfo').innerHTML =
-    `<b style="color:var(--gold)">${tt('numbers')}:</b> ${pool.join(' · ')}<br>` +
-    `<b style="color:var(--blue2)">${tt('type')}:</b> ${namesList()[currentResults.k] || currentResults.k} &nbsp;|&nbsp; ` +
-    `<b style="color:var(--blue2)">${tt('mode')}:</b> ${modeLabel({key: currentResults.modeKey})}<br>` +
-    `<b style="color:var(--green)">${tt('columns')}:</b> ${currentResults.lines.length}`;
-  document.getElementById('saveNameInput').value = '';
-  document.getElementById('saveNameInput').style.borderColor = 'var(--border)';
-  document.getElementById('saveModal').classList.add('open');
+    '<b style="color:var(--gold)">'+tt('numbers')+':</b> '+currentResults.pool.join(' · ')+'<br>'+
+    '<b style="color:var(--blue2)">'+tt('type')+':</b> '+namesList()[currentResults.k]+'<br>'+
+    '<b style="color:var(--green)">'+currentResults.trigger+'→'+currentResults.hit+'/'+currentResults.k+'</b> · '+currentResults.lines.length+' στήλες';
+  document.getElementById('saveModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('saveNameInput').focus(), 150);
 }
 function closeSaveModal() {
-  document.getElementById('saveModal').classList.remove('open');
+  document.getElementById('saveModal').className = 'sys-modal';
   document.body.style.overflow = '';
 }
 function confirmSave() {
-  const name = document.getElementById('saveNameInput').value.trim();
-  if (!name) {
-    document.getElementById('saveNameInput').style.borderColor = 'var(--red)';
-    return;
-  }
-  const saved = getSaved();
-  if (saved.length >= MAX_SAVED) {
-    alert(tt('saveOver'));
-    return;
-  }
-  saved.push({
-    id: Date.now(),
-    name,
-    date: new Date().toLocaleDateString('el-GR'),
-    result: currentResults
-  });
+  var name = document.getElementById('saveNameInput').value.trim();
+  if (!name) return;
+  var saved = getSaved();
+  if (saved.length >= MAX_SAVED) { alert(tt('saveOver')); return; }
+  saved.push({id:Date.now(), name:name, date:new Date().toLocaleDateString('el-GR'), result:currentResults});
   setSaved(saved);
   closeSaveModal();
-  const btn = document.getElementById('saveBtn');
-  const orig = btn.textContent;
-  btn.textContent = tt('saved');
-  setTimeout(() => { btn.textContent = orig; }, 2000);
+  var btn = document.getElementById('saveBtn');
+  var orig = btn.querySelector('#t-savebtn').textContent;
+  btn.querySelector('#t-savebtn').textContent = tt('saved');
+  setTimeout(function(){ btn.querySelector('#t-savebtn').textContent = orig; }, 1500);
 }
 function openSavedModal() {
   renderSavedList();
-  document.getElementById('savedListModal').classList.add('open');
+  document.getElementById('savedListModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
 }
 function closeSavedModal() {
-  document.getElementById('savedListModal').classList.remove('open');
+  document.getElementById('savedListModal').className = 'sys-modal';
   document.body.style.overflow = '';
 }
 function renderSavedList() {
-  const saved = getSaved();
-  const body = document.getElementById('savedListBody');
-  if (!saved.length) {
-    body.innerHTML = `<div class="empty-saved">${tt('noSaved')}</div>`;
-    return;
+  var saved = getSaved();
+  var body = document.getElementById('savedListBody');
+  if (!saved.length) { body.innerHTML = '<div class="empty-saved">'+tt('noSaved')+'</div>'; return; }
+  var html = '';
+  for (var i = 0; i < saved.length; i++) {
+    var s = saved[i];
+    html +=
+      '<div class="sys-item" onclick="openSysView('+s.id+')">'+
+        '<div style="flex:1">'+
+          '<div class="sys-item-name">'+s.name+'</div>'+
+          '<div class="sys-item-meta">'+namesList()[s.result.k]+' · '+s.result.trigger+'→'+s.result.hit+'/'+s.result.k+' · '+s.result.lines.length+' στήλες · 📅 '+s.date+'</div>'+
+          '<div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;">'+s.result.pool.join(' · ')+'</div>'+
+        '</div>'+
+        '<button class="sys-del" onclick="event.stopPropagation();deleteSys('+s.id+')">✕</button>'+
+      '</div>';
   }
-  const sorted = [...saved].sort((a,b) => a.name.localeCompare(b.name, 'el') || a.id - b.id);
-  body.innerHTML = sorted.map(s => `
-    <div class="sys-item" onclick="openSysView(${s.id})">
-      <div style="flex:1">
-        <div class="sys-item-name">${s.name}</div>
-        <div class="sys-item-meta">
-          ${namesList()[s.result.k] || s.result.k} · ${tt('mode')} ${modeLabel({key: s.result.modeKey})} · ${s.result.lines.length} ${tt('lines')} · 📅 ${s.date}
-        </div>
-        <div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;letter-spacing:.5px;">${s.result.pool.join(' · ')}</div>
-      </div>
-      <button class="sys-del" onclick="event.stopPropagation();deleteSys(${s.id})">✕</button>
-    </div>
-  `).join('');
+  body.innerHTML = html;
 }
 function deleteSys(id) {
-  setSaved(getSaved().filter(s => s.id !== id));
+  setSaved(getSaved().filter(function(x){ return x.id !== id; }));
   renderSavedList();
 }
 function openSysView(id) {
-  const sys = getSaved().find(s => s.id === id);
+  var saved = getSaved(), sys = null;
+  for (var i=0;i<saved.length;i++) if (saved[i].id===id) { sys=saved[i]; break; }
   if (!sys) return;
   closeSavedModal();
-  const r = sys.result;
+  var r = sys.result;
   document.getElementById('sysViewTitle').textContent = sys.name;
-  const cardsHTML = r.lines.map((line, idx) => {
-    const balls = line.map(n => `<div class="ball">${n<10?'0'+n:n}</div>`).join('');
-    return `
-      <div class="res-card" style="animation-delay:${idx*0.02}s">
-        <div class="rc-head">
-          <div class="rc-idx">${idx+1}</div>
-          <div class="rc-title">${tt('column')} ${idx+1} · ${greekUpper(namesList()[r.k] || String(r.k))}</div>
-        </div>
-        <div class="rc-body">${balls}</div>
-      </div>
-    `;
-  }).join('');
-  document.getElementById('sysViewBody').innerHTML = `
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-family:monospace;font-size:11px;color:var(--muted2);line-height:1.8;">
-      <b style="color:var(--gold)">${tt('numbers')}:</b> ${r.pool.join(' · ')}<br>
-      <b style="color:var(--blue2)">${tt('type')}:</b> ${namesList()[r.k] || r.k} &nbsp;|&nbsp;
-      <b style="color:var(--blue2)">${tt('mode')}:</b> ${modeLabel({key:r.modeKey})} &nbsp;|&nbsp;
-      <b style="color:var(--green)">${tt('columns')}:</b> ${r.lines.length}<br>
-      <b style="color:var(--muted)">${tt('savedOn')}:</b> ${sys.date}
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-      <button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;letter-spacing:1px;" onclick="regenFromSaved(${sys.id})">${tt('regen')}</button>
-      <button class="qr-btn" style="margin-top:0;font-size:14px;padding:14px;" onclick="qrFromSaved(${sys.id})">${tt('qrTickets')}</button>
-    </div>
-    ${cardsHTML}
-  `;
-  document.getElementById('sysViewModal').classList.add('open');
+  document.getElementById('sysViewBody').innerHTML =
+    '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-family:monospace;font-size:11px;color:var(--muted2);line-height:1.8;">'+
+      '<b style="color:var(--gold)">'+tt('numbers')+':</b> '+r.pool.join(' · ')+'<br>'+
+      '<b style="color:var(--blue2)">'+tt('type')+':</b> '+namesList()[r.k]+' | '+r.trigger+'→'+r.hit+'/'+r.k+'<br>'+
+      r.lines.length+' στήλες | '+tt('savedOn')+': '+sys.date+
+    '</div>'+
+    '<button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;" onclick="regenFromSaved('+sys.id+')">'+tt('regen')+'</button>';
+  document.getElementById('sysViewModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
 }
 function closeSysView() {
-  document.getElementById('sysViewModal').classList.remove('open');
+  document.getElementById('sysViewModal').className = 'sys-modal';
   document.body.style.overflow = '';
 }
 function regenFromSaved(id) {
-  const sys = getSaved().find(s => s.id === id);
+  var saved = getSaved(), sys = null;
+  for (var i=0;i<saved.length;i++) if (saved[i].id===id) { sys=saved[i]; break; }
   if (!sys) return;
   closeSysView();
-  clearNums();
   currentResults = JSON.parse(JSON.stringify(sys.result));
   gameK = currentResults.k;
-  selectedModeKey = currentResults.modeKey;
+  triggerVal = currentResults.trigger;
+  hitVal = currentResults.hit;
   selected = new Set(currentResults.pool);
   syncSelectedVisuals();
   updateSelBar();
   buildTypeCards();
-  buildModeGrid();
-  updateCond();
+  updateTHDisplay();
+  updateSystem();
   renderResults(currentResults);
   document.getElementById('saveBtn').style.display = 'block';
-}
-function qrFromSaved(id) {
-  const sys = getSaved().find(s => s.id === id);
-  if (!sys) return;
-  closeSysView();
-  currentResults = JSON.parse(JSON.stringify(sys.result));
-  gameK = currentResults.k;
-  selectedModeKey = currentResults.modeKey;
-  openQR();
 }
 
 function setLang(lang) {
   currentLang = lang;
-  const tr = T[lang];
-
-  document.getElementById('langEl').classList.toggle('active', lang === 'el');
-  document.getElementById('langEn').classList.toggle('active', lang === 'en');
-  document.documentElement.lang = lang === 'el' ? 'el' : 'en';
-
-  const ids = ['subtitle','lastdraw','step1','step2','step3','howmany','lines','estcost',
-    'saved-btn','genbtn','savebtn','genbtn-sticky','qr-title','bonus-sub','draws-lbl',
-    'total-lbl','mult-lbl','mult-total-lbl','savemodal-title','saveconfirm','savedlist-title'];
-
-  ids.forEach(id => {
-    const el = document.getElementById('t-' + id);
-    if (el) el.innerHTML = tr[id];
-  });
-
-  document.getElementById('t-savemodal-title2').innerHTML = tr['savemodal-title'];
-  document.getElementById('t-savedlist-title2').innerHTML = tr['savedlist-title'];
-
-  const inp = document.getElementById('saveNameInput');
-  if (inp) inp.placeholder = tr.saveplaceholder;
-
-  const emptyEl = document.getElementById('t-empty');
-  if (emptyEl) emptyEl.innerHTML = tr.empty;
-
-  const liveTxt = document.getElementById('liveBadgeText');
-  if (liveTxt) liveTxt.textContent = liveVisible ? tr.close : 'LIVE';
-
+  document.getElementById('langEl').className = 'lang-btn'+(lang==='el'?' active':'');
+  document.getElementById('langEn').className = 'lang-btn'+(lang==='en'?' active':'');
+  document.documentElement.lang = lang;
+  document.getElementById('t-subtitle').textContent = tt('subtitle');
+  document.getElementById('t-lastdraw').textContent = tt('lastdraw');
+  document.getElementById('t-step1').textContent = tt('step1');
+  document.getElementById('t-step2').textContent = tt('step2');
+  document.getElementById('t-step3').textContent = tt('step3');
+  document.getElementById('t-howmany').textContent = tt('howmany');
+  document.getElementById('t-lines').textContent = tt('lines');
+  document.getElementById('t-estcost').textContent = tt('estcost');
+  document.getElementById('t-genbtn').textContent = tt('genbtn');
+  document.getElementById('t-savebtn').textContent = tt('savebtn');
+  document.getElementById('t-saved-btn').textContent = tt('savedBtn');
+  document.getElementById('saveNameInput').placeholder = tt('placeholder');
   buildTypeCards();
-  buildModeGrid();
-  updateSelBar();
-  updateCond();
+  updateSystem();
   if (currentResults) renderResults(currentResults);
-  refreshSavedBadge();
 }
 
+// ---- WINNER / DRAW MODE ----
+var winnerMode = false; // true = picking winner numbers
+var winnerNums = new Set();
+
+function toggleMode(mode) {
+  if (mode === 'winner') {
+    if (winnerMode) {
+      // Toggle OFF - clear everything
+      clearWinner();
+    } else {
+      // Toggle ON
+      winnerMode = true;
+      document.getElementById('btnWinner').className = 'toggle-btn active-win';
+      document.getElementById('btnDraw').className = 'toggle-btn';
+      syncNumGridWinner();
+    }
+  } else {
+    // DRAW mode - winner stays active/locked, just run the draw
+    document.getElementById('btnDraw').className = 'toggle-btn active-draw';
+    drawActive = true;
+    runDraw();
+  }
+}
+
+function syncNumGridWinner() {
+  for (var i = 1; i <= 80; i++) {
+    var el = document.getElementById('nc'+i);
+    if (!el) continue;
+    var cls = 'nc locked';
+    if (selected.has(i)) cls += ' sel';
+    if (liveNumbers.indexOf(i) >= 0) cls += ' live-hit';
+    if (winnerNums.has(i)) cls += ' winner';
+    el.className = cls;
+  }
+}
+
+function toggleNumOriginal(n) {
+  // original toggleNum - only works when not in winner mode
+  if (selected.has(n)) selected.delete(n); else selected.add(n);
+  syncSelectedVisuals();
+  updateSelBar();
+  clampTriggerHit();
+  updateSystem();
+}
+
+function toggleNumWinner(n) {
+  if (winnerNums.has(n)) winnerNums.delete(n);
+  else winnerNums.add(n);
+  syncNumGridWinner();
+  // Auto-redraw if draw was already active
+  if (drawActive && currentResults) runDraw();
+}
+
+function clearWinner() {
+  winnerMode = false;
+  drawActive = false;
+  winnerNums.clear();
+  document.getElementById('btnWinner').className = 'toggle-btn';
+  document.getElementById('btnDraw').className = 'toggle-btn';
+  syncSelectedVisuals();
+  var badges = document.querySelectorAll('.draw-badge');
+  for (var i = 0; i < badges.length; i++) badges[i].remove();
+  var pays = document.querySelectorAll('.payout-badge');
+  for (var j = 0; j < pays.length; j++) pays[j].remove();
+  // Reset all balls to original state
+  var balls = document.querySelectorAll('.ball.hit');
+  for (var k = 0; k < balls.length; k++) balls[k].classList.remove('hit');
+}
+
+
+var bonusMode = false;
+var drawActive = false;  // true once ΔΙΑΛΟΓΗ has been pressed
+
+function toggleBonus() {
+  bonusMode = !bonusMode;
+  document.getElementById('bonusBtn').className = bonusMode ? 'bonus-btn active' : 'bonus-btn';
+  // Re-run draw if already drawn
+  if (drawActive && currentResults) runDraw();
+}
+
+var PAYOUTS = {
+  1:  {1: 1.25},
+  2:  {2: 2.5, 1: 0.5},
+  3:  {3: 12.5, 2: 1.25},
+  4:  {4: 50, 3: 2, 2: 0.5},
+  5:  {5: 225, 4: 10, 3: 1},
+  6:  {6: 800, 5: 25, 4: 3.5, 3: 0.5},
+  7:  {7: 2500, 6: 50, 5: 10, 4: 1.5, 3: 0.5},
+  8:  {8: 7500, 7: 500, 6: 25, 5: 5, 4: 1},
+  9:  {9: 20000, 8: 2000, 7: 100, 6: 12.5, 5: 2.5, 4: 0.5},
+  10: {10: 50000, 9: 5000, 8: 250, 7: 40, 6: 10, 5: 2},
+  11: {11: 250000, 10: 7500, 9: 750, 8: 125, 7: 25, 6: 5, 5: 0.5},
+  12: {12: 500000, 11: 12500, 10: 1250, 9: 500, 8: 75, 7: 12.5, 6: 2.5}
+};
+
+var PAYOUTS_BONUS = {
+  1:  {1: 26.25},
+  2:  {2: 35, 1: 8},
+  3:  {3: 87.5, 2: 9, 1: 4},
+  4:  {4: 300, 3: 12, 2: 4, 1: 2.5},
+  5:  {5: 675, 4: 45, 3: 8.5, 2: 2.5, 1: 1.5},
+  6:  {6: 2050, 5: 150, 4: 13.5, 3: 4.5, 2: 1.5, 1: 1},
+  7:  {7: 7500, 6: 200, 5: 40, 4: 6.5, 3: 4, 2: 1.5, 1: 1},
+  8:  {8: 20000, 7: 1500, 6: 100, 5: 15, 4: 3.5, 3: 2, 2: 1.5, 1: 1},
+  9:  {9: 50000, 8: 5000, 7: 250, 6: 35, 5: 7.5, 4: 3, 3: 2, 2: 1.5, 1: 1},
+  10: {10: 125000, 9: 12500, 8: 750, 7: 90, 6: 30, 5: 3.5, 4: 2, 3: 1.25, 2: 1},
+  11: {11: 600000, 10: 15500, 9: 1750, 8: 275, 7: 52.5, 6: 12.5, 5: 3, 4: 2, 3: 1.5, 2: 1.25, 1: 1},
+  12: {12: 1000000, 11: 37500, 10: 2750, 9: 1100, 8: 175, 7: 25, 6: 5, 5: 2, 4: 1.75, 3: 1.5, 2: 1.25, 1: 1}
+};
+
+function getPayout(k, hits) {
+  var table = bonusMode ? PAYOUTS_BONUS : PAYOUTS;
+  if (!table[k]) return 0;
+  return table[k][hits] || 0;
+}
+
+function runDraw() {
+  if (!currentResults) return;
+  if (winnerNums.size === 0) {
+    alert('Επίλεξε πρώτα τη νικήτρια στήλη (πάτα ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ).');
+    document.getElementById('btnDraw').className = 'toggle-btn';
+    return;
+  }
+  var lines = currentResults.lines;
+  var k = currentResults.k;
+  var wrap = document.getElementById('resultsWrap');
+  var cardEls = wrap.querySelectorAll('.res-card');
+  var cardData = [];
+
+  for (var ci = 0; ci < cardEls.length; ci++) {
+    var card = cardEls[ci];
+    var lineIdx = parseInt(card.getAttribute('data-line-idx'));
+    if (isNaN(lineIdx)) lineIdx = ci;
+    var line = lines[lineIdx];
+    if (!line) continue;
+
+    var hits = 0;
+    for (var j = 0; j < line.length; j++) {
+      if (winnerNums.has(line[j])) hits++;
+    }
+
+    // Update header badges
+    var head = card.querySelector('.rc-head');
+    if (head) {
+      var oldBadge = head.querySelector('.draw-badge');
+      if (oldBadge) oldBadge.remove();
+      var oldPay = head.querySelector('.payout-badge');
+      if (oldPay) oldPay.remove();
+
+      var badge = document.createElement('div');
+      badge.className = hits === k ? 'draw-badge hit-full' : hits >= Math.ceil(k/2) ? 'draw-badge hit-good' : 'draw-badge hit-low';
+      badge.textContent = hits+'/'+k;
+      head.appendChild(badge);
+
+      var payout = getPayout(k, hits);
+      var payBadge = document.createElement('div');
+      if (payout > 0) {
+        payBadge.className = payout >= 1000 ? 'payout-badge big' : 'payout-badge win';
+        payBadge.textContent = payout >= 1000000
+          ? (payout/1000000).toFixed(1)+'M€'
+          : payout >= 1000 ? (payout/1000).toFixed(0)+'K€'
+          : payout+'€';
+      } else {
+        payBadge.className = 'payout-badge nowin';
+        payBadge.textContent = '0€';
+      }
+      head.appendChild(payBadge);
+    }
+
+    // Update balls - use line data not DOM order
+    var body = card.querySelector('.rc-body');
+    if (body) {
+      var balls = body.querySelectorAll('.ball');
+      for (var b = 0; b < balls.length; b++) {
+        var num = parseInt(balls[b].textContent);
+        if (winnerNums.has(num)) balls[b].classList.add('hit');
+        else balls[b].classList.remove('hit');
+      }
+    }
+
+    cardData.push({el: card, hits: hits});
+  }
+
+  // Calculate total winnings
+  var totalWin = 0;
+  for (var ti = 0; ti < cardData.length; ti++) totalWin += getPayout(k, cardData[ti].hits);
+  totalWin = Math.round(totalWin * 100) / 100;
+
+  // Remove old total bar if exists
+  var oldTotal = wrap.querySelector('.total-winnings');
+  if (oldTotal) oldTotal.remove();
+
+  // Insert total winnings bar before the first card
+  var totalBar = document.createElement('div');
+  totalBar.className = 'total-winnings';
+  var modeLabel = bonusMode ? 'KINO BONUS' : 'KINO';
+  totalBar.innerHTML =
+    '<div class="total-winnings-label">'+
+      '<b>ΣΥΝΟΛΟ ΚΕΡΔΩΝ</b><br>'+
+      modeLabel+' &nbsp;·&nbsp; '+currentResults.lines.length+' στήλες &times; 0.50€'+
+    '</div>'+
+    '<div class="total-winnings-amount">'+
+      totalWin.toFixed(2)+'<small>€</small>'+
+    '</div>';
+
+  // Sort by hits descending
+  cardData.sort(function(a,b){ return b.hits - a.hits; });
+
+  // Build verified numbers box
+  var oldVerified = wrap.querySelector('.verified-box');
+  if (oldVerified) oldVerified.remove();
+
+  var pool = currentResults.pool;
+  var hitCount = 0;
+  for (var vi = 0; vi < pool.length; vi++) {
+    if (winnerNums.has(pool[vi])) hitCount++;
+  }
+
+  var verifiedBox = document.createElement('div');
+  verifiedBox.className = 'verified-box';
+
+  var ballsHtml = '';
+  for (var pi = 0; pi < pool.length; pi++) {
+    var pn = pool[pi];
+    var isHit = winnerNums.has(pn);
+    ballsHtml += '<div class="vball'+(isHit?' hit':'')+'">'+( pn<10?'0'+pn:''+pn)+'</div>';
+  }
+
+  verifiedBox.innerHTML =
+    '<div class="verified-title">'+
+      '<span>ΕΠΑΛΗΘΕΥΜΕΝΑ</span>'+
+      '<span class="verified-count">'+hitCount+'/'+pool.length+'</span>'+
+    '</div>'+
+    '<div class="verified-balls">'+ballsHtml+'</div>';
+
+  // Insert total bar, verified box, then cards
+  wrap.appendChild(totalBar);
+  wrap.appendChild(verifiedBox);
+  for (var di = 0; di < cardData.length; di++) {
+    wrap.appendChild(cardData[di].el);
+  }
+}
+
+function toggleNum(n) {
+  if (winnerMode) {
+    toggleNumWinner(n);
+  } else {
+    if (selected.has(n)) selected.delete(n); else selected.add(n);
+    syncSelectedVisuals();
+    updateSelBar();
+    clampTriggerHit();
+    updateSystem();
+  }
+}
+
+// Show toggle bar when results exist
+function showToggleBar(show) {
+  document.getElementById('toggleBar').style.display = show ? 'flex' : 'none';
+}
+
+// ---- QR GENERATION ----
+function openQRModal() {
+  if (!currentResults) return;
+  var body = document.getElementById('qrModalBody');
+  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">Φόρτωση QR...</div>';
+  document.getElementById('qrModal').className = 'sys-modal open';
+  document.body.style.overflow = 'hidden';
+
+  // Load QR library then generate
+  if (typeof QRCode === 'undefined') {
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.onload = function() { buildQRCards(); };
+    document.head.appendChild(script);
+  } else {
+    buildQRCards();
+  }
+}
+
+function buildQRCards() {
+  var body = document.getElementById('qrModalBody');
+  body.innerHTML = '';
+  var lines = currentResults.lines;
+  var k = currentResults.k;
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    // OPAP KINO QR format: game=1100, numbers joined
+    var nums = line.join(',');
+    var qrData = 'KINO|' + k + '|' + nums;
+
+    var card = document.createElement('div');
+    card.className = 'qr-card';
+    card.innerHTML =
+      '<div class="qr-card-title">ΣΤΗΛΗ ' + (i+1) + ' &middot; ' + k + ' ΑΡΙΘΜΟΙ</div>' +
+      '<div id="qr-'+i+'"></div>' +
+      '<div class="qr-nums">' + line.map(function(n){ return n<10?'0'+n:''+n; }).join(' &middot; ') + '</div>';
+    body.appendChild(card);
+
+    try {
+      new QRCode(document.getElementById('qr-'+i), {
+        text: qrData,
+        width: 200,
+        height: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch(e) {
+      document.getElementById('qr-'+i).innerHTML =
+        '<div style="font-size:11px;color:var(--red);padding:10px;">Αδύνατη δημιουργία QR</div>';
+    }
+  }
+}
+
+function closeQRModal() {
+  document.getElementById('qrModal').className = 'sys-modal';
+  document.body.style.overflow = '';
+}
+
+// ---- INIT ----
 buildNumGrid();
 buildTypeCards();
-buildModeGrid();
-updateSelBar();
-updateCond();
+updateTHDisplay();
+updateSystem();
 refreshSavedBadge();
+
 </script>
 </body>
 </html>
