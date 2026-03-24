@@ -662,6 +662,51 @@ body::before {
   font-size:12px; color:var(--blue2);
   letter-spacing:1px;
 }
+
+.stats-btn {
+  padding:8px 14px;
+  background:rgba(74,158,255,0.1); border:1.5px solid var(--blue);
+  border-radius:20px; font-size:11px; color:var(--blue2);
+  font-family:'Source Code Pro',monospace; cursor:pointer;
+}
+.stats-modal { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.96); display:none; flex-direction:column; overflow-y:auto; }
+.stats-modal.open { display:flex; }
+.stats-section { margin-bottom:20px; }
+.stats-section-title {
+  font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:3px;
+  text-transform:uppercase; color:var(--muted2); margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.stats-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.hot-cold-grid { display:flex; flex-wrap:wrap; gap:6px; }
+.stat-ball {
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Source Code Pro',monospace; font-size:12px; font-weight:600;
+  flex-direction:column; cursor:default;
+}
+.stat-ball.hot { background:linear-gradient(135deg,#5a1a00,#8a3000); border:2px solid var(--price); color:var(--price); }
+.stat-ball.cold { background:linear-gradient(135deg,#001a3a,#00245a); border:2px solid var(--blue2); color:var(--blue2); }
+.stat-ball.delayed { background:linear-gradient(135deg,#1a0050,#2a0070); border:2px solid #aa88ff; color:#aa88ff; }
+.stat-ball-sub { font-size:8px; opacity:0.8; margin-top:1px; }
+.delay-grid { display:flex; flex-direction:column; gap:4px; }
+.delay-row {
+  display:flex; align-items:center; gap:8px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:6px 10px;
+}
+.delay-num { font-family:'Source Code Pro',monospace; font-size:12px; font-weight:600; color:var(--blue2); min-width:28px; }
+.delay-bar-wrap { flex:1; background:var(--border); border-radius:4px; height:8px; overflow:hidden; }
+.delay-bar-fill { height:100%; border-radius:4px; }
+.delay-count { font-family:'Source Code Pro',monospace; font-size:11px; min-width:40px; text-align:right; }
+.repeat-grid { display:flex; flex-wrap:wrap; gap:6px; }
+.repeat-item {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:6px 10px; text-align:center;
+}
+.repeat-num { font-family:'Oswald',sans-serif; font-size:20px; color:var(--gold); }
+.repeat-sub { font-size:9px; color:var(--muted); letter-spacing:1px; }
+.stats-loading { text-align:center; padding:40px; color:var(--muted); font-size:13px; }
 </style>
 </head>
 <body>
@@ -679,16 +724,10 @@ body::before {
         <button class="lang-btn active" id="langEl" onclick="setLang('el')">&#x1F1EC;&#x1F1F7;</button>
         <button class="lang-btn" id="langEn" onclick="setLang('en')">&#x1F1EC;&#x1F1E7;</button>
       </div>
-      <div class="live-badge" onclick="toggleLive()">
-        <div class="live-dot"></div>
-        <span id="liveBadgeText">LIVE</span>
-      </div>
+      <button class="stats-btn" id="statsBtnHeader" onclick="openStats()">📊 ΣΤΑΤΙΣΤΙΚΑ</button>
     </div>
   </div>
-  <div class="live-strip" id="liveStrip">
-    <div class="live-strip-label"><span id="t-lastdraw">ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ</span> — <span id="liveDrawNum">—</span></div>
-    <div class="live-numbers" id="liveNumbers"></div>
-  </div>
+
 </div>
 
 <div class="wrap">
@@ -828,7 +867,6 @@ var gameK = 6;
 var triggerVal = 7;
 var hitVal = 6;
 var selected = new Set();
-var liveVisible = false;
 var liveNumbers = [];
 var currentResults = null;
 var MAX_COMBOS = 300;
@@ -1331,31 +1369,10 @@ function renderResults(res) {
 }
 
 // ---- LIVE ----
-function parseLiveData(data) {
-  var nums = [], drawId = '';
-  // Format 1: { last: { winningNumbers: { list: [] }, drawId: X } }
-  if (data && data.last && data.last.winningNumbers) {
-    nums = data.last.winningNumbers.list || [];
-    drawId = data.last.drawId || '';
-  }
-  // Format 2: { winningNumbers: { list: [] }, drawId: X }
-  else if (data && data.winningNumbers) {
-    nums = data.winningNumbers.list || [];
-    drawId = data.drawId || '';
-  }
-  // Format 3: array of draws, take last
-  else if (Array.isArray(data) && data.length) {
-    var d = data[data.length-1];
-    nums = (d.winningNumbers && d.winningNumbers.list) ? d.winningNumbers.list : [];
-    drawId = d.drawId || '';
-  }
-  return { nums: nums, drawId: drawId };
-}
 
 function applyLiveData(nums, drawId) {
   if (!nums || !nums.length) return;
   liveNumbers = nums;
-  // ONLY update the live strip - do NOT touch the grid or results
   document.getElementById('liveDrawNum').textContent = '#'+drawId;
   var html = '';
   for (var i = 0; i < nums.length; i++) {
@@ -1365,53 +1382,11 @@ function applyLiveData(nums, drawId) {
   document.getElementById('liveNumbers').innerHTML = html;
 }
 
-// Direct URLs (work when hosted on server - GitHub Pages etc)
-// Proxy URLs (work when opening HTML file locally)
-var LIVE_APIS = [
-  'https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
-  'https://corsproxy.io/?https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
-  'https://api.allorigins.win/raw?url=https://api.opap.gr/draws/v3.0/1100/last-result-and-active',
-  'https://api.opap.gr/games/v1.0/1100/last-result-and-active',
-  'https://corsproxy.io/?https://api.opap.gr/games/v1.0/1100/last-result-and-active'
-];
-var liveApiIdx = 0;
-
 function fetchLive() {
   tryLiveApi(0);
 }
 
-function tryLiveApi(idx) {
-  if (idx >= LIVE_APIS.length) {
-    document.getElementById('liveNumbers').innerHTML =
-      '<span style="font-size:11px;color:var(--muted)">'+tt('connectionFail')+'</span>';
-    return;
-  }
-  fetch(LIVE_APIS[idx])
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP '+r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      var parsed = parseLiveData(data);
-      if (!parsed.nums.length) throw new Error('empty');
-      liveApiIdx = idx; // remember which one worked
-      applyLiveData(parsed.nums, parsed.drawId);
-    })
-    .catch(function() {
-      tryLiveApi(idx + 1); // try next
-    });
-}
 
-function toggleLive() {
-  liveVisible = !liveVisible;
-  document.getElementById('liveStrip').className = 'live-strip'+(liveVisible?' visible':'');
-  document.getElementById('liveBadgeText').textContent = liveVisible ? 'CLOSE' : 'LIVE';
-  if (liveVisible) fetchLive();
-}
-// Poll every 5 seconds when live is active (KINO draw every 5 min, but results update faster)
-setInterval(function(){ if (liveVisible) fetchLive(); }, 5000);
-
-// ---- SAVED ----
 function getSaved() {
   try { return JSON.parse(localStorage.getItem('kinoMasterSystems')||'[]'); } catch(e){ return []; }
 }
@@ -1561,7 +1536,7 @@ function toggleMode(mode) {
   } else {
     document.getElementById('btnDraw').className = 'toggle-btn active-draw';
     if (winnerNums.size === 0) {
-      alert('Πάτα πρώτα ΕΥΚΑΙΡΙΑ ΣΤΗΛΗ και επίλεξε τους κληρωθέντες αριθμούς.');
+      alert('Πάτα πρώτα ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ και επίλεξε τους κληρωθέντες.');
       document.getElementById('btnDraw').className = 'toggle-btn';
       return;
     }
@@ -1863,6 +1838,171 @@ function closeQRModal() {
   document.body.style.overflow = '';
 }
 
+// ============================================================
+// STATISTICS ENGINE
+// ============================================================
+var statsData = null;
+var statsLoaded = false;
+
+function openStats() {
+  document.getElementById('statsModal').className = 'sys-modal open';
+  document.body.style.overflow = 'hidden';
+  if (!statsLoaded) loadStats();
+}
+
+function closeStats() {
+  document.getElementById('statsModal').className = 'sys-modal';
+  document.body.style.overflow = '';
+}
+
+function loadStats() {
+  var body = document.getElementById('statsBody');
+  body.innerHTML = '<div class="stats-loading">Φόρτωση τελευταίων κληρώσεων...</div>';
+
+  // Get last 3 hours = ~36 draws (1 per 5 min)
+  var now = new Date();
+  var from = new Date(now.getTime() - 3*60*60*1000);
+  var fromStr = from.toISOString().split('T')[0];
+  var toStr = now.toISOString().split('T')[0];
+
+  var urls = [
+    'https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr,
+    'https://corsproxy.io/?https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr,
+    'https://api.allorigins.win/raw?url=https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr
+  ];
+
+  tryStatsUrl(urls, 0);
+}
+
+function tryStatsUrl(urls, idx) {
+  if (idx >= urls.length) {
+    document.getElementById('statsBody').innerHTML = '<div class="stats-loading" style="color:var(--red)">Αδυναμία σύνδεσης. Δοκίμασε αργότερα.</div>';
+    return;
+  }
+  fetch(urls[idx])
+    .then(function(r) { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(data) {
+      var draws = [];
+      if (data && data.content) draws = data.content;
+      else if (Array.isArray(data)) draws = data;
+      if (!draws.length) throw new Error('empty');
+      processStats(draws);
+    })
+    .catch(function() { tryStatsUrl(urls, idx+1); });
+}
+
+function processStats(draws) {
+  // Sort by drawId desc (newest first)
+  draws.sort(function(a,b) { return (b.drawId||0)-(a.drawId||0); });
+
+  var freq = {}; // number -> count of appearances
+  var lastSeen = {}; // number -> draws ago (0 = appeared in last draw)
+  var repeatMap = {}; // number -> consecutive streak
+  
+  for (var n = 1; n <= 80; n++) {
+    freq[n] = 0;
+    lastSeen[n] = draws.length; // assume not seen
+    repeatMap[n] = 0;
+  }
+
+  // Process all draws
+  for (var di = 0; di < draws.length; di++) {
+    var nums = (draws[di].winningNumbers && draws[di].winningNumbers.list) ? draws[di].winningNumbers.list : [];
+    for (var ni = 0; ni < nums.length; ni++) {
+      var n2 = nums[ni];
+      if (n2 >= 1 && n2 <= 80) {
+        freq[n2]++;
+        if (lastSeen[n2] === draws.length) lastSeen[n2] = di; // first time seen
+      }
+    }
+  }
+
+  // Consecutive repeat streak from most recent draws
+  var streak = {};
+  for (var n3 = 1; n3 <= 80; n3++) streak[n3] = 0;
+  for (var di2 = 0; di2 < draws.length; di2++) {
+    var nums2 = (draws[di2].winningNumbers && draws[di2].winningNumbers.list) ? draws[di2].winningNumbers.list : [];
+    for (var n4 = 1; n4 <= 80; n4++) {
+      if (nums2.indexOf(n4) >= 0) {
+        if (di2 === 0 || streak[n4] === di2) streak[n4] = di2+1;
+      }
+    }
+  }
+
+  // Hot = appeared most in last 3h
+  var sortedFreq = Object.keys(freq).map(function(n){return {n:parseInt(n),f:freq[n]};});
+  sortedFreq.sort(function(a,b){return b.f-a.f;});
+  var hot = sortedFreq.slice(0,10);
+  var cold = sortedFreq.slice(-10).reverse();
+
+  // Delayed = not appeared for most draws
+  var delayed = Object.keys(lastSeen).map(function(n){return {n:parseInt(n),d:lastSeen[n]};});
+  delayed.sort(function(a,b){return b.d-a.d;});
+  delayed = delayed.slice(0,20);
+
+  // Repeats = appeared in consecutive draws
+  var repeats = Object.keys(streak).map(function(n){return {n:parseInt(n),s:streak[n]};});
+  repeats = repeats.filter(function(x){return x.s>=2;});
+  repeats.sort(function(a,b){return b.s-a.s;});
+  repeats = repeats.slice(0,15);
+
+  renderStats(hot, cold, delayed, repeats, draws.length);
+}
+
+function renderStats(hot, cold, delayed, repeats, totalDraws) {
+  var totalMins = totalDraws * 5;
+  var body = document.getElementById('statsBody');
+
+  // HOT
+  var hotHtml = '<div class="stats-section"><div class="stats-section-title">🔥 HOT NUMBERS — τελευταίες 3 ώρες (~'+totalDraws+' κληρώσεις)</div><div class="hot-cold-grid">';
+  for (var i=0;i<hot.length;i++) {
+    hotHtml += '<div class="stat-ball hot">'+( hot[i].n<10?'0'+hot[i].n:''+hot[i].n)+'<div class="stat-ball-sub">'+hot[i].f+'x</div></div>';
+  }
+  hotHtml += '</div></div>';
+
+  // COLD
+  var coldHtml = '<div class="stats-section"><div class="stats-section-title">🧊 COLD NUMBERS — τελευταίες 3 ώρες</div><div class="hot-cold-grid">';
+  for (var i2=0;i2<cold.length;i2++) {
+    coldHtml += '<div class="stat-ball cold">'+( cold[i2].n<10?'0'+cold[i2].n:''+cold[i2].n)+'<div class="stat-ball-sub">'+cold[i2].f+'x</div></div>';
+  }
+  coldHtml += '</div></div>';
+
+  // DELAYED
+  var delayHtml = '<div class="stats-section"><div class="stats-section-title">⏳ ΚΑΘΥΣΤΕΡΗΣΕΙΣ</div><div class="delay-grid">';
+  var maxDelay = delayed.length ? delayed[0].d : 1;
+  for (var i3=0;i3<delayed.length;i3++) {
+    var d = delayed[i3];
+    var pct = Math.round((d.d/maxDelay)*100);
+    var color = d.d > 30 ? 'var(--red)' : d.d > 15 ? 'var(--price)' : 'var(--blue2)';
+    delayHtml += '<div class="delay-row">'+
+      '<div class="delay-num">'+( d.n<10?'0'+d.n:''+d.n)+'</div>'+
+      '<div class="delay-bar-wrap"><div class="delay-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
+      '<div class="delay-count" style="color:'+color+'">'+d.d+' κλ.</div>'+
+    '</div>';
+  }
+  delayHtml += '</div></div>';
+
+  // REPEATS
+  var repHtml = '<div class="stats-section"><div class="stats-section-title">🔁 ΕΠΑΝΑΛΗΨΕΙΣ (διαδοχικές κληρώσεις)</div>';
+  if (!repeats.length) {
+    repHtml += '<div style="font-size:12px;color:var(--muted);padding:10px;">Δεν υπάρχουν επαναλήψεις στο τρέχον διάστημα.</div>';
+  } else {
+    repHtml += '<div class="repeat-grid">';
+    for (var i4=0;i4<repeats.length;i4++) {
+      var r = repeats[i4];
+      repHtml += '<div class="repeat-item">'+
+        '<div class="repeat-num">'+( r.n<10?'0'+r.n:''+r.n)+'</div>'+
+        '<div class="repeat-sub">'+r.s+'x \u03c3\u03b5\u03c1\u03af</div>'+
+      '</div>';
+    }
+    repHtml += '</div>';
+  }
+  repHtml += '</div>';
+
+  body.innerHTML = hotHtml + coldHtml + delayHtml + repHtml;
+  statsLoaded = true;
+}
+
 // ---- INIT ----
 buildNumGrid();
 buildTypeCards();
@@ -1871,5 +2011,15 @@ updateSystem();
 refreshSavedBadge();
 
 </script>
+
+<div class="sys-modal" id="statsModal" style="display:none;flex-direction:column;overflow-y:auto;">
+  <div class="sys-modal-header">
+    <div class="sys-modal-title">📊 ΣΤΑΤΙΣΤΙΚΑ KINO</div>
+    <button class="qr-close" onclick="closeStats()">&#x2715;</button>
+  </div>
+  <div class="sys-modal-body" id="statsBody">
+    <div class="stats-loading">Φόρτωση δεδομένων...</div>
+  </div>
+</div>
 </body>
 </html>
