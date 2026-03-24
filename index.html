@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="el">
 <head>
 <meta charset="UTF-8" />
@@ -218,7 +219,13 @@ body::before {
   color:#000; border-color:var(--gold);
   box-shadow:0 2px 8px rgba(232,184,75,.3);
 }
-/* live-hit removed - live does not touch the grid */
+.nc.live-hit { border-color:var(--green) !important; }
+.nc.sel.live-hit {
+  background:linear-gradient(135deg,#2a8a5e,var(--green));
+  border-color:var(--green);
+  color:#fff;
+  box-shadow:0 2px 8px rgba(62,207,142,.3);
+}
 
 .sel-bar {
   background:var(--surface);
@@ -377,8 +384,10 @@ body::before {
   color:var(--blue2);
 }
 .ball.hit {
-  border-color:var(--gold) !important;
-  box-shadow:0 0 0 2.5px var(--gold), 0 0 10px rgba(232,184,75,0.5) !important;
+  background:linear-gradient(135deg,#3a2800,#5a3e00);
+  border-color:var(--gold);
+  color:var(--gold2);
+  box-shadow:0 0 8px rgba(232,184,75,0.5);
 }
 
 .empty {
@@ -663,51 +672,23 @@ body::before {
   letter-spacing:1px;
 }
 
-.stats-btn {
-  padding:8px 14px;
-  background:rgba(74,158,255,0.1); border:1.5px solid var(--blue);
-  border-radius:20px; font-size:11px; color:var(--blue2);
-  font-family:'Source Code Pro',monospace; cursor:pointer;
+.stats-section{margin-bottom:8px;}
+.stats-label{font-size:9px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.stats-balls{display:flex;flex-wrap:wrap;gap:3px;}
+.sball{width:30px;height:30px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;}
+.sball-num{font-size:9px;font-weight:700;line-height:1.1;}
+.sball-val{font-size:7px;opacity:0.85;line-height:1;}
+.sball.hot{background:rgba(255,90,90,0.15);border:1px solid var(--red);color:var(--red);}
+.sball.cold{background:rgba(74,158,255,0.12);border:1px solid var(--blue);color:var(--blue2);}
+.sball.delayed{background:rgba(255,159,63,0.12);border:1px solid var(--price);color:var(--price);}
+.sball.repeat{background:rgba(62,207,142,0.12);border:1px solid var(--green);color:var(--green);}
+
+@media (max-width: 420px) {
+  .summary-grid { grid-template-columns:repeat(2,1fr); }
+  .ball { width:34px; height:34px; font-size:11px; }
 }
-.stats-modal { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.96); display:none; flex-direction:column; overflow-y:auto; }
-.stats-modal.open { display:flex; }
-.stats-section { margin-bottom:20px; }
-.stats-section-title {
-  font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:3px;
-  text-transform:uppercase; color:var(--muted2); margin-bottom:10px;
-  display:flex; align-items:center; gap:8px;
-}
-.stats-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-.hot-cold-grid { display:flex; flex-wrap:wrap; gap:6px; }
-.stat-ball {
-  width:44px; height:44px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Source Code Pro',monospace; font-size:12px; font-weight:600;
-  flex-direction:column; cursor:default;
-}
-.stat-ball.hot { background:linear-gradient(135deg,#5a1a00,#8a3000); border:2px solid var(--price); color:var(--price); }
-.stat-ball.cold { background:linear-gradient(135deg,#001a3a,#00245a); border:2px solid var(--blue2); color:var(--blue2); }
-.stat-ball.delayed { background:linear-gradient(135deg,#1a0050,#2a0070); border:2px solid #aa88ff; color:#aa88ff; }
-.stat-ball-sub { font-size:8px; opacity:0.8; margin-top:1px; }
-.delay-grid { display:flex; flex-direction:column; gap:4px; }
-.delay-row {
-  display:flex; align-items:center; gap:8px;
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:8px; padding:6px 10px;
-}
-.delay-num { font-family:'Source Code Pro',monospace; font-size:12px; font-weight:600; color:var(--blue2); min-width:28px; }
-.delay-bar-wrap { flex:1; background:var(--border); border-radius:4px; height:8px; overflow:hidden; }
-.delay-bar-fill { height:100%; border-radius:4px; }
-.delay-count { font-family:'Source Code Pro',monospace; font-size:11px; min-width:40px; text-align:right; }
-.repeat-grid { display:flex; flex-wrap:wrap; gap:6px; }
-.repeat-item {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:8px; padding:6px 10px; text-align:center;
-}
-.repeat-num { font-family:'Oswald',sans-serif; font-size:20px; color:var(--gold); }
-.repeat-sub { font-size:9px; color:var(--muted); letter-spacing:1px; }
-.stats-loading { text-align:center; padding:40px; color:var(--muted); font-size:13px; }
 </style>
+
 </head>
 <body>
 <div class="header">
@@ -724,10 +705,21 @@ body::before {
         <button class="lang-btn active" id="langEl" onclick="setLang('el')">&#x1F1EC;&#x1F1F7;</button>
         <button class="lang-btn" id="langEn" onclick="setLang('en')">&#x1F1EC;&#x1F1E7;</button>
       </div>
-      <button class="stats-btn" id="statsBtnHeader" onclick="openStats()">📊 ΣΤΑΤΙΣΤΙΚΑ</button>
+      <div class="live-badge" onclick="toggleStats()">
+        <div class="live-dot"></div>
+        <span id="liveBadgeText">STATS</span>
+      </div>
     </div>
   </div>
-
+  <div class="live-strip" id="liveStrip">
+    <div class="live-strip-label" style="margin-bottom:8px;">
+      <span id="t-lastdraw">ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ</span> — <span id="statsDrawRef">...</span>
+    </div>
+    <div id="statsHot" style="margin-bottom:5px;"></div>
+    <div id="statsCold" style="margin-bottom:5px;"></div>
+    <div id="statsDelay" style="margin-bottom:5px;"></div>
+    <div id="statsRepeat"></div>
+  </div>
 </div>
 
 <div class="wrap">
@@ -807,8 +799,8 @@ body::before {
     <span id="savedBadge" style="font-size:12px;background:var(--border);border-radius:20px;padding:2px 10px;">0/30</span>
   </button>
 
-  <button class="gen-btn" id="genBtn" onclick="generate()"><span id="t-genbtn">&#x26A1; ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</span></button>
-  <button class="save-btn" id="saveBtn" onclick="openSaveModal()"><span id="t-savebtn">&#x1F4BE; ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></button>
+  <button class="gen-btn" id="genBtn" onclick="generate()"><span id="t-genbtn">⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ</span></button>
+  <button class="save-btn" id="saveBtn" onclick="openSaveModal()"><span id="t-savebtn">💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ</span></button>
 
   <div class="results-wrap" id="resultsWrap">
     <div class="empty">
@@ -872,55 +864,115 @@ var currentResults = null;
 var MAX_COMBOS = 300;
 var TICKET_PRICE = 0.50;
 var MAX_SAVED = 30;
+var winnerMode = false;
+var winnerNums = new Set();
+var bonusMode = false;
+var drawActive = false;
 
 var T = {
   el: {
-    subtitle:'Αυτόματη Διόρθωση Συστημάτων',lastdraw:'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
-    step1:'Τύπος Παιχνιδιού',step2:'Επιλογή Αριθμών',step3:'Σύστημα',
-    howmany:'Πόσους;',lines:'στήλες',estcost:'Εκτιμώμενο κόστος',
-    genbtn:'⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ',savebtn:'💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
+    subtitle:'Αυτόματη Διόρθωση Συστημάτων',
+    lastdraw:'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
+    step1:'Τύπος Παιχνιδιού',
+    step2:'Επιλογή Αριθμών',
+    step3:'Σύστημα',
+    howmany:'Πόσους;',
+    lines:'στήλες',
+    estcost:'Εκτιμώμενο κόστος',
+    genbtn:'⚡ ΔΗΜΙΟΥΡΓΙΑ ΣΥΣΤΗΜΑΤΟΣ',
+    savebtn:'💾 ΑΠΟΘΗΚΕΥΣΗ ΣΥΣΤΗΜΑΤΟΣ',
     empty:'Επίλεξε αριθμούς, τύπο παιχνιδιού και σύστημα, μετά πάτα ΔΗΜΙΟΥΡΓΙΑ',
     names:['','','','Τριάδα','Τετράδα','Πεντάδα','Εξάδα','Επτάδα','Οκτάδα','Εννιάδα','Δεκάδα','Ενδεκάδα','Δωδεκάδα'],
-    guarantee:'Στόχος',columns:'Στήλες',cost:'Κόστος',result:'ΑΠΟΤΕΛΕΣΜΑ',
-    column:'ΣΤΗΛΗ',validated:'Επαληθευμένο',lowerBound:'Κατώτατο',
-    exactChance:'Πιθανότητα',triggerHit:'αν πιάσουμε',
-    amongSelected:'στους επιλεγμένους',weGuarantee:'εγγυόμαστε',onALine:'σε 1 στήλη',
+    guarantee:'Στόχος',
+    columns:'Στήλες',
+    cost:'Κόστος',
+    result:'ΑΠΟΤΕΛΕΣΜΑ',
+    column:'ΣΤΗΛΗ',
+    validated:'Επαληθευμένο',
+    lowerBound:'Κατώτατο',
+    exactChance:'Πιθανότητα',
+    triggerHit:'αν πιάσουμε',
+    amongSelected:'στους επιλεγμένους',
+    weGuarantee:'εγγυόμαστε',
+    onALine:'σε 1 στήλη',
     noValidSystem:'Δεν βρέθηκε έγκυρο σύστημα μέχρι 300 στήλες.',
     tooExpensive:'Πολύ ακριβό (>300 στήλες). Μείωσε trigger ή hit.',
     noSaved:'Δεν υπάρχουν αποθηκευμένα συστήματα ακόμα.',
-    numbers:'Αριθμοί',type:'Τύπος',savedOn:'Αποθηκεύτηκε',
-    regen:'⚡ ΕΠΑΝΑΦΟΡΑ',saved:'✅ ΑΠΟΘΗΚΕΥΤΗΚΕ!',
+    numbers:'Αριθμοί',
+    type:'Τύπος',
+    savedOn:'Αποθηκεύτηκε',
+    regen:'⚡ ΕΠΑΝΑΦΟΡΑ',
+    saved:'✅ ΑΠΟΘΗΚΕΥΤΗΚΕ!',
     saveOver:'Έχεις φτάσει το όριο των 30 αποθηκευμένων συστημάτων.',
-    savedBtn:'📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',saveConfirm:'✓ ΑΠΟΘΗΚΕΥΣΗ',
-    placeholder:'Δώσε όνομα στο σύστημα...',selectMin:'Επίλεξε τουλάχιστον',
-    numbersFor:'αριθμούς για',connectionFail:'Δεν ήταν δυνατή η σύνδεση',
+    savedBtn:'📂 ΑΠΟΘΗΚΕΥΜΕΝΑ ΣΥΣΤΗΜΑΤΑ',
+    saveConfirm:'✓ ΑΠΟΘΗΚΕΥΣΗ',
+    placeholder:'Δώσε όνομα στο σύστημα...',
+    selectMin:'Επίλεξε τουλάχιστον',
+    numbersFor:'αριθμούς για',
+    connectionFail:'Δεν ήταν δυνατή η σύνδεση',
     selectNums:'Επίλεξε αριθμούς για να δεις τις επιλογές.',
     trigMin:'Trigger πρέπει > Hit και > k',
-    hitMax:'Hit δεν μπορεί να ξεπερνά k'
+    hitMax:'Hit δεν μπορεί να ξεπερνά k',
+    selectWinnerFirst:'Επίλεξε πρώτα τη νικήτρια στήλη (πάτα ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ).',
+    totalWinnings:'ΣΥΝΟΛΟ ΚΕΡΔΩΝ',
+    verified:'ΕΠΑΛΗΘΕΥΜΕΝΑ',
+    qrLoading:'Φόρτωση QR...',
+    qrFailed:'Αδύνατη δημιουργία QR',
+    qrTickets:'📱 ΔΗΜΙΟΥΡΓΙΑ QR ΔΕΛΤΙΩΝ',
+    drawMode:'ΔΙΑΛΟΓΗ',
+    winnerModeLabel:'ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ'
   },
   en: {
-    subtitle:'Auto Correcting Systems',lastdraw:'LAST DRAW',
-    step1:'Game Type',step2:'Number Selection',step3:'System',
-    howmany:'How many?',lines:'lines',estcost:'Estimated cost',
-    genbtn:'⚡ GENERATE SYSTEM',savebtn:'💾 SAVE SYSTEM',
+    subtitle:'Auto Correcting Systems',
+    lastdraw:'LAST DRAW',
+    step1:'Game Type',
+    step2:'Number Selection',
+    step3:'System',
+    howmany:'How many?',
+    lines:'lines',
+    estcost:'Estimated cost',
+    genbtn:'⚡ GENERATE SYSTEM',
+    savebtn:'💾 SAVE SYSTEM',
     empty:'Select numbers, game type and system, then press GENERATE',
     names:['','','','Triple','Quad','Quintuple','Sextuple','Septuple','Octuple','Nonuple','Decuple','Undecuple','Duodecuple'],
-    guarantee:'Target',columns:'Lines',cost:'Cost',result:'RESULT',
-    column:'LINE',validated:'Validated',lowerBound:'Lower bound',
-    exactChance:'Chance',triggerHit:'if we hit',
-    amongSelected:'among selected',weGuarantee:'we guarantee',onALine:'on 1 line',
+    guarantee:'Target',
+    columns:'Lines',
+    cost:'Cost',
+    result:'RESULT',
+    column:'LINE',
+    validated:'Validated',
+    lowerBound:'Lower bound',
+    exactChance:'Chance',
+    triggerHit:'if we hit',
+    amongSelected:'among selected',
+    weGuarantee:'we guarantee',
+    onALine:'on 1 line',
     noValidSystem:'No valid system found up to 300 lines.',
     tooExpensive:'Too expensive (>300 lines). Reduce trigger or hit.',
     noSaved:'No saved systems yet.',
-    numbers:'Numbers',type:'Type',savedOn:'Saved',
-    regen:'⚡ RESTORE',saved:'✅ SAVED!',
+    numbers:'Numbers',
+    type:'Type',
+    savedOn:'Saved',
+    regen:'⚡ RESTORE',
+    saved:'✅ SAVED!',
     saveOver:'You reached the 30 saved systems limit.',
-    savedBtn:'📂 SAVED SYSTEMS',saveConfirm:'✓ SAVE',
-    placeholder:'Give your system a name...',selectMin:'Select at least',
-    numbersFor:'numbers for',connectionFail:'Connection failed',
+    savedBtn:'📂 SAVED SYSTEMS',
+    saveConfirm:'✓ SAVE',
+    placeholder:'Give your system a name...',
+    selectMin:'Select at least',
+    numbersFor:'numbers for',
+    connectionFail:'Connection failed',
     selectNums:'Select numbers to see options.',
     trigMin:'Trigger must be > Hit and > k',
-    hitMax:'Hit cannot exceed k'
+    hitMax:'Hit cannot exceed k',
+    selectWinnerFirst:'Select the winning row first (tap WINNER ROW).',
+    totalWinnings:'TOTAL WINNINGS',
+    verified:'VERIFIED',
+    qrLoading:'Loading QR...',
+    qrFailed:'Unable to generate QR',
+    qrTickets:'📱 GENERATE QR TICKETS',
+    drawMode:'DRAW',
+    winnerModeLabel:'WINNER ROW'
   }
 };
 
@@ -928,7 +980,7 @@ function tt(k) { return (T[currentLang] && T[currentLang][k]) ? T[currentLang][k
 function namesList() { return T[currentLang].names; }
 
 function greekUpper(s) {
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 }
 
 function comb(n, r) {
@@ -955,15 +1007,14 @@ function minHit(k) {
   return 6;
 }
 
-// ---- NUM GRID ----
 function buildNumGrid() {
   var g = document.getElementById('numGrid');
   g.innerHTML = '';
   for (var i = 1; i <= 80; i++) {
     var d = document.createElement('div');
     d.className = 'nc';
-    d.id = 'nc'+i;
-    d.textContent = i < 10 ? '0'+i : ''+i;
+    d.id = 'nc' + i;
+    d.textContent = i < 10 ? '0' + i : '' + i;
     (function(n){ d.onclick = function(){ toggleNum(n); }; })(i);
     g.appendChild(d);
   }
@@ -971,7 +1022,7 @@ function buildNumGrid() {
 
 function syncSelectedVisuals() {
   for (var i = 1; i <= 80; i++) {
-    var el = document.getElementById('nc'+i);
+    var el = document.getElementById('nc' + i);
     if (!el) continue;
     var cls = 'nc';
     if (selected.has(i)) cls += ' sel';
@@ -990,33 +1041,30 @@ function updateSelBar() {
     : (currentLang === 'el' ? 'Επίλεξε αριθμούς από τον πίνακα...' : 'Select numbers from the grid...');
 }
 
-function toggleNum(n) {
-  if (selected.has(n)) selected.delete(n); else selected.add(n);
-  syncSelectedVisuals();
-  updateSelBar();
-  clampTriggerHit();
-  updateSystem();
+function clearResultsUI() {
+  document.getElementById('resultsWrap').innerHTML =
+    '<div class="empty"><span class="empty-icon">🎰</span><p><span id="t-empty">' + tt('empty') + '</span></p></div>';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('qrBtnSticky').style.display = 'none';
+  document.getElementById('genBtnSticky').style.display = 'none';
+  showToggleBar(false);
 }
 
 function clearNums() {
   selected.clear();
   currentResults = null;
-  var els = document.querySelectorAll('.nc');
-  for (var i = 0; i < els.length; i++) els[i].className = 'nc';
+  winnerMode = false;
+  winnerNums.clear();
+  drawActive = false;
+  bonusMode = false;
+  document.getElementById('bonusBtn').className = 'bonus-btn';
+  document.getElementById('btnWinner').className = 'toggle-btn';
+  document.getElementById('btnDraw').className = 'toggle-btn';
+  syncSelectedVisuals();
   updateSelBar();
   updateSystem();
   document.getElementById('lbBar').style.display = 'none';
-  document.getElementById('resultsWrap').innerHTML =
-    '<div class="empty"><span class="empty-icon">🎰</span><p><span id="t-empty">'+tt('empty')+'</span></p></div>';
-  document.getElementById('saveBtn').style.display = 'none';
-  document.getElementById('genBtnSticky').style.display = 'none';
-  showToggleBar(false);
-  winnerMode = false;
-  winnerNums.clear();
-  document.getElementById('btnWinner').className = 'toggle-btn';
-  document.getElementById('btnDraw').className = 'toggle-btn';
-  document.getElementById('qrBtnSticky').style.display = 'none';
-  document.getElementById('genBtnSticky').style.display = 'none';
+  clearResultsUI();
 }
 
 function showQPick() {
@@ -1037,7 +1085,6 @@ function quickPick(n) {
   document.getElementById('qpickRow').style.display = 'none';
 }
 
-// ---- TYPE CARDS ----
 function buildTypeCards() {
   var sc = document.getElementById('typeScroll');
   sc.innerHTML = '';
@@ -1045,34 +1092,36 @@ function buildTypeCards() {
     var d = document.createElement('div');
     d.className = 'type-card' + (k === gameK ? ' active' : '');
     (function(kk){ d.onclick = function(){ setGameType(kk); }; })(k);
-    d.innerHTML = '<span class="tc-k">'+k+'</span><div class="tc-label">'+namesList()[k]+'</div>';
+    d.innerHTML = '<span class="tc-k">' + k + '</span><div class="tc-label">' + namesList()[k] + '</div>';
     sc.appendChild(d);
   }
 }
 
 function setGameType(k) {
   gameK = k;
-  // Reset trigger/hit to sensible defaults for new k
   triggerVal = k + 1;
   hitVal = k;
+  winnerMode = false;
+  winnerNums.clear();
+  drawActive = false;
   clampTriggerHit();
   buildTypeCards();
   updateTHDisplay();
   updateSystem();
+  if (currentResults) {
+    currentResults = null;
+    clearResultsUI();
+  }
 }
 
-// ---- TRIGGER / HIT ----
 function clampTriggerHit() {
   var v = selected.size || (gameK + 2);
   var minH = minHit(gameK);
-  // hit: between minHit and k
   if (hitVal > gameK) hitVal = gameK;
   if (hitVal < minH) hitVal = minH;
-  // trigger: must be > hit AND > k AND <= pool
   if (triggerVal <= hitVal) triggerVal = hitVal + 1;
   if (triggerVal <= gameK) triggerVal = gameK + 1;
   if (triggerVal > v) triggerVal = v;
-  // re-check hit after trigger clamp
   if (hitVal >= triggerVal) hitVal = triggerVal - 1;
   if (hitVal < minH) hitVal = minH;
 }
@@ -1119,7 +1168,7 @@ function updateSystem() {
   var lbBar = document.getElementById('lbBar');
 
   if (v < gameK) {
-    summary.innerHTML = tt('selectMin')+' <b>'+gameK+'</b> '+tt('numbersFor')+' <b>'+namesList()[gameK]+'</b>.';
+    summary.innerHTML = tt('selectMin') + ' <b>' + gameK + '</b> ' + tt('numbersFor') + ' <b>' + namesList()[gameK] + '</b>.';
     lbBar.style.display = 'none';
     return;
   }
@@ -1128,13 +1177,12 @@ function updateSystem() {
   updateTHDisplay();
 
   var lb = estimateLowerBound(v, gameK, triggerVal, hitVal);
-  var cost = (lb * TICKET_PRICE).toFixed(2);
   var isOver = lb > MAX_COMBOS;
   var isWarn = lb > 150 && !isOver;
 
   summary.innerHTML =
-    tt('triggerHit')+' <b>'+triggerVal+'</b> '+tt('amongSelected')+' → '+tt('weGuarantee')+' <b style="color:var(--green)">'+hitVal+'/'+gameK+'</b> '+tt('onALine')+'<br>'+
-    tt('lowerBound')+': <b>'+(isOver ? '<span style="color:var(--red)">'+lb+'</span>' : lb)+'</b> &nbsp;·&nbsp; Full cover: <b>'+comb(v,gameK)+'</b>';
+    tt('triggerHit') + ' <b>' + triggerVal + '</b> ' + tt('amongSelected') + ' → ' + tt('weGuarantee') + ' <b style="color:var(--green)">' + hitVal + '/' + gameK + '</b> ' + tt('onALine') + '<br>' +
+    tt('lowerBound') + ': <b>' + (isOver ? '<span style="color:var(--red)">' + lb + '</span>' : lb) + '</b> &nbsp;·&nbsp; Full cover: <b>' + comb(v, gameK) + '</b>';
 
   lbBar.style.display = 'flex';
   document.getElementById('t-lbcombos').textContent = isOver ? '∞' : lb;
@@ -1145,14 +1193,8 @@ function updateSystem() {
     costEl.textContent = isOver ? '∞' : (lb * 0.5).toFixed(2) + '€';
     costEl.style.color = isOver ? 'var(--red)' : isWarn ? 'var(--price)' : 'var(--gold)';
   }
-
-  var costEl = document.querySelector('.cost-total');
-  if (costEl) {
-    document.getElementById('costTotal') && (document.getElementById('costTotal').textContent = isOver ? '∞' : cost);
-  }
 }
 
-// ---- MATH ----
 function combinations(arr, r) {
   var result = [], combo = [];
   function bt(start) {
@@ -1167,9 +1209,9 @@ function combinations(arr, r) {
 
 function shuffle(arr) {
   var a = arr.slice();
-  for (var i = a.length-1; i > 0; i--) {
-    var j = Math.floor(Math.random()*(i+1));
-    var tmp = a[i]; a[i]=a[j]; a[j]=tmp;
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
@@ -1185,7 +1227,7 @@ function validateSystem(lines, pool, trigger, hit) {
   for (var i = 0; i < subsets.length; i++) {
     var ok = false;
     for (var j = 0; j < lines.length; j++) {
-      if (intersectionCount(lines[j], subsets[i]) >= hit) { ok=true; break; }
+      if (intersectionCount(lines[j], subsets[i]) >= hit) { ok = true; break; }
     }
     if (!ok) return false;
   }
@@ -1202,15 +1244,16 @@ function uniqueLines(lines) {
   var seen = {}, out = [];
   for (var i = 0; i < lines.length; i++) {
     var key = lines[i].join(',');
-    if (!seen[key]) { seen[key]=true; out.push(lines[i]); }
+    if (!seen[key]) { seen[key] = true; out.push(lines[i]); }
   }
   return out;
 }
 
 function lineCoverageCount(line, subsets, hit) {
   var score = 0;
-  for (var i = 0; i < subsets.length; i++)
+  for (var i = 0; i < subsets.length; i++) {
     if (intersectionCount(line, subsets[i]) >= hit) score++;
+  }
   return score;
 }
 
@@ -1218,9 +1261,9 @@ function pruneLines(lines, pool, trigger, hit) {
   var changed = true, current = lines.slice();
   while (changed) {
     changed = false;
-    for (var i = current.length-1; i >= 0; i--) {
-      var test = current.slice(0,i).concat(current.slice(i+1));
-      if (validateSystem(test, pool, trigger, hit)) { current=test; changed=true; }
+    for (var i = current.length - 1; i >= 0; i--) {
+      var test = current.slice(0, i).concat(current.slice(i + 1));
+      if (validateSystem(test, pool, trigger, hit)) { current = test; changed = true; }
     }
   }
   return current;
@@ -1236,13 +1279,13 @@ function autoCorrectingGenerate(pool, k, trigger, hit) {
     for (var t2 = 0; t2 < tries; t2++) {
       var cand = buildLineFromSubset(seed, pool, k, hit);
       var score = lineCoverageCount(cand, uncovered, hit);
-      if (score > bestScore) { best=cand; bestScore=score; }
+      if (score > bestScore) { best = cand; bestScore = score; }
     }
     if (!best) break;
     lines.push(best);
     lines = uniqueLines(lines);
     uncovered = uncovered.filter(function(s){
-      return !lines.some(function(l){ return intersectionCount(l,s)>=hit; });
+      return !lines.some(function(l){ return intersectionCount(l, s) >= hit; });
     });
   }
   var fix = 0;
@@ -1252,7 +1295,7 @@ function autoCorrectingGenerate(pool, k, trigger, hit) {
     lines.push(nl);
     lines = uniqueLines(lines);
     uncovered = uncovered.filter(function(s){
-      return !lines.some(function(l){ return intersectionCount(l,s)>=hit; });
+      return !lines.some(function(l){ return intersectionCount(l, s) >= hit; });
     });
   }
   if (!validateSystem(lines, pool, trigger, hit)) return null;
@@ -1269,12 +1312,21 @@ function generate() {
   var pool = sortedArr;
   var v = pool.length;
 
-  if (v < gameK) { showErr('⚠️ '+tt('selectMin')+' '+gameK+' '+tt('numbersFor')+' '+namesList()[gameK]+'.'); return; }
+  if (v < gameK) {
+    showErr('⚠️ ' + tt('selectMin') + ' ' + gameK + ' ' + tt('numbersFor') + ' ' + namesList()[gameK] + '.');
+    return;
+  }
+
+  winnerMode = false;
+  winnerNums.clear();
+  drawActive = false;
+  document.getElementById('btnWinner').className = 'toggle-btn';
+  document.getElementById('btnDraw').className = 'toggle-btn';
 
   clampTriggerHit();
   updateTHDisplay();
   var lb = estimateLowerBound(v, gameK, triggerVal, hitVal);
-  if (lb > MAX_COMBOS) { showErr('⚠️ '+tt('tooExpensive')); return; }
+  if (lb > MAX_COMBOS) { showErr('⚠️ ' + tt('tooExpensive')); return; }
 
   setBusy(true);
   setTimeout(function() {
@@ -1283,7 +1335,7 @@ function generate() {
       var attempt = autoCorrectingGenerate(pool, gameK, triggerVal, hitVal);
       if (attempt && (!bestLines || attempt.length < bestLines.length)) bestLines = attempt;
     }
-    if (!bestLines) { showErr('⚠️ '+tt('noValidSystem')); setBusy(false); return; }
+    if (!bestLines) { showErr('⚠️ ' + tt('noValidSystem')); setBusy(false); return; }
 
     currentResults = {pool:pool, k:gameK, trigger:triggerVal, hit:hitVal, lines:bestLines};
     renderResults(currentResults);
@@ -1296,7 +1348,7 @@ function generate() {
 }
 
 function showErr(msg) {
-  document.getElementById('resultsWrap').innerHTML = '<div class="err-box">'+msg+'</div>';
+  document.getElementById('resultsWrap').innerHTML = '<div class="err-box">' + msg + '</div>';
   setBusy(false);
 }
 
@@ -1308,10 +1360,10 @@ function setBusy(b) {
 }
 
 function renderResults(res) {
-  var pool=res.pool, k=res.k, trigger=res.trigger, hit=res.hit, lines=res.lines;
+  var pool = res.pool, k = res.k, trigger = res.trigger, hit = res.hit, lines = res.lines;
   var cost = (lines.length * TICKET_PRICE).toFixed(2);
   var totalC = comb(pool.length, k);
-  var chance = totalC ? Math.round((lines.length/totalC)*100) : 0;
+  var chance = totalC ? Math.round((lines.length / totalC) * 100) : 0;
 
   var cardsHTML = '';
   for (var idx = 0; idx < lines.length; idx++) {
@@ -1320,89 +1372,150 @@ function renderResults(res) {
     for (var bi = 0; bi < line.length; bi++) {
       var num = line[bi];
       var isHit = liveNumbers.indexOf(num) >= 0;
-      balls += '<div class="ball'+(isHit?' hit':'')+'">'+( num<10?'0'+num:''+num)+'</div>';
+      balls += '<div class="ball' + (isHit ? ' hit' : '') + '">' + (num < 10 ? '0' + num : '' + num) + '</div>';
     }
-    var hitCount = liveNumbers.length ? line.filter(function(x){ return liveNumbers.indexOf(x)>=0; }).length : '';
-    var hitBadge = hitCount !== '' ? '<div class="rc-hit">'+hitCount+'/'+k+' ✓</div>' : '';
+    var hitCount = liveNumbers.length ? line.filter(function(x){ return liveNumbers.indexOf(x) >= 0; }).length : '';
+    var hitBadge = hitCount !== '' ? '<div class="rc-hit">' + hitCount + '/' + k + ' ✓</div>' : '';
     cardsHTML +=
-      '<div class="res-card" data-line-idx="'+idx+'" style="animation-delay:'+(idx*0.02)+'s">'+
-        '<div class="rc-head">'+
-          '<div class="rc-idx">'+(idx+1)+'</div>'+
-          '<div class="rc-title">'+tt('column')+' '+(idx+1)+' · '+greekUpper(namesList()[k])+'</div>'+
-          hitBadge+
-        '</div>'+
-        '<div class="rc-body">'+balls+'</div>'+
+      '<div class="res-card" data-line-idx="' + idx + '" style="animation-delay:' + (idx * 0.02) + 's">' +
+        '<div class="rc-head">' +
+          '<div class="rc-idx">' + (idx + 1) + '</div>' +
+          '<div class="rc-title">' + tt('column') + ' ' + (idx + 1) + ' · ' + greekUpper(namesList()[k]) + '</div>' +
+          hitBadge +
+        '</div>' +
+        '<div class="rc-body">' + balls + '</div>' +
       '</div>';
   }
 
   document.getElementById('resultsWrap').innerHTML =
-    '<div class="res-header">'+
-      '<div class="res-title">'+tt('result')+'</div>'+
-      '<div class="res-count">'+lines.length+' '+greekUpper(tt('columns'))+'</div>'+
-    '</div>'+
-    '<div class="summary-grid">'+
-      '<div class="sg-item"><div class="sg-val">'+lines.length+'</div><div class="sg-key">'+tt('columns')+'</div></div>'+
-      '<div class="sg-item"><div class="sg-val gold">'+trigger+'→'+hit+'/'+k+'</div><div class="sg-key">'+tt('guarantee')+'</div></div>'+
-      '<div class="sg-item"><div class="sg-val blue">'+chance+'%</div><div class="sg-key">'+tt('exactChance')+'</div></div>'+
-      '<div class="sg-item"><div class="sg-val orange">'+cost+'€</div><div class="sg-key">'+tt('cost')+'</div></div>'+
-    '</div>'+
-    '<div class="note-box">'+
-      tt('validated')+': <b style="color:var(--green)">✅ YES</b><br>'+
-      tt('triggerHit')+' <b>'+trigger+'</b> '+tt('amongSelected')+' → '+tt('weGuarantee')+' <b>'+hit+'/'+k+'</b> '+tt('onALine')+
-    '</div>'+
+    '<div class="res-header">' +
+      '<div class="res-title">' + tt('result') + '</div>' +
+      '<div class="res-count">' + lines.length + ' ' + greekUpper(tt('columns')) + '</div>' +
+    '</div>' +
+    '<div class="summary-grid">' +
+      '<div class="sg-item"><div class="sg-val">' + lines.length + '</div><div class="sg-key">' + tt('columns') + '</div></div>' +
+      '<div class="sg-item"><div class="sg-val gold">' + trigger + '→' + hit + '/' + k + '</div><div class="sg-key">' + tt('guarantee') + '</div></div>' +
+      '<div class="sg-item"><div class="sg-val blue">' + chance + '%</div><div class="sg-key">' + tt('exactChance') + '</div></div>' +
+      '<div class="sg-item"><div class="sg-val orange">' + cost + '€</div><div class="sg-key">' + tt('cost') + '</div></div>' +
+    '</div>' +
+    '<div class="note-box">' +
+      tt('validated') + ': <b style="color:var(--green)">✅ YES</b><br>' +
+      tt('triggerHit') + ' <b>' + trigger + '</b> ' + tt('amongSelected') + ' → ' + tt('weGuarantee') + ' <b>' + hit + '/' + k + '</b> ' + tt('onALine') +
+    '</div>' +
     cardsHTML;
 
   document.getElementById('saveBtn').style.display = 'block';
   document.getElementById('genBtnSticky').style.display = 'none';
   document.getElementById('qrBtnSticky').style.display = 'block';
+  document.getElementById('qrBtnSticky').textContent = tt('qrTickets');
   showToggleBar(true);
-  // Update cost bar with actual line count
+
+  var lc = currentResults.lines.length;
+  document.getElementById('t-lbcombos').textContent = lc;
+  document.getElementById('lbVal').textContent = lc;
+  document.getElementById('lbVal').className = 'lb-val' + (lc > 150 ? ' warn' : '');
   var lbCostEl = document.getElementById('lbCost');
-  if (lbCostEl && currentResults) {
-    var lc = currentResults.lines.length;
-    document.getElementById('t-lbcombos').textContent = lc;
-    document.getElementById('lbVal').textContent = lc;
-    document.getElementById('lbVal').className = 'lb-val' + (lc > 150 ? ' warn' : '');
+  if (lbCostEl) {
     lbCostEl.textContent = (lc * 0.5).toFixed(2) + '€';
     lbCostEl.style.color = lc > 150 ? 'var(--price)' : 'var(--gold)';
   }
 }
 
-// ---- LIVE ----
+function toggleStats() {
+  var strip = document.getElementById('liveStrip');
+  var vis = strip.classList.contains('visible');
+  strip.className = 'live-strip' + (vis ? '' : ' visible');
+  document.getElementById('liveBadgeText').textContent = vis ? 'STATS' : 'CLOSE';
+  if (!vis) loadStats();
+}
 
-function applyLiveData(nums, drawId) {
-  if (!nums || !nums.length) return;
-  liveNumbers = nums;
-  document.getElementById('liveDrawNum').textContent = '#'+drawId;
-  var html = '';
-  for (var i = 0; i < nums.length; i++) {
-    var n = nums[i];
-    html += '<div class="live-num">'+( n<10?'0'+n:''+n)+'</div>';
+function loadStats() {
+  var ref = document.getElementById('statsDrawRef');
+  if (ref) ref.textContent = '...';
+  ['statsHot','statsCold','statsDelay','statsRepeat'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = '';
+  });
+  var h = document.getElementById('statsHot');
+  if (h) h.innerHTML = '<div style="font-size:10px;color:var(--muted);font-family:monospace;">Loading...</div>';
+  var now = new Date(), from3h = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+  function fmt(d){return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');}
+  var base = 'https://api.opap.gr/draws/v3.0/1100/draw-date/' + fmt(from3h) + '/' + fmt(now);
+  var urls = ['https://corsproxy.io/?' + base, 'https://api.allorigins.win/raw?url=' + encodeURIComponent(base), base];
+  tryStatsUrl(urls, 0);
+}
+
+function tryStatsUrl(urls, idx) {
+  if (idx >= urls.length) {
+    var h = document.getElementById('statsHot');
+    if (h) h.innerHTML = '<div style="font-size:10px;color:var(--red);">' + tt('connectionFail') + '</div>';
+    return;
   }
-  document.getElementById('liveNumbers').innerHTML = html;
+  fetch(urls[idx])
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(processStats)
+    .catch(function(){ tryStatsUrl(urls, idx + 1); });
 }
 
-function fetchLive() {
-  tryLiveApi(0);
+function processStats(data) {
+  var draws = Array.isArray(data) ? data : (data && data.content ? data.content : []);
+  draws = draws.filter(function(d){ return d.winningNumbers && d.winningNumbers.list && d.winningNumbers.list.length; });
+  draws.sort(function(a,b){ return (b.drawId || 0) - (a.drawId || 0); });
+  var ref = document.getElementById('statsDrawRef');
+  if (!draws.length) { if (ref) ref.textContent = 'No data'; return; }
+  if (ref) ref.textContent = draws.length + ' draws (3h)';
+  var freq = {}, delay = {}, repeats = {};
+  for (var n = 1; n <= 80; n++) { freq[n] = 0; delay[n] = draws.length; repeats[n] = 0; }
+  draws.forEach(function(d, i){
+    d.winningNumbers.list.forEach(function(n){
+      freq[n]++;
+      if (delay[n] === draws.length) delay[n] = i;
+    });
+  });
+  for (var i = 0; i < draws.length - 1; i++) {
+    var c = draws[i].winningNumbers.list, nx = draws[i + 1].winningNumbers.list;
+    c.forEach(function(n){ if (nx.indexOf(n) >= 0) repeats[n]++; });
+  }
+  var all = [];
+  for (var x = 1; x <= 80; x++) all.push(x);
+  var hot = all.slice().sort(function(a,b){ return freq[b] - freq[a]; }).slice(0, 12);
+  var cold = all.slice().sort(function(a,b){ return freq[a] - freq[b]; }).slice(0, 12);
+  var del = all.slice().sort(function(a,b){ return delay[b] - delay[a]; }).slice(0, 12);
+  var rep = all.filter(function(n){ return repeats[n] > 0; }).sort(function(a,b){ return repeats[b] - repeats[a]; }).slice(0, 12);
+  renderStat('statsHot','HOT',hot,freq,'hot','x');
+  renderStat('statsCold','COLD',cold,freq,'cold','x');
+  renderStat('statsDelay','DELAY',del,delay,'delayed','k');
+  if (rep.length) renderStat('statsRepeat','REPEAT',rep,repeats,'repeat','x');
 }
 
+function renderStat(elId, label, nums, map, cls, suffix) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var h = '<div class="stats-section"><div class="stats-label">' + label + '</div><div class="stats-balls">';
+  nums.forEach(function(n){
+    var v = map[n] || 0, d = n < 10 ? '0' + n : '' + n;
+    h += '<div class="sball ' + cls + '"><span class="sball-num">' + d + '</span><span class="sball-val">' + v + suffix + '</span></div>';
+  });
+  h += '</div></div>';
+  el.innerHTML = h;
+}
 
 function getSaved() {
-  try { return JSON.parse(localStorage.getItem('kinoMasterSystems')||'[]'); } catch(e){ return []; }
+  try { return JSON.parse(localStorage.getItem('kinoMasterSystems') || '[]'); } catch(e) { return []; }
 }
 function setSaved(arr) {
   localStorage.setItem('kinoMasterSystems', JSON.stringify(arr));
   refreshSavedBadge();
 }
 function refreshSavedBadge() {
-  document.getElementById('savedBadge').textContent = getSaved().length+'/30';
+  document.getElementById('savedBadge').textContent = getSaved().length + '/30';
 }
 function openSaveModal() {
   if (!currentResults) return;
   document.getElementById('saveFormInfo').innerHTML =
-    '<b style="color:var(--gold)">'+tt('numbers')+':</b> '+currentResults.pool.join(' · ')+'<br>'+
-    '<b style="color:var(--blue2)">'+tt('type')+':</b> '+namesList()[currentResults.k]+'<br>'+
-    '<b style="color:var(--green)">'+currentResults.trigger+'→'+currentResults.hit+'/'+currentResults.k+'</b> · '+currentResults.lines.length+' στήλες';
+    '<b style="color:var(--gold)">' + tt('numbers') + ':</b> ' + currentResults.pool.join(' · ') + '<br>' +
+    '<b style="color:var(--blue2)">' + tt('type') + ':</b> ' + namesList()[currentResults.k] + '<br>' +
+    '<b style="color:var(--green)">' + currentResults.trigger + '→' + currentResults.hit + '/' + currentResults.k + '</b> · ' + currentResults.lines.length + ' ' + tt('lines');
   document.getElementById('saveModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
 }
@@ -1415,13 +1528,19 @@ function confirmSave() {
   if (!name) return;
   var saved = getSaved();
   if (saved.length >= MAX_SAVED) { alert(tt('saveOver')); return; }
-  saved.push({id:Date.now(), name:name, date:new Date().toLocaleDateString('el-GR'), result:currentResults});
+  saved.push({
+    id: Date.now(),
+    name: name,
+    date: new Date().toLocaleDateString(currentLang === 'el' ? 'el-GR' : 'en-GB'),
+    result: currentResults
+  });
   setSaved(saved);
   closeSaveModal();
-  var btn = document.getElementById('saveBtn');
-  var orig = btn.querySelector('#t-savebtn').textContent;
-  btn.querySelector('#t-savebtn').textContent = tt('saved');
-  setTimeout(function(){ btn.querySelector('#t-savebtn').textContent = orig; }, 1500);
+  document.getElementById('saveNameInput').value = '';
+  var btnText = document.getElementById('t-savebtn');
+  var orig = btnText.textContent;
+  btnText.textContent = tt('saved');
+  setTimeout(function(){ btnText.textContent = orig; }, 1500);
 }
 function openSavedModal() {
   renderSavedList();
@@ -1435,18 +1554,18 @@ function closeSavedModal() {
 function renderSavedList() {
   var saved = getSaved();
   var body = document.getElementById('savedListBody');
-  if (!saved.length) { body.innerHTML = '<div class="empty-saved">'+tt('noSaved')+'</div>'; return; }
+  if (!saved.length) { body.innerHTML = '<div class="empty-saved">' + tt('noSaved') + '</div>'; return; }
   var html = '';
   for (var i = 0; i < saved.length; i++) {
     var s = saved[i];
     html +=
-      '<div class="sys-item" onclick="openSysView('+s.id+')">'+
-        '<div style="flex:1">'+
-          '<div class="sys-item-name">'+s.name+'</div>'+
-          '<div class="sys-item-meta">'+namesList()[s.result.k]+' · '+s.result.trigger+'→'+s.result.hit+'/'+s.result.k+' · '+s.result.lines.length+' στήλες · 📅 '+s.date+'</div>'+
-          '<div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;">'+s.result.pool.join(' · ')+'</div>'+
-        '</div>'+
-        '<button class="sys-del" onclick="event.stopPropagation();deleteSys('+s.id+')">✕</button>'+
+      '<div class="sys-item" onclick="openSysView(' + s.id + ')">' +
+        '<div style="flex:1">' +
+          '<div class="sys-item-name">' + s.name + '</div>' +
+          '<div class="sys-item-meta">' + namesList()[s.result.k] + ' · ' + s.result.trigger + '→' + s.result.hit + '/' + s.result.k + ' · ' + s.result.lines.length + ' ' + tt('lines') + ' · 📅 ' + s.date + '</div>' +
+          '<div style="margin-top:6px;font-family:monospace;font-size:11px;color:#4a9eff;">' + s.result.pool.join(' · ') + '</div>' +
+        '</div>' +
+        '<button class="sys-del" onclick="event.stopPropagation();deleteSys(' + s.id + ')">✕</button>' +
       '</div>';
   }
   body.innerHTML = html;
@@ -1457,18 +1576,18 @@ function deleteSys(id) {
 }
 function openSysView(id) {
   var saved = getSaved(), sys = null;
-  for (var i=0;i<saved.length;i++) if (saved[i].id===id) { sys=saved[i]; break; }
+  for (var i = 0; i < saved.length; i++) if (saved[i].id === id) { sys = saved[i]; break; }
   if (!sys) return;
   closeSavedModal();
   var r = sys.result;
   document.getElementById('sysViewTitle').textContent = sys.name;
   document.getElementById('sysViewBody').innerHTML =
-    '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-family:monospace;font-size:11px;color:var(--muted2);line-height:1.8;">'+
-      '<b style="color:var(--gold)">'+tt('numbers')+':</b> '+r.pool.join(' · ')+'<br>'+
-      '<b style="color:var(--blue2)">'+tt('type')+':</b> '+namesList()[r.k]+' | '+r.trigger+'→'+r.hit+'/'+r.k+'<br>'+
-      r.lines.length+' στήλες | '+tt('savedOn')+': '+sys.date+
-    '</div>'+
-    '<button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;" onclick="regenFromSaved('+sys.id+')">'+tt('regen')+'</button>';
+    '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-family:monospace;font-size:11px;color:var(--muted2);line-height:1.8;">' +
+      '<b style="color:var(--gold)">' + tt('numbers') + ':</b> ' + r.pool.join(' · ') + '<br>' +
+      '<b style="color:var(--blue2)">' + tt('type') + ':</b> ' + namesList()[r.k] + ' | ' + r.trigger + '→' + r.hit + '/' + r.k + '<br>' +
+      r.lines.length + ' ' + tt('lines') + ' | ' + tt('savedOn') + ': ' + sys.date +
+    '</div>' +
+    '<button class="gen-btn" style="margin-bottom:0;font-size:15px;padding:14px;" onclick="regenFromSaved(' + sys.id + ')">' + tt('regen') + '</button>';
   document.getElementById('sysViewModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
 }
@@ -1478,7 +1597,7 @@ function closeSysView() {
 }
 function regenFromSaved(id) {
   var saved = getSaved(), sys = null;
-  for (var i=0;i<saved.length;i++) if (saved[i].id===id) { sys=saved[i]; break; }
+  for (var i = 0; i < saved.length; i++) if (saved[i].id === id) { sys = saved[i]; break; }
   if (!sys) return;
   closeSysView();
   currentResults = JSON.parse(JSON.stringify(sys.result));
@@ -1486,6 +1605,9 @@ function regenFromSaved(id) {
   triggerVal = currentResults.trigger;
   hitVal = currentResults.hit;
   selected = new Set(currentResults.pool);
+  winnerMode = false;
+  winnerNums.clear();
+  drawActive = false;
   syncSelectedVisuals();
   updateSelBar();
   buildTypeCards();
@@ -1497,49 +1619,49 @@ function regenFromSaved(id) {
 
 function setLang(lang) {
   currentLang = lang;
-  document.getElementById('langEl').className = 'lang-btn'+(lang==='el'?' active':'');
-  document.getElementById('langEn').className = 'lang-btn'+(lang==='en'?' active':'');
+  document.getElementById('langEl').className = 'lang-btn' + (lang === 'el' ? ' active' : '');
+  document.getElementById('langEn').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
   document.documentElement.lang = lang;
-  document.getElementById('t-subtitle').textContent = tt('subtitle');
-  document.getElementById('t-lastdraw').textContent = tt('lastdraw');
-  document.getElementById('t-step1').textContent = tt('step1');
-  document.getElementById('t-step2').textContent = tt('step2');
-  document.getElementById('t-step3').textContent = tt('step3');
-  document.getElementById('t-howmany').textContent = tt('howmany');
-  document.getElementById('t-lines').textContent = tt('lines');
-  document.getElementById('t-estcost').textContent = tt('estcost');
-  document.getElementById('t-genbtn').textContent = tt('genbtn');
-  document.getElementById('t-savebtn').textContent = tt('savebtn');
-  document.getElementById('t-saved-btn').textContent = tt('savedBtn');
-  document.getElementById('saveNameInput').placeholder = tt('placeholder');
+
+  var el;
+  el = document.getElementById('t-subtitle'); if (el) el.textContent = tt('subtitle');
+  el = document.getElementById('t-lastdraw'); if (el) el.textContent = tt('lastdraw');
+  el = document.getElementById('t-step1'); if (el) el.textContent = tt('step1');
+  el = document.getElementById('t-step2'); if (el) el.textContent = tt('step2');
+  el = document.getElementById('t-step3'); if (el) el.textContent = tt('step3');
+  el = document.getElementById('t-howmany'); if (el) el.textContent = tt('howmany');
+  el = document.getElementById('t-lines'); if (el) el.textContent = tt('lines');
+  el = document.getElementById('t-estcost'); if (el) el.textContent = tt('estcost');
+  el = document.getElementById('t-genbtn'); if (el) el.textContent = tt('genbtn');
+  el = document.getElementById('t-savebtn'); if (el) el.textContent = tt('savebtn');
+  el = document.getElementById('t-saved-btn'); if (el) el.textContent = tt('savedBtn');
+  el = document.getElementById('t-saveconfirm'); if (el) el.textContent = tt('saveConfirm');
+  el = document.getElementById('t-empty'); if (el) el.textContent = tt('empty');
+  el = document.getElementById('btnWinner'); if (el) el.textContent = '🏆 ' + tt('winnerModeLabel');
+  el = document.getElementById('btnDraw'); if (el) el.textContent = '🎯 ' + tt('drawMode');
+  el = document.getElementById('qrBtnSticky'); if (el) el.textContent = tt('qrTickets');
+
+  var input = document.getElementById('saveNameInput');
+  if (input) input.placeholder = tt('placeholder');
+
   buildTypeCards();
   updateSystem();
+  renderSavedList();
   if (currentResults) renderResults(currentResults);
 }
-
-// ---- WINNER / DRAW MODE ----
-var winnerMode = false; // true = picking winner numbers
-var winnerNums = new Set();
 
 function toggleMode(mode) {
   if (mode === 'winner') {
     if (winnerMode) {
-      // Toggle OFF - clear everything
       clearWinner();
     } else {
-      // Toggle ON
       winnerMode = true;
       document.getElementById('btnWinner').className = 'toggle-btn active-win';
-      document.getElementById('btnDraw').className = 'toggle-btn';
+      document.getElementById('btnDraw').className = drawActive ? 'toggle-btn active-draw' : 'toggle-btn';
       syncNumGridWinner();
     }
   } else {
     document.getElementById('btnDraw').className = 'toggle-btn active-draw';
-    if (winnerNums.size === 0) {
-      alert('Πάτα πρώτα ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ και επίλεξε τους κληρωθέντες.');
-      document.getElementById('btnDraw').className = 'toggle-btn';
-      return;
-    }
     drawActive = true;
     runDraw();
   }
@@ -1547,7 +1669,7 @@ function toggleMode(mode) {
 
 function syncNumGridWinner() {
   for (var i = 1; i <= 80; i++) {
-    var el = document.getElementById('nc'+i);
+    var el = document.getElementById('nc' + i);
     if (!el) continue;
     var cls = 'nc locked';
     if (selected.has(i)) cls += ' sel';
@@ -1557,20 +1679,10 @@ function syncNumGridWinner() {
   }
 }
 
-function toggleNumOriginal(n) {
-  // original toggleNum - only works when not in winner mode
-  if (selected.has(n)) selected.delete(n); else selected.add(n);
-  syncSelectedVisuals();
-  updateSelBar();
-  clampTriggerHit();
-  updateSystem();
-}
-
 function toggleNumWinner(n) {
   if (winnerNums.has(n)) winnerNums.delete(n);
   else winnerNums.add(n);
   syncNumGridWinner();
-  // Auto-redraw if draw was already active
   if (drawActive && currentResults) runDraw();
 }
 
@@ -1585,50 +1697,36 @@ function clearWinner() {
   for (var i = 0; i < badges.length; i++) badges[i].remove();
   var pays = document.querySelectorAll('.payout-badge');
   for (var j = 0; j < pays.length; j++) pays[j].remove();
-  // Reset all balls to original state
   var balls = document.querySelectorAll('.ball.hit');
   for (var k = 0; k < balls.length; k++) balls[k].classList.remove('hit');
+  var oldTotal = document.querySelector('.total-winnings');
+  if (oldTotal) oldTotal.remove();
+  var oldVerified = document.querySelector('.verified-box');
+  if (oldVerified) oldVerified.remove();
 }
-
-
-var bonusMode = false;
-var drawActive = false;  // true once ΔΙΑΛΟΓΗ has been pressed
 
 function toggleBonus() {
   bonusMode = !bonusMode;
   document.getElementById('bonusBtn').className = bonusMode ? 'bonus-btn active' : 'bonus-btn';
-  // Re-run draw if already drawn
   if (drawActive && currentResults) runDraw();
 }
 
 var PAYOUTS = {
-  1:  {1: 1.25},
-  2:  {2: 2.5, 1: 0.5},
-  3:  {3: 12.5, 2: 1.25},
-  4:  {4: 50, 3: 2, 2: 0.5},
-  5:  {5: 225, 4: 10, 3: 1},
-  6:  {6: 800, 5: 25, 4: 3.5, 3: 0.5},
-  7:  {7: 2500, 6: 50, 5: 10, 4: 1.5, 3: 0.5},
-  8:  {8: 7500, 7: 500, 6: 25, 5: 5, 4: 1},
-  9:  {9: 20000, 8: 2000, 7: 100, 6: 12.5, 5: 2.5, 4: 0.5},
-  10: {10: 50000, 9: 5000, 8: 250, 7: 40, 6: 10, 5: 2},
-  11: {11: 250000, 10: 7500, 9: 750, 8: 125, 7: 25, 6: 5, 5: 0.5},
-  12: {12: 500000, 11: 12500, 10: 1250, 9: 500, 8: 75, 7: 12.5, 6: 2.5}
+  1:{1:1.25}, 2:{2:2.5,1:0.5}, 3:{3:12.5,2:1.25}, 4:{4:50,3:2,2:0.5},
+  5:{5:225,4:10,3:1}, 6:{6:800,5:25,4:3.5,3:0.5}, 7:{7:2500,6:50,5:10,4:1.5,3:0.5},
+  8:{8:7500,7:500,6:25,5:5,4:1}, 9:{9:20000,8:2000,7:100,6:12.5,5:2.5,4:0.5},
+  10:{10:50000,9:5000,8:250,7:40,6:10,5:2}, 11:{11:250000,10:7500,9:750,8:125,7:25,6:5,5:0.5},
+  12:{12:500000,11:12500,10:1250,9:500,8:75,7:12.5,6:2.5}
 };
 
 var PAYOUTS_BONUS = {
-  1:  {1: 26.25},
-  2:  {2: 35, 1: 8},
-  3:  {3: 87.5, 2: 9, 1: 4},
-  4:  {4: 300, 3: 12, 2: 4, 1: 2.5},
-  5:  {5: 675, 4: 45, 3: 8.5, 2: 2.5, 1: 1.5},
-  6:  {6: 2050, 5: 150, 4: 13.5, 3: 4.5, 2: 1.5, 1: 1},
-  7:  {7: 7500, 6: 200, 5: 40, 4: 6.5, 3: 4, 2: 1.5, 1: 1},
-  8:  {8: 20000, 7: 1500, 6: 100, 5: 15, 4: 3.5, 3: 2, 2: 1.5, 1: 1},
-  9:  {9: 50000, 8: 5000, 7: 250, 6: 35, 5: 7.5, 4: 3, 3: 2, 2: 1.5, 1: 1},
-  10: {10: 125000, 9: 12500, 8: 750, 7: 90, 6: 30, 5: 3.5, 4: 2, 3: 1.25, 2: 1},
-  11: {11: 600000, 10: 15500, 9: 1750, 8: 275, 7: 52.5, 6: 12.5, 5: 3, 4: 2, 3: 1.5, 2: 1.25, 1: 1},
-  12: {12: 1000000, 11: 37500, 10: 2750, 9: 1100, 8: 175, 7: 25, 6: 5, 5: 2, 4: 1.75, 3: 1.5, 2: 1.25, 1: 1}
+  1:{1:26.25}, 2:{2:35,1:8}, 3:{3:87.5,2:9,1:4}, 4:{4:300,3:12,2:4,1:2.5},
+  5:{5:675,4:45,3:8.5,2:2.5,1:1.5}, 6:{6:2050,5:150,4:13.5,3:4.5,2:1.5,1:1},
+  7:{7:7500,6:200,5:40,4:6.5,3:4,2:1.5,1:1}, 8:{8:20000,7:1500,6:100,5:15,4:3.5,3:2,2:1.5,1:1},
+  9:{9:50000,8:5000,7:250,6:35,5:7.5,4:3,3:2,2:1.5,1:1},
+  10:{10:125000,9:12500,8:750,7:90,6:30,5:3.5,4:2,3:1.25,2:1},
+  11:{11:600000,10:15500,9:1750,8:275,7:52.5,6:12.5,5:3,4:2,3:1.5,2:1.25,1:1},
+  12:{12:1000000,11:37500,10:2750,9:1100,8:175,7:25,6:5,5:2,4:1.75,3:1.5,2:1.25,1:1}
 };
 
 function getPayout(k, hits) {
@@ -1640,10 +1738,12 @@ function getPayout(k, hits) {
 function runDraw() {
   if (!currentResults) return;
   if (winnerNums.size === 0) {
-    alert('Επίλεξε πρώτα τη νικήτρια στήλη (πάτα ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ).');
+    alert(tt('selectWinnerFirst'));
     document.getElementById('btnDraw').className = 'toggle-btn';
+    drawActive = false;
     return;
   }
+
   var lines = currentResults.lines;
   var k = currentResults.k;
   var wrap = document.getElementById('resultsWrap');
@@ -1652,7 +1752,7 @@ function runDraw() {
 
   for (var ci = 0; ci < cardEls.length; ci++) {
     var card = cardEls[ci];
-    var lineIdx = parseInt(card.getAttribute('data-line-idx'));
+    var lineIdx = parseInt(card.getAttribute('data-line-idx'), 10);
     if (isNaN(lineIdx)) lineIdx = ci;
     var line = lines[lineIdx];
     if (!line) continue;
@@ -1662,7 +1762,6 @@ function runDraw() {
       if (winnerNums.has(line[j])) hits++;
     }
 
-    // Update header badges
     var head = card.querySelector('.rc-head');
     if (head) {
       var oldBadge = head.querySelector('.draw-badge');
@@ -1671,15 +1770,18 @@ function runDraw() {
       if (oldPay) oldPay.remove();
 
       var badge = document.createElement('div');
-      badge.className = hits === k ? 'draw-badge hit-full' : hits >= Math.ceil(k/2) ? 'draw-badge hit-good' : 'draw-badge hit-low';
-      badge.textContent = hits+'/'+k;
+      badge.className = hits === k ? 'draw-badge hit-full' : hits >= Math.ceil(k / 2) ? 'draw-badge hit-good' : 'draw-badge hit-low';
+      badge.textContent = hits + '/' + k;
       head.appendChild(badge);
 
       var payout = getPayout(k, hits);
       var payBadge = document.createElement('div');
       if (payout > 0) {
         payBadge.className = payout >= 1000 ? 'payout-badge big' : 'payout-badge win';
-        payBadge.textContent = payout >= 1000000 ? (payout/1000000).toFixed(2)+'M€' : payout >= 1000 ? (payout/1000).toFixed(1)+'K€' : payout.toFixed(2)+'€';
+        payBadge.textContent = payout >= 1000000
+          ? (payout / 1000000).toFixed(1) + 'M€'
+          : payout >= 1000 ? (payout / 1000).toFixed(0) + 'K€'
+          : payout + '€';
       } else {
         payBadge.className = 'payout-badge nowin';
         payBadge.textContent = '0€';
@@ -1687,12 +1789,11 @@ function runDraw() {
       head.appendChild(payBadge);
     }
 
-    // Update balls - use line data not DOM order
     var body = card.querySelector('.rc-body');
     if (body) {
       var balls = body.querySelectorAll('.ball');
       for (var b = 0; b < balls.length; b++) {
-        var num = parseInt(balls[b].textContent);
+        var num = parseInt(balls[b].textContent, 10);
         if (winnerNums.has(num)) balls[b].classList.add('hit');
         else balls[b].classList.remove('hit');
       }
@@ -1701,32 +1802,27 @@ function runDraw() {
     cardData.push({el: card, hits: hits});
   }
 
-  // Calculate total winnings
   var totalWin = 0;
   for (var ti = 0; ti < cardData.length; ti++) totalWin += getPayout(k, cardData[ti].hits);
   totalWin = Math.round(totalWin * 100) / 100;
 
-  // Remove old total bar if exists
   var oldTotal = wrap.querySelector('.total-winnings');
   if (oldTotal) oldTotal.remove();
 
-  // Insert total winnings bar before the first card
   var totalBar = document.createElement('div');
   totalBar.className = 'total-winnings';
   var modeLabel = bonusMode ? 'KINO BONUS' : 'KINO';
   totalBar.innerHTML =
-    '<div class="total-winnings-label">'+
-      '<b>ΣΥΝΟΛΟ ΚΕΡΔΩΝ</b><br>'+
-      modeLabel+' &nbsp;·&nbsp; '+currentResults.lines.length+' στήλες &times; 0.50€'+
-    '</div>'+
-    '<div class="total-winnings-amount">'+
-      totalWin.toFixed(2)+'<small>€</small>'+
+    '<div class="total-winnings-label">' +
+      '<b>' + tt('totalWinnings') + '</b><br>' +
+      modeLabel + ' &nbsp;·&nbsp; ' + currentResults.lines.length + ' ' + tt('lines') + ' × 0.50€' +
+    '</div>' +
+    '<div class="total-winnings-amount">' +
+      totalWin.toFixed(2) + '<small>€</small>' +
     '</div>';
 
-  // Sort by hits descending
   cardData.sort(function(a,b){ return b.hits - a.hits; });
 
-  // Build verified numbers box
   var oldVerified = wrap.querySelector('.verified-box');
   if (oldVerified) oldVerified.remove();
 
@@ -1743,17 +1839,16 @@ function runDraw() {
   for (var pi = 0; pi < pool.length; pi++) {
     var pn = pool[pi];
     var isHit = winnerNums.has(pn);
-    ballsHtml += '<div class="vball'+(isHit?' hit':'')+'">'+( pn<10?'0'+pn:''+pn)+'</div>';
+    ballsHtml += '<div class="vball' + (isHit ? ' hit' : '') + '">' + (pn < 10 ? '0' + pn : '' + pn) + '</div>';
   }
 
   verifiedBox.innerHTML =
-    '<div class="verified-title">'+
-      '<span>ΕΠΑΛΗΘΕΥΜΕΝΑ</span>'+
-      '<span class="verified-count">'+hitCount+'/'+pool.length+'</span>'+
-    '</div>'+
-    '<div class="verified-balls">'+ballsHtml+'</div>';
+    '<div class="verified-title">' +
+      '<span>' + tt('verified') + '</span>' +
+      '<span class="verified-count">' + hitCount + '/' + pool.length + '</span>' +
+    '</div>' +
+    '<div class="verified-balls">' + ballsHtml + '</div>';
 
-  // Insert total bar, verified box, then cards
   wrap.appendChild(totalBar);
   wrap.appendChild(verifiedBox);
   for (var di = 0; di < cardData.length; di++) {
@@ -1773,24 +1868,24 @@ function toggleNum(n) {
   }
 }
 
-// Show toggle bar when results exist
 function showToggleBar(show) {
   document.getElementById('toggleBar').style.display = show ? 'flex' : 'none';
 }
 
-// ---- QR GENERATION ----
 function openQRModal() {
   if (!currentResults) return;
   var body = document.getElementById('qrModalBody');
-  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">Φόρτωση QR...</div>';
+  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">' + tt('qrLoading') + '</div>';
   document.getElementById('qrModal').className = 'sys-modal open';
   document.body.style.overflow = 'hidden';
 
-  // Load QR library then generate
   if (typeof QRCode === 'undefined') {
     var script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
     script.onload = function() { buildQRCards(); };
+    script.onerror = function() {
+      body.innerHTML = '<div class="err-box">' + tt('qrFailed') + '</div>';
+    };
     document.head.appendChild(script);
   } else {
     buildQRCards();
@@ -1805,20 +1900,19 @@ function buildQRCards() {
 
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
-    // OPAP KINO QR format: game=1100, numbers joined
     var nums = line.join(',');
     var qrData = 'KINO|' + k + '|' + nums;
 
     var card = document.createElement('div');
     card.className = 'qr-card';
     card.innerHTML =
-      '<div class="qr-card-title">ΣΤΗΛΗ ' + (i+1) + ' &middot; ' + k + ' ΑΡΙΘΜΟΙ</div>' +
-      '<div id="qr-'+i+'"></div>' +
-      '<div class="qr-nums">' + line.map(function(n){ return n<10?'0'+n:''+n; }).join(' &middot; ') + '</div>';
+      '<div class="qr-card-title">' + tt('column') + ' ' + (i + 1) + ' · ' + k + ' ' + (currentLang === 'el' ? 'ΑΡΙΘΜΟΙ' : 'NUMBERS') + '</div>' +
+      '<div id="qr-' + i + '"></div>' +
+      '<div class="qr-nums">' + line.map(function(n){ return n < 10 ? '0' + n : '' + n; }).join(' · ') + '</div>';
     body.appendChild(card);
 
     try {
-      new QRCode(document.getElementById('qr-'+i), {
+      new QRCode(document.getElementById('qr-' + i), {
         text: qrData,
         width: 200,
         height: 200,
@@ -1827,8 +1921,8 @@ function buildQRCards() {
         correctLevel: QRCode.CorrectLevel.M
       });
     } catch(e) {
-      document.getElementById('qr-'+i).innerHTML =
-        '<div style="font-size:11px;color:var(--red);padding:10px;">Αδύνατη δημιουργία QR</div>';
+      document.getElementById('qr-' + i).innerHTML =
+        '<div style="font-size:11px;color:var(--red);padding:10px;">' + tt('qrFailed') + '</div>';
     }
   }
 }
@@ -1838,188 +1932,13 @@ function closeQRModal() {
   document.body.style.overflow = '';
 }
 
-// ============================================================
-// STATISTICS ENGINE
-// ============================================================
-var statsData = null;
-var statsLoaded = false;
-
-function openStats() {
-  document.getElementById('statsModal').className = 'sys-modal open';
-  document.body.style.overflow = 'hidden';
-  if (!statsLoaded) loadStats();
-}
-
-function closeStats() {
-  document.getElementById('statsModal').className = 'sys-modal';
-  document.body.style.overflow = '';
-}
-
-function loadStats() {
-  var body = document.getElementById('statsBody');
-  body.innerHTML = '<div class="stats-loading">Φόρτωση τελευταίων κληρώσεων...</div>';
-
-  // Get last 3 hours = ~36 draws (1 per 5 min)
-  var now = new Date();
-  var from = new Date(now.getTime() - 3*60*60*1000);
-  var fromStr = from.toISOString().split('T')[0];
-  var toStr = now.toISOString().split('T')[0];
-
-  var urls = [
-    'https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr,
-    'https://corsproxy.io/?https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr,
-    'https://api.allorigins.win/raw?url=https://api.opap.gr/draws/v3.0/1100/draw-date/'+fromStr+'/'+toStr
-  ];
-
-  tryStatsUrl(urls, 0);
-}
-
-function tryStatsUrl(urls, idx) {
-  if (idx >= urls.length) {
-    document.getElementById('statsBody').innerHTML = '<div class="stats-loading" style="color:var(--red)">Αδυναμία σύνδεσης. Δοκίμασε αργότερα.</div>';
-    return;
-  }
-  fetch(urls[idx])
-    .then(function(r) { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(data) {
-      var draws = [];
-      if (data && data.content) draws = data.content;
-      else if (Array.isArray(data)) draws = data;
-      if (!draws.length) throw new Error('empty');
-      processStats(draws);
-    })
-    .catch(function() { tryStatsUrl(urls, idx+1); });
-}
-
-function processStats(draws) {
-  // Sort by drawId desc (newest first)
-  draws.sort(function(a,b) { return (b.drawId||0)-(a.drawId||0); });
-
-  var freq = {}; // number -> count of appearances
-  var lastSeen = {}; // number -> draws ago (0 = appeared in last draw)
-  var repeatMap = {}; // number -> consecutive streak
-  
-  for (var n = 1; n <= 80; n++) {
-    freq[n] = 0;
-    lastSeen[n] = draws.length; // assume not seen
-    repeatMap[n] = 0;
-  }
-
-  // Process all draws
-  for (var di = 0; di < draws.length; di++) {
-    var nums = (draws[di].winningNumbers && draws[di].winningNumbers.list) ? draws[di].winningNumbers.list : [];
-    for (var ni = 0; ni < nums.length; ni++) {
-      var n2 = nums[ni];
-      if (n2 >= 1 && n2 <= 80) {
-        freq[n2]++;
-        if (lastSeen[n2] === draws.length) lastSeen[n2] = di; // first time seen
-      }
-    }
-  }
-
-  // Consecutive repeat streak from most recent draws
-  var streak = {};
-  for (var n3 = 1; n3 <= 80; n3++) streak[n3] = 0;
-  for (var di2 = 0; di2 < draws.length; di2++) {
-    var nums2 = (draws[di2].winningNumbers && draws[di2].winningNumbers.list) ? draws[di2].winningNumbers.list : [];
-    for (var n4 = 1; n4 <= 80; n4++) {
-      if (nums2.indexOf(n4) >= 0) {
-        if (di2 === 0 || streak[n4] === di2) streak[n4] = di2+1;
-      }
-    }
-  }
-
-  // Hot = appeared most in last 3h
-  var sortedFreq = Object.keys(freq).map(function(n){return {n:parseInt(n),f:freq[n]};});
-  sortedFreq.sort(function(a,b){return b.f-a.f;});
-  var hot = sortedFreq.slice(0,10);
-  var cold = sortedFreq.slice(-10).reverse();
-
-  // Delayed = not appeared for most draws
-  var delayed = Object.keys(lastSeen).map(function(n){return {n:parseInt(n),d:lastSeen[n]};});
-  delayed.sort(function(a,b){return b.d-a.d;});
-  delayed = delayed.slice(0,20);
-
-  // Repeats = appeared in consecutive draws
-  var repeats = Object.keys(streak).map(function(n){return {n:parseInt(n),s:streak[n]};});
-  repeats = repeats.filter(function(x){return x.s>=2;});
-  repeats.sort(function(a,b){return b.s-a.s;});
-  repeats = repeats.slice(0,15);
-
-  renderStats(hot, cold, delayed, repeats, draws.length);
-}
-
-function renderStats(hot, cold, delayed, repeats, totalDraws) {
-  var totalMins = totalDraws * 5;
-  var body = document.getElementById('statsBody');
-
-  // HOT
-  var hotHtml = '<div class="stats-section"><div class="stats-section-title">🔥 HOT NUMBERS — τελευταίες 3 ώρες (~'+totalDraws+' κληρώσεις)</div><div class="hot-cold-grid">';
-  for (var i=0;i<hot.length;i++) {
-    hotHtml += '<div class="stat-ball hot">'+( hot[i].n<10?'0'+hot[i].n:''+hot[i].n)+'<div class="stat-ball-sub">'+hot[i].f+'x</div></div>';
-  }
-  hotHtml += '</div></div>';
-
-  // COLD
-  var coldHtml = '<div class="stats-section"><div class="stats-section-title">🧊 COLD NUMBERS — τελευταίες 3 ώρες</div><div class="hot-cold-grid">';
-  for (var i2=0;i2<cold.length;i2++) {
-    coldHtml += '<div class="stat-ball cold">'+( cold[i2].n<10?'0'+cold[i2].n:''+cold[i2].n)+'<div class="stat-ball-sub">'+cold[i2].f+'x</div></div>';
-  }
-  coldHtml += '</div></div>';
-
-  // DELAYED
-  var delayHtml = '<div class="stats-section"><div class="stats-section-title">⏳ ΚΑΘΥΣΤΕΡΗΣΕΙΣ</div><div class="delay-grid">';
-  var maxDelay = delayed.length ? delayed[0].d : 1;
-  for (var i3=0;i3<delayed.length;i3++) {
-    var d = delayed[i3];
-    var pct = Math.round((d.d/maxDelay)*100);
-    var color = d.d > 30 ? 'var(--red)' : d.d > 15 ? 'var(--price)' : 'var(--blue2)';
-    delayHtml += '<div class="delay-row">'+
-      '<div class="delay-num">'+( d.n<10?'0'+d.n:''+d.n)+'</div>'+
-      '<div class="delay-bar-wrap"><div class="delay-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
-      '<div class="delay-count" style="color:'+color+'">'+d.d+' κλ.</div>'+
-    '</div>';
-  }
-  delayHtml += '</div></div>';
-
-  // REPEATS
-  var repHtml = '<div class="stats-section"><div class="stats-section-title">🔁 ΕΠΑΝΑΛΗΨΕΙΣ (διαδοχικές κληρώσεις)</div>';
-  if (!repeats.length) {
-    repHtml += '<div style="font-size:12px;color:var(--muted);padding:10px;">Δεν υπάρχουν επαναλήψεις στο τρέχον διάστημα.</div>';
-  } else {
-    repHtml += '<div class="repeat-grid">';
-    for (var i4=0;i4<repeats.length;i4++) {
-      var r = repeats[i4];
-      repHtml += '<div class="repeat-item">'+
-        '<div class="repeat-num">'+( r.n<10?'0'+r.n:''+r.n)+'</div>'+
-        '<div class="repeat-sub">'+r.s+'x \u03c3\u03b5\u03c1\u03af</div>'+
-      '</div>';
-    }
-    repHtml += '</div>';
-  }
-  repHtml += '</div>';
-
-  body.innerHTML = hotHtml + coldHtml + delayHtml + repHtml;
-  statsLoaded = true;
-}
-
-// ---- INIT ----
 buildNumGrid();
 buildTypeCards();
 updateTHDisplay();
 updateSystem();
 refreshSavedBadge();
-
+setLang('el');
 </script>
 
-<div class="sys-modal" id="statsModal" style="display:none;flex-direction:column;overflow-y:auto;">
-  <div class="sys-modal-header">
-    <div class="sys-modal-title">📊 ΣΤΑΤΙΣΤΙΚΑ KINO</div>
-    <button class="qr-close" onclick="closeStats()">&#x2715;</button>
-  </div>
-  <div class="sys-modal-body" id="statsBody">
-    <div class="stats-loading">Φόρτωση δεδομένων...</div>
-  </div>
-</div>
 </body>
 </html>
