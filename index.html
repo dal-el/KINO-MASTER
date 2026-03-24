@@ -218,13 +218,7 @@ body::before {
   color:#000; border-color:var(--gold);
   box-shadow:0 2px 8px rgba(232,184,75,.3);
 }
-.nc.live-hit { border-color:var(--green) !important; }
-.nc.sel.live-hit {
-  background:linear-gradient(135deg,#2a8a5e,var(--green));
-  border-color:var(--green);
-  color:#fff;
-  box-shadow:0 2px 8px rgba(62,207,142,.3);
-}
+/* live-hit removed - live does not touch the grid */
 
 .sel-bar {
   background:var(--surface);
@@ -384,7 +378,7 @@ body::before {
 }
 .ball.hit {
   border-color:var(--gold) !important;
-  box-shadow:0 0 0 2.5px var(--gold), 0 0 10px rgba(232,184,75,0.6) !important;
+  box-shadow:0 0 0 2.5px var(--gold), 0 0 10px rgba(232,184,75,0.5) !important;
 }
 
 .empty {
@@ -668,16 +662,6 @@ body::before {
   font-size:12px; color:var(--blue2);
   letter-spacing:1px;
 }
-
-.draw-dialog-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;}
-.draw-dialog{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:340px;}
-.draw-dialog-title{font-family:'Oswald',sans-serif;font-size:18px;color:var(--text);letter-spacing:2px;margin-bottom:6px;text-align:center;}
-.draw-dialog-sub{font-size:12px;color:var(--muted2);text-align:center;margin-bottom:20px;line-height:1.6;}
-.draw-dialog-btns{display:flex;flex-direction:column;gap:10px;}
-.draw-dialog-btn{padding:14px;border-radius:10px;border:none;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;letter-spacing:2px;cursor:pointer;}
-.draw-dialog-btn.live{background:linear-gradient(135deg,#1a3a2a,#1e4a30);border:1.5px solid var(--green);color:var(--green);}
-.draw-dialog-btn.manual{background:rgba(74,158,255,0.08);border:1.5px solid var(--blue);color:var(--blue2);}
-.draw-dialog-btn.cancel{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:13px;}
 </style>
 </head>
 <body>
@@ -1371,20 +1355,14 @@ function parseLiveData(data) {
 function applyLiveData(nums, drawId) {
   if (!nums || !nums.length) return;
   liveNumbers = nums;
+  // ONLY update the live strip - do NOT touch the grid or results
   document.getElementById('liveDrawNum').textContent = '#'+drawId;
   var html = '';
   for (var i = 0; i < nums.length; i++) {
     var n = nums[i];
-    html += '<div class="live-num'+(selected.has(n)?' match':'')+'">'+( n<10?'0'+n:''+n)+'</div>';
+    html += '<div class="live-num">'+( n<10?'0'+n:''+n)+'</div>';
   }
   document.getElementById('liveNumbers').innerHTML = html;
-  var els = document.querySelectorAll('.nc');
-  for (var j = 0; j < els.length; j++) els[j].classList.remove('live-hit');
-  for (var k2 = 0; k2 < nums.length; k2++) {
-    var el = document.getElementById('nc'+nums[k2]);
-    if (el) el.classList.add('live-hit');
-  }
-  if (currentResults) renderResults(currentResults);
 }
 
 // Direct URLs (work when hosted on server - GitHub Pages etc)
@@ -1582,12 +1560,13 @@ function toggleMode(mode) {
     }
   } else {
     document.getElementById('btnDraw').className = 'toggle-btn active-draw';
-    if (!winnerMode && winnerNums.size === 0) {
-      showDrawSourceDialog();
-    } else {
-      drawActive = true;
-      runDraw();
+    if (winnerNums.size === 0) {
+      alert('Πάτα πρώτα ΕΥΚΑΙΡΙΑ ΣΤΗΛΗ και επίλεξε τους κληρωθέντες αριθμούς.');
+      document.getElementById('btnDraw').className = 'toggle-btn';
+      return;
     }
+    drawActive = true;
+    runDraw();
   }
 }
 
@@ -1884,50 +1863,6 @@ function closeQRModal() {
   document.body.style.overflow = '';
 }
 
-function showDrawSourceDialog() {
-  var overlay = document.createElement('div');
-  overlay.className = 'draw-dialog-overlay';
-  overlay.id = 'drawSourceDialog';
-  var d = document.createElement('div');
-  d.className = 'draw-dialog';
-  d.innerHTML = '<div class="draw-dialog-title">ΠΩΣ ΕΙΣΑΓΕΙΣ ΤΗ ΝΙΚΗΤΡΙΑ;</div>' +
-    '<div class="draw-dialog-sub">Αυτόματα από LIVE ή χειροκίνητα;</div>' +
-    '<div class="draw-dialog-btns">' +
-    '<button class="draw-dialog-btn live" id="ddbLive">LIVE ΑΥΤΟΜΑΤΑ</button>' +
-    '<button class="draw-dialog-btn manual" id="ddbManual">MANUAL ΧΕΙΡΟΚΙΝΗΤΑ</button>' +
-    '<button class="draw-dialog-btn cancel" id="ddbCancel">ΑΚΥΡΩΣΗ</button>' +
-    '</div>';
-  overlay.appendChild(d);
-  document.body.appendChild(overlay);
-  document.getElementById('ddbLive').onclick = importFromLive;
-  document.getElementById('ddbManual').onclick = switchToManual;
-  document.getElementById('ddbCancel').onclick = cancelDrawDialog;
-}
-function closeDrawDialog() { var d=document.getElementById('drawSourceDialog'); if(d) d.remove(); }
-function importFromLive() {
-  closeDrawDialog();
-  if (!liveNumbers || !liveNumbers.length) {
-    alert('Πάτα πρώτα LIVE για να φορτωθούν κληρωθέντες.');
-    document.getElementById('btnDraw').className = 'toggle-btn'; return;
-  }
-  winnerNums.clear();
-  for (var i=0;i<liveNumbers.length;i++) winnerNums.add(liveNumbers[i]);
-  winnerMode = true;
-  document.getElementById('btnWinner').className = 'toggle-btn active-win';
-  syncNumGridWinner();
-  drawActive = true;
-  runDraw();
-}
-function switchToManual() {
-  closeDrawDialog();
-  winnerMode = true;
-  document.getElementById('btnWinner').className = 'toggle-btn active-win';
-  syncNumGridWinner();
-}
-function cancelDrawDialog() {
-  closeDrawDialog();
-  document.getElementById('btnDraw').className = 'toggle-btn';
-}
 // ---- INIT ----
 buildNumGrid();
 buildTypeCards();
