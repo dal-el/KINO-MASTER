@@ -383,10 +383,8 @@ body::before {
   color:var(--blue2);
 }
 .ball.hit {
-  background:linear-gradient(135deg,#3a2800,#5a3e00);
-  border-color:var(--gold);
-  color:var(--gold2);
-  box-shadow:0 0 8px rgba(232,184,75,0.5);
+  border-color:var(--gold) !important;
+  box-shadow:0 0 0 2.5px var(--gold), 0 0 10px rgba(232,184,75,0.6) !important;
 }
 
 .empty {
@@ -670,6 +668,16 @@ body::before {
   font-size:12px; color:var(--blue2);
   letter-spacing:1px;
 }
+
+.draw-dialog-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;}
+.draw-dialog{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:340px;}
+.draw-dialog-title{font-family:'Oswald',sans-serif;font-size:18px;color:var(--text);letter-spacing:2px;margin-bottom:6px;text-align:center;}
+.draw-dialog-sub{font-size:12px;color:var(--muted2);text-align:center;margin-bottom:20px;line-height:1.6;}
+.draw-dialog-btns{display:flex;flex-direction:column;gap:10px;}
+.draw-dialog-btn{padding:14px;border-radius:10px;border:none;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;letter-spacing:2px;cursor:pointer;}
+.draw-dialog-btn.live{background:linear-gradient(135deg,#1a3a2a,#1e4a30);border:1.5px solid var(--green);color:var(--green);}
+.draw-dialog-btn.manual{background:rgba(74,158,255,0.08);border:1.5px solid var(--blue);color:var(--blue2);}
+.draw-dialog-btn.cancel{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:13px;}
 </style>
 </head>
 <body>
@@ -1573,10 +1581,13 @@ function toggleMode(mode) {
       syncNumGridWinner();
     }
   } else {
-    // DRAW mode - winner stays active/locked, just run the draw
     document.getElementById('btnDraw').className = 'toggle-btn active-draw';
-    drawActive = true;
-    runDraw();
+    if (!winnerMode && winnerNums.size === 0) {
+      showDrawSourceDialog();
+    } else {
+      drawActive = true;
+      runDraw();
+    }
   }
 }
 
@@ -1714,10 +1725,7 @@ function runDraw() {
       var payBadge = document.createElement('div');
       if (payout > 0) {
         payBadge.className = payout >= 1000 ? 'payout-badge big' : 'payout-badge win';
-        payBadge.textContent = payout >= 1000000
-          ? (payout/1000000).toFixed(1)+'M€'
-          : payout >= 1000 ? (payout/1000).toFixed(0)+'K€'
-          : payout+'€';
+        payBadge.textContent = payout >= 1000000 ? (payout/1000000).toFixed(2)+'M€' : payout >= 1000 ? (payout/1000).toFixed(1)+'K€' : payout.toFixed(2)+'€';
       } else {
         payBadge.className = 'payout-badge nowin';
         payBadge.textContent = '0€';
@@ -1876,6 +1884,50 @@ function closeQRModal() {
   document.body.style.overflow = '';
 }
 
+function showDrawSourceDialog() {
+  var overlay = document.createElement('div');
+  overlay.className = 'draw-dialog-overlay';
+  overlay.id = 'drawSourceDialog';
+  var d = document.createElement('div');
+  d.className = 'draw-dialog';
+  d.innerHTML = '<div class="draw-dialog-title">ΠΩΣ ΕΙΣΑΓΕΙΣ ΤΗ ΝΙΚΗΤΡΙΑ;</div>' +
+    '<div class="draw-dialog-sub">Αυτόματα από LIVE ή χειροκίνητα;</div>' +
+    '<div class="draw-dialog-btns">' +
+    '<button class="draw-dialog-btn live" id="ddbLive">LIVE ΑΥΤΟΜΑΤΑ</button>' +
+    '<button class="draw-dialog-btn manual" id="ddbManual">MANUAL ΧΕΙΡΟΚΙΝΗΤΑ</button>' +
+    '<button class="draw-dialog-btn cancel" id="ddbCancel">ΑΚΥΡΩΣΗ</button>' +
+    '</div>';
+  overlay.appendChild(d);
+  document.body.appendChild(overlay);
+  document.getElementById('ddbLive').onclick = importFromLive;
+  document.getElementById('ddbManual').onclick = switchToManual;
+  document.getElementById('ddbCancel').onclick = cancelDrawDialog;
+}
+function closeDrawDialog() { var d=document.getElementById('drawSourceDialog'); if(d) d.remove(); }
+function importFromLive() {
+  closeDrawDialog();
+  if (!liveNumbers || !liveNumbers.length) {
+    alert('Πάτα πρώτα LIVE για να φορτωθούν κληρωθέντες.');
+    document.getElementById('btnDraw').className = 'toggle-btn'; return;
+  }
+  winnerNums.clear();
+  for (var i=0;i<liveNumbers.length;i++) winnerNums.add(liveNumbers[i]);
+  winnerMode = true;
+  document.getElementById('btnWinner').className = 'toggle-btn active-win';
+  syncNumGridWinner();
+  drawActive = true;
+  runDraw();
+}
+function switchToManual() {
+  closeDrawDialog();
+  winnerMode = true;
+  document.getElementById('btnWinner').className = 'toggle-btn active-win';
+  syncNumGridWinner();
+}
+function cancelDrawDialog() {
+  closeDrawDialog();
+  document.getElementById('btnDraw').className = 'toggle-btn';
+}
 // ---- INIT ----
 buildNumGrid();
 buildTypeCards();
