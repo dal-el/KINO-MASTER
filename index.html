@@ -673,12 +673,13 @@ body::before {
 }
 
 .stats-section{margin-bottom:8px;}
-.stats-label{font-size:9px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
-.stats-balls{display:flex;flex-wrap:wrap;gap:3px;}
-.sball{width:30px;height:30px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;}
-.sball-num{font-size:9px;font-weight:700;line-height:1.1;}
-.sball-val{font-size:7px;opacity:0.85;line-height:1;}
-.sball.hot{background:rgba(255,90,90,0.15);border:1px solid var(--red);color:var(--red);}
+.stats-label{font-size:11px;letter-spacing:2px;font-family:'Oswald',sans-serif;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.stats-balls{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.stats-balls::-webkit-scrollbar{display:none;}
+.sball{width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;}
+.sball-num{font-size:14px;font-weight:700;line-height:1.1;}
+.sball-val{font-size:10px;opacity:0.85;line-height:1;}
+.sball.hot{background:rgba(255,100,30,0.2);border:2px solid #ff6020;color:#ff9060;}
 .sball.cold{background:rgba(74,158,255,0.12);border:1px solid var(--blue);color:var(--blue2);}
 .sball.delayed{background:rgba(255,159,63,0.12);border:1px solid var(--price);color:var(--price);}
 .sball.repeat{background:rgba(62,207,142,0.12);border:1px solid var(--green);color:var(--green);}
@@ -715,10 +716,9 @@ body::before {
     <div class="live-strip-label" style="margin-bottom:8px;">
       <span id="t-lastdraw">ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ</span> — <span id="statsDrawRef">...</span>
     </div>
-    <div id="statsHot" style="margin-bottom:5px;"></div>
-    <div id="statsCold" style="margin-bottom:5px;"></div>
-    <div id="statsDelay" style="margin-bottom:5px;"></div>
-    <div id="statsRepeat"></div>
+    <div id="statsDelay" style="margin-bottom:8px;"></div>
+    <div id="statsHot" style="margin-bottom:8px;"></div>
+    <div id="statsCold"></div>
   </div>
 </div>
 
@@ -1482,10 +1482,9 @@ function processStats(data) {
   var cold = all.slice().sort(function(a,b){ return freq[a] - freq[b]; }).slice(0, 12);
   var del = all.slice().sort(function(a,b){ return delay[b] - delay[a]; }).slice(0, 12);
   var rep = all.filter(function(n){ return repeats[n] > 0; }).sort(function(a,b){ return repeats[b] - repeats[a]; }).slice(0, 12);
-  renderStat('statsHot','HOT',hot,freq,'hot','x');
-  renderStat('statsCold','COLD',cold,freq,'cold','x');
-  renderStat('statsDelay','DELAY',del,delay,'delayed','k');
-  if (rep.length) renderStat('statsRepeat','REPEAT',rep,repeats,'repeat','x');
+  renderStat('statsDelay','⏳ DELAY',del,delay,'delay','κλ');
+  renderStat('statsHot','?? HOT',hot,freq,'hot','x');
+  renderStat('statsCold','?? COLD',cold,freq,'cold','x');
 }
 
 function renderStat(elId, label, nums, map, cls, suffix) {
