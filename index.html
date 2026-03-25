@@ -688,6 +688,38 @@ body::before {
   .summary-grid { grid-template-columns:repeat(2,1fr); }
   .ball { width:34px; height:34px; font-size:11px; }
 }
+
+.sp-overlay{position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;}
+.sp-inner{max-width:480px;margin:0 auto;padding:16px 16px 80px;}
+.sp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:12px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;}
+.sp-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:2px;}
+.sp-close{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--muted2);font-size:13px;cursor:pointer;}
+.sp-sec{margin-bottom:22px;}
+.sp-stitle{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sp-stitle::after{content:'';flex:1;height:1px;background:var(--border);}
+.sp-dchart{display:flex;align-items:flex-end;gap:4px;height:110px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.sp-dchart::-webkit-scrollbar{display:none;}
+.sp-dc{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;width:34px;}
+.sp-dcbar{width:24px;border-radius:3px 3px 0 0;min-height:4px;}
+.sp-dcn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;}
+.sp-dcv{font-family:'Source Code Pro',monospace;font-size:8px;color:var(--muted2);}
+.sp-balls{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.sp-balls::-webkit-scrollbar{display:none;}
+.spb{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.spb-n{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;}
+.spb-v{font-family:'Source Code Pro',monospace;font-size:9px;}
+.spb.h .spb-n{background:rgba(255,80,20,0.18);border:2px solid #ff5010;color:#ff7040;}
+.spb.h .spb-v{color:#ff7040;}
+.spb.c .spb-n{background:rgba(70,150,255,0.15);border:2px solid #4696ff;color:#70b0ff;}
+.spb.c .spb-v{color:#70b0ff;}
+.spb.r .spb-n{background:rgba(62,207,142,0.15);border:2px solid var(--green);color:var(--green);}
+.spb.r .spb-v{color:var(--green);}
+.sp-lgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;}
+.sp-lb{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;background:linear-gradient(135deg,#1a1e30,#1e2235);border:1.5px solid var(--border2);color:var(--blue2);}
+.sp-hrow{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:6px;}
+.sp-hid{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted2);margin-bottom:5px;}
+.sp-hballs{display:flex;flex-wrap:wrap;gap:3px;}
+.sp-hb{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-size:8px;font-weight:700;background:rgba(30,35,60,1);border:1px solid var(--border);color:var(--muted2);}
 </style>
 
 </head>
@@ -1422,11 +1454,17 @@ function renderResults(res) {
 }
 
 function toggleStats() {
-  var strip = document.getElementById('liveStrip');
-  var vis = strip.classList.contains('visible');
-  strip.className = 'live-strip' + (vis ? '' : ' visible');
-  document.getElementById('liveBadgeText').textContent = vis ? 'STATS' : 'CLOSE';
-  if (!vis) loadStats();
+  var ov = document.getElementById('spOverlay');
+  if (ov.style.display === 'block') {
+    ov.style.display = 'none';
+    document.body.style.overflow = '';
+    document.getElementById('liveBadgeText').textContent = 'STATS';
+  } else {
+    ov.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('liveBadgeText').textContent = 'CLOSE';
+    spLoad();
+  }
 }
 
 function loadStats() {
@@ -1483,8 +1521,8 @@ function processStats(data) {
   var del = all.slice().sort(function(a,b){ return delay[b] - delay[a]; }).slice(0, 12);
   var rep = all.filter(function(n){ return repeats[n] > 0; }).sort(function(a,b){ return repeats[b] - repeats[a]; }).slice(0, 12);
   renderStat('statsDelay','⏳ DELAY',del,delay,'delay','κλ');
-  renderStat('statsHot','?? HOT',hot,freq,'hot','x');
-  renderStat('statsCold','?? COLD',cold,freq,'cold','x');
+  renderStat('statsHot','🔥 HOT',hot,freq,'hot','x');
+  renderStat('statsCold','❄️ COLD',cold,freq,'cold','x');
 }
 
 function renderStat(elId, label, nums, map, cls, suffix) {
@@ -1497,6 +1535,59 @@ function renderStat(elId, label, nums, map, cls, suffix) {
   });
   h += '</div></div>';
   el.innerHTML = h;
+}
+
+function spClose() {
+  document.getElementById('spOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('liveBadgeText').textContent = 'STATS';
+}
+function spLoad() {
+  var el = document.getElementById('spContent');
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Φορτωση...</div>';
+  var now = new Date(), f3 = new Date(now.getTime()-3*60*60*1000);
+  function zp(n){return n<10?'0'+n:''+n;}
+  var fs=f3.getFullYear()+'-'+zp(f3.getMonth()+1)+'-'+zp(f3.getDate());
+  var ts=now.getFullYear()+'-'+zp(now.getMonth()+1)+'-'+zp(now.getDate());
+  var base='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts;
+  spTry([base,'https://corsproxy.io/?'+base,'https://api.allorigins.win/raw?url='+encodeURIComponent(base)],0);
+}
+function spTry(urls,i) {
+  if(i>=urls.length){document.getElementById('spContent').innerHTML='<div style="color:var(--red);padding:20px;font-size:13px;">Αδυναμια συνδεσης. Δοκιμασε απο browser.</div>';return;}
+  fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(data){
+    var d=Array.isArray(data)?data:(data&&data.content?data.content:[]);
+    d=d.filter(function(x){return x.winningNumbers&&x.winningNumbers.list&&x.winningNumbers.list.length;});
+    d.sort(function(a,b){return(b.drawId||0)-(a.drawId||0);});
+    if(!d.length)throw 0;
+    spRender(d);
+  }).catch(function(){spTry(urls,i+1);});
+}
+function spRender(draws) {
+  var fr={},dl={},st={};
+  for(var n=1;n<=80;n++){fr[n]=0;dl[n]=draws.length;st[n]=0;}
+  draws.forEach(function(d,i){d.winningNumbers.list.forEach(function(n){fr[n]++;if(dl[n]===draws.length)dl[n]=i;});});
+  for(var i=0;i<draws.length-1;i++){var c=draws[i].winningNumbers.list,nx=draws[i+1].winningNumbers.list;c.forEach(function(n){if(nx.indexOf(n)>=0)st[n]++;});}
+  var all=[];for(var x=1;x<=80;x++)all.push(x);
+  var hot=all.slice().sort(function(a,b){return fr[b]-fr[a];}).slice(0,12);
+  var cold=all.slice().sort(function(a,b){return fr[a]-fr[b];}).slice(0,12);
+  var del=all.slice().sort(function(a,b){return dl[b]-dl[a];}).slice(0,15);
+  var rep=all.filter(function(n){return st[n]>0;}).sort(function(a,b){return st[b]-st[a];}).slice(0,12);
+  var maxD=dl[del[0]]||1;
+  var h='<div style="font-family:Source Code Pro,monospace;font-size:10px;color:var(--muted2);margin-bottom:14px;">'+draws.length+' klhroseis (3h)</div>';
+  h+='<div class="sp-sec"><div class="sp-stitle">DELAY</div><div class="sp-dchart">';
+  del.forEach(function(n){var v=dl[n],ht=Math.max(6,Math.round(v/maxD*96)),col=v>maxD*0.7?'var(--red)':v>maxD*0.35?'var(--price)':'var(--gold)';h+='<div class="sp-dc"><div style="height:100px;display:flex;align-items:flex-end;"><div class="sp-dcbar" style="height:'+ht+'px;background:'+col+';"></div></div><div class="sp-dcn" style="color:'+col+'">'+(n<10?'0'+n:''+n)+'</div><div class="sp-dcv">'+v+'</div></div>';});
+  h+='</div></div>';
+  if(rep.length){h+='<div class="sp-sec"><div class="sp-stitle">REPEAT</div><div class="sp-balls">';rep.forEach(function(n){h+='<div class="spb r"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+st[n]+'x</div></div>';});h+='</div></div>';}
+  h+='<div class="sp-sec"><div class="sp-stitle">HOT</div><div class="sp-balls">';hot.forEach(function(n){h+='<div class="spb h"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+fr[n]+'x</div></div>';});h+='</div></div>';
+  h+='<div class="sp-sec"><div class="sp-stitle">COLD</div><div class="sp-balls">';cold.forEach(function(n){h+='<div class="spb c"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+fr[n]+'x</div></div>';});h+='</div></div>';
+  var last=draws[0],lastN=last.winningNumbers.list;
+  h+='<div class="sp-sec"><div class="sp-stitle">LAST DRAW #'+(last.drawId||'')+'</div><div class="sp-lgrid">';lastN.forEach(function(n){h+='<div class="sp-lb">'+(n<10?'0'+n:''+n)+'</div>';});h+='</div></div>';
+  h+='<div class="sp-sec"><div class="sp-stitle">HISTORY</div>';
+  draws.slice(1,13).forEach(function(d){var bs=d.winningNumbers.list.map(function(n){return'<div class="sp-hb">'+(n<10?'0'+n:''+n)+'</div>';}).join('');h+='<div class="sp-hrow"><div class="sp-hid">#'+(d.drawId||'')+'</div><div class="sp-hballs">'+bs+'</div></div>';});
+  h+='</div>';
+  document.getElementById('spContent').innerHTML=h;
+  var cb=document.getElementById('spClose');
+  if(cb)cb.onclick=spClose;
 }
 
 function getSaved() {
@@ -1939,5 +2030,15 @@ refreshSavedBadge();
 setLang('el');
 </script>
 
+
+<div class="sp-overlay" id="spOverlay">
+  <div class="sp-inner">
+    <div class="sp-header">
+      <div class="sp-title">ΣΤΑΤΙΣΤΙΚΑ KINO</div>
+      <button class="sp-close" id="spClose">X ΚΛΕΙΣΙΜΟ</button>
+    </div>
+    <div id="spContent"><div style="text-align:center;padding:40px;color:var(--muted);">Φορτωση...</div></div>
+  </div>
+</div>
 </body>
 </html>
