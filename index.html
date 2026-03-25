@@ -720,6 +720,12 @@ body::before {
 .sp-hid{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted2);margin-bottom:5px;}
 .sp-hballs{display:flex;flex-wrap:wrap;gap:3px;}
 .sp-hb{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-size:8px;font-weight:700;background:rgba(30,35,60,1);border:1px solid var(--border);color:var(--muted2);}
+
+.sp-brow{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.sp-brow::-webkit-scrollbar{display:none;}
+.sp-bpair{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;}
+.sp-bball{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:#fff;border:2px solid transparent;box-shadow:0 3px 10px rgba(0,0,0,0.5);}
+.sp-bval{width:30px;height:24px;background:var(--surface);border:1.5px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
 </style>
 
 </head>
@@ -1544,50 +1550,100 @@ function spClose() {
 }
 function spLoad() {
   var el = document.getElementById('spContent');
-  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Φορτωση...</div>';
-  var now = new Date(), f3 = new Date(now.getTime()-3*60*60*1000);
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Fortosi...</div>';
+  var now = new Date();
   function zp(n){return n<10?'0'+n:''+n;}
+  var f3=new Date(now.getTime()-3*60*60*1000);
   var fs=f3.getFullYear()+'-'+zp(f3.getMonth()+1)+'-'+zp(f3.getDate());
   var ts=now.getFullYear()+'-'+zp(now.getMonth()+1)+'-'+zp(now.getDate());
-  var base='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts;
-  spTry([base,'https://corsproxy.io/?'+base,'https://api.allorigins.win/raw?url='+encodeURIComponent(base)],0);
+  var yd=new Date(now.getTime()-24*60*60*1000);
+  var yds=yd.getFullYear()+'-'+zp(yd.getMonth()+1)+'-'+zp(yd.getDate());
+  var base3='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts;
+  var baseDl='https://api.opap.gr/draws/v3.0/1100/draw-date/'+yds+'/'+ts;
+  var px='https://corsproxy.io/?', px2='https://api.allorigins.win/raw?url=';
+  function tryF(urls,i,cb){
+    if(i>=urls.length){cb(null);return;}
+    fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(data){
+      var d=Array.isArray(data)?data:(data&&data.content?data.content:[]);
+      d=d.filter(function(x){return x.winningNumbers&&x.winningNumbers.list&&x.winningNumbers.list.length;});
+      d.sort(function(a,b){return(b.drawId||0)-(a.drawId||0);});
+      if(!d.length)throw 0; cb(d);
+    }).catch(function(){tryF(urls,i+1,cb);});
+  }
+  tryF([base3,px+base3,px2+encodeURIComponent(base3)],0,function(d3){
+    tryF([baseDl,px+baseDl,px2+encodeURIComponent(baseDl)],0,function(dD){
+      if(!d3&&!dD){document.getElementById('spContent').innerHTML='<div style="color:var(--red);padding:20px;">Adynamia syndesis.</div>';return;}
+      spRender(d3||[],dD||d3||[]);
+    });
+  });
 }
-function spTry(urls,i) {
-  if(i>=urls.length){document.getElementById('spContent').innerHTML='<div style="color:var(--red);padding:20px;font-size:13px;">Αδυναμια συνδεσης. Δοκιμασε απο browser.</div>';return;}
-  fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(data){
-    var d=Array.isArray(data)?data:(data&&data.content?data.content:[]);
-    d=d.filter(function(x){return x.winningNumbers&&x.winningNumbers.list&&x.winningNumbers.list.length;});
-    d.sort(function(a,b){return(b.drawId||0)-(a.drawId||0);});
-    if(!d.length)throw 0;
-    spRender(d);
-  }).catch(function(){spTry(urls,i+1);});
-}
-function spRender(draws) {
-  var fr={},dl={},st={};
-  for(var n=1;n<=80;n++){fr[n]=0;dl[n]=draws.length;st[n]=0;}
-  draws.forEach(function(d,i){d.winningNumbers.list.forEach(function(n){fr[n]++;if(dl[n]===draws.length)dl[n]=i;});});
-  for(var i=0;i<draws.length-1;i++){var c=draws[i].winningNumbers.list,nx=draws[i+1].winningNumbers.list;c.forEach(function(n){if(nx.indexOf(n)>=0)st[n]++;});}
+function spTry(u,i){}
+
+function spRender(d3h,dDl) {
+  var fr={},st={},dl={},found={};
+  for(var n=1;n<=80;n++){fr[n]=0;st[n]=0;dl[n]=0;}
+  d3h.forEach(function(d){d.winningNumbers.list.forEach(function(n){fr[n]++;});});
+  for(var i=0;i<d3h.length-1;i++){var c=d3h[i].winningNumbers.list,nx=d3h[i+1].winningNumbers.list;c.forEach(function(n){if(nx.indexOf(n)>=0)st[n]++;});}
+  for(var di=0;di<dDl.length;di++){dDl[di].winningNumbers.list.forEach(function(n){if(!found[n]){found[n]=true;dl[n]=di;}});}
+  for(var n2=1;n2<=80;n2++){if(!found[n2])dl[n2]=dDl.length;}
   var all=[];for(var x=1;x<=80;x++)all.push(x);
   var hot=all.slice().sort(function(a,b){return fr[b]-fr[a];}).slice(0,12);
   var cold=all.slice().sort(function(a,b){return fr[a]-fr[b];}).slice(0,12);
   var del=all.slice().sort(function(a,b){return dl[b]-dl[a];}).slice(0,15);
   var rep=all.filter(function(n){return st[n]>0;}).sort(function(a,b){return st[b]-st[a];}).slice(0,12);
-  var maxD=dl[del[0]]||1;
-  var h='<div style="font-family:Source Code Pro,monospace;font-size:10px;color:var(--muted2);margin-bottom:14px;">'+draws.length+' klhroseis (3h)</div>';
-  h+='<div class="sp-sec"><div class="sp-stitle">DELAY</div><div class="sp-dchart">';
-  del.forEach(function(n){var v=dl[n],ht=Math.max(6,Math.round(v/maxD*96)),col=v>maxD*0.7?'var(--red)':v>maxD*0.35?'var(--price)':'var(--gold)';h+='<div class="sp-dc"><div style="height:100px;display:flex;align-items:flex-end;"><div class="sp-dcbar" style="height:'+ht+'px;background:'+col+';"></div></div><div class="sp-dcn" style="color:'+col+'">'+(n<10?'0'+n:''+n)+'</div><div class="sp-dcv">'+v+'</div></div>';});
-  h+='</div></div>';
-  if(rep.length){h+='<div class="sp-sec"><div class="sp-stitle">REPEAT</div><div class="sp-balls">';rep.forEach(function(n){h+='<div class="spb r"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+st[n]+'x</div></div>';});h+='</div></div>';}
-  h+='<div class="sp-sec"><div class="sp-stitle">HOT</div><div class="sp-balls">';hot.forEach(function(n){h+='<div class="spb h"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+fr[n]+'x</div></div>';});h+='</div></div>';
-  h+='<div class="sp-sec"><div class="sp-stitle">COLD</div><div class="sp-balls">';cold.forEach(function(n){h+='<div class="spb c"><div class="spb-n">'+(n<10?'0'+n:''+n)+'</div><div class="spb-v">'+fr[n]+'x</div></div>';});h+='</div></div>';
-  var last=draws[0],lastN=last.winningNumbers.list;
-  h+='<div class="sp-sec"><div class="sp-stitle">LAST DRAW #'+(last.drawId||'')+'</div><div class="sp-lgrid">';lastN.forEach(function(n){h+='<div class="sp-lb">'+(n<10?'0'+n:''+n)+'</div>';});h+='</div></div>';
+  var maxD=dl[del[0]]||1, maxF=fr[hot[0]]||1;
+
+  function col3(v,mx,type){
+    var p=mx>0?v/mx:0;
+    if(type==='delay') return p>0.7?'#dd1100':p>0.4?'#ee6600':'#ccaa00';
+    if(type==='hot') return 'rgb('+Math.round(180+75*p)+','+Math.round(50+100*(1-p))+',0)';
+    if(type==='cold') return 'rgb(0,'+Math.round(60+100*p)+','+Math.round(140+115*p)+')';
+    return 'rgb('+Math.round(30+80*p)+','+Math.round(150+80*p)+','+Math.round(60+60*p)+')';
+  }
+  function darkCol(v,mx,type){
+    var p=mx>0?v/mx:0;
+    if(type==='delay') return p>0.7?'#550000':p>0.4?'#663300':'#665500';
+    if(type==='hot') return 'rgb('+Math.round(60+40*p)+','+Math.round(10+20*(1-p))+',0)';
+    if(type==='cold') return 'rgb(0,'+Math.round(10+30*p)+','+Math.round(60+50*p)+')';
+    return 'rgb(0,'+Math.round(60+40*p)+','+Math.round(20+20*p)+')';
+  }
+  function mkBall(n,v,mx,type){
+    var c=col3(v,mx,type),dc=darkCol(v,mx,type);
+    return '<div class="sp-bpair"><div class="sp-bball" style="background:radial-gradient(circle at 35% 35%,'+c+','+dc+');border-color:'+c+';">'+(n<10?'0'+n:''+n)+'</div><div class="sp-bval">'+v+'</div></div>';
+  }
+  function mkRow(label,nums,map,mx,type){
+    var h='<div class="sp-sec"><div class="sp-stitle">'+label+'</div><div class="sp-brow">';
+    nums.forEach(function(n){h+=mkBall(n,map[n],mx,type);});
+    return h+'</div></div>';
+  }
+
+  var h='<div style="font-size:10px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">3h: '+d3h.length+' draws | delay: '+dDl.length+' draws</div>';
+  h+=mkRow('DELAY',del,dl,maxD,'delay');
+  if(rep.length){var maxR=st[rep[0]]||1;h+=mkRow('REPEAT',rep,st,maxR,'repeat');}
+  h+=mkRow('HOT',hot,fr,maxF,'hot');
+  h+=mkRow('COLD',cold,fr,maxF,'cold');
+
+  var last=d3h[0]||(dDl[0]);
+  if(last){
+    var lN=last.winningNumbers.list;
+    h+='<div class="sp-sec"><div class="sp-stitle">LAST DRAW #'+(last.drawId||'')+'</div><div class="sp-lgrid">';
+    lN.forEach(function(n){h+='<div class="sp-lb">'+(n<10?'0'+n:''+n)+'</div>';});
+    h+='</div></div>';
+  }
+
+  var src=d3h.length>1?d3h:dDl;
   h+='<div class="sp-sec"><div class="sp-stitle">HISTORY</div>';
-  draws.slice(1,13).forEach(function(d){var bs=d.winningNumbers.list.map(function(n){return'<div class="sp-hb">'+(n<10?'0'+n:''+n)+'</div>';}).join('');h+='<div class="sp-hrow"><div class="sp-hid">#'+(d.drawId||'')+'</div><div class="sp-hballs">'+bs+'</div></div>';});
+  src.slice(1,13).forEach(function(d){
+    var nums=d.winningNumbers.list.slice().sort(function(a,b){return a-b;});
+    h+='<div class="sp-hrow"><div class="sp-hid">#'+(d.drawId||'')+'</div><div class="sp-hballs">';
+    nums.forEach(function(n){h+='<div class="sp-hb">'+(n<10?'0'+n:''+n)+'</div>';});
+    h+='</div></div>';
+  });
   h+='</div>';
+
   document.getElementById('spContent').innerHTML=h;
   var cb=document.getElementById('spClose');
-  if(cb)cb.onclick=spClose;
+  if(cb) cb.onclick=spClose;
 }
 
 function getSaved() {
