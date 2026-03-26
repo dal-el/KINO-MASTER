@@ -1530,12 +1530,14 @@ function spClose() {
 }
 
 var STATS_WINDOW = 12;
+var HOT_COLD_HOURS = 3;
+var HOT_COLD_MAX_DRAWS = 50;
 
 function normalizeDraws(draws) {
   return (Array.isArray(draws)?draws:[]).filter(function(d){
     return d&&d.winningNumbers&&Array.isArray(d.winningNumbers.list)&&d.winningNumbers.list.length;
   }).map(function(d){
-    return {drawId:Number(d.drawId||0),drawTime:Number(d.drawTime||0),bonus:Number(d.bonus||0),winningNumbers:{list:d.winningNumbers.list.map(Number).sort(function(a,b){return a-b;})}};
+    return {drawId:Number(d.drawId||0),drawTime:Number(d.drawTime||0),bonus:Number((d.winningNumbers&&d.winningNumbers.bonus&&d.winningNumbers.bonus[0])||d.bonus||0),winningNumbers:{list:d.winningNumbers.list.map(Number).sort(function(a,b){return a-b;})}};
   }).sort(function(a,b){
     if(b.drawId!==a.drawId)return b.drawId-a.drawId;
     return b.drawTime-a.drawTime;
@@ -1586,20 +1588,30 @@ function mkKinoGrid(draw){
 }
 
 function spRender(rawDraws) {
-  var s=computeStats(rawDraws,STATS_WINDOW),src=s.hist,fr=s.freq,st=s.streak,dl=s.delay,all=[];
+  var allHist=normalizeDraws(rawDraws),now=Date.now(),hotColdHist=allHist.filter(function(d){
+    return d.drawTime && (now - d.drawTime) <= HOT_COLD_HOURS*60*60*1000;
+  }).slice(0,HOT_COLD_MAX_DRAWS);
+  if(!hotColdHist.length) hotColdHist=allHist.slice(0,HOT_COLD_MAX_DRAWS);
+  var viewHist=allHist.slice(0,STATS_WINDOW);
+  var sRepeatDelay=computeStats(allHist,allHist.length||STATS_WINDOW),sHotCold=computeStats(hotColdHist,hotColdHist.length||HOT_COLD_MAX_DRAWS),all=[];
+  var fr=sHotCold.freq,st=sRepeatDelay.streak,dl=sRepeatDelay.delay;
   for(var x=1;x<=80;x++)all.push(x);
   var hot=all.slice().sort(function(a,b){return fr[b]!==fr[a]?fr[b]-fr[a]:a-b;}).slice(0,10);
   var cold=all.slice().sort(function(a,b){return fr[a]!==fr[b]?fr[a]-fr[b]:a-b;}).slice(0,10);
   var del=all.slice().sort(function(a,b){return dl[b]!==dl[a]?dl[b]-dl[a]:a-b;}).slice(0,10);
-  var rep=all.filter(function(n){return st[n]>0;}).sort(function(a,b){return st[b]!==st[a]?st[b]-st[a]:a-b;}).slice(0,10);
+  var rep=all.filter(function(n){return st[n]>=2;}).sort(function(a,b){return st[b]!==st[a]?st[b]-st[a]:a-b;}).slice(0,10);
   var maxD=del.length?(dl[del[0]]||1):1,maxR=rep.length?(st[rep[0]]||1):1;
-  var h='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">τελευταίες '+src.length+' κληρώσεις</div>';
-  if(rep.length)h+=mkRow('ΕΠΑΝΑΛΗΨΕΙΣ',rep,st,maxR,'repeat');
+  var h='';
+  if(rep.length){
+    h+='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">Επαναλήψεις / καθυστερήσεις: όλο το διαθέσιμο ιστορικό</div>';
+    h+=mkRow('ΕΠΑΝΑΛΗΨΕΙΣ',rep,st,maxR,'repeat');
+  }
   h+=mkRow('ΚΑΘΥΣΤΕΡΗΣΕΙΣ',del,dl,maxD,'delay');
+  h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">Καυτά / κρύα: τελευταίες '+hotColdHist.length+' κληρώσεις έως '+HOT_COLD_HOURS+' ώρες</div>';
   h+=mkHotCold('ΚΑΥΤΑ',hot,fr,'fire');
   h+=mkHotCold('ΚΡΥΑ',cold,fr,'ice');
   h+='<div style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:800;">ΚΛΗΡΩΣΕΙΣ<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
-  src.forEach(function(d){h+=mkKinoGrid(d);});
+  viewHist.forEach(function(d){h+=mkKinoGrid(d);});
   h+='</div>';
   document.getElementById('spContent').innerHTML=h;
   document.getElementById('spClose').onclick=spClose;
@@ -1612,7 +1624,7 @@ function spLoad() {
   function zp(n){return n<10?'0'+n:''+n;}
   var fs=f3.getFullYear()+'-'+zp(f3.getMonth()+1)+'-'+zp(f3.getDate());
   var ts=now.getFullYear()+'-'+zp(now.getMonth()+1)+'-'+zp(now.getDate());
-  var base='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts;
+  var base='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts+'?limit=100';
   var px='https://corsproxy.io/?',px2='https://api.allorigins.win/raw?url=';
   spTry([base,px+base,px2+encodeURIComponent(base)],0);
 }
