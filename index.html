@@ -719,6 +719,16 @@ body::before {
 .sp-dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle;margin-right:5px;}
 .sp-dot.hit{background:#dfaf2c;}
 .sp-dot.bonus{background:#d62020;}
+/* GRID VIEW MODE */
+#sp-draws-wrap.grid-view{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+#sp-draws-wrap.grid-view .sp-hcard{margin-bottom:0;padding:7px 7px 8px;border-radius:10px;}
+#sp-draws-wrap.grid-view .sp-hmeta{margin-bottom:6px;}
+#sp-draws-wrap.grid-view .sp-hid{font-size:9px;}
+#sp-draws-wrap.grid-view .sp-htime{font-size:9px;}
+#sp-draws-wrap.grid-view .sp-kino-grid{gap:2px;}
+#sp-draws-wrap.grid-view .sp-kcell{font-size:8px;border-radius:4px;}
+#sp-draws-wrap.grid-view .sp-klegend{font-size:9px;gap:8px;margin-top:5px;}
+#sp-draws-wrap.grid-view #sp-loadmore-wrap{grid-column:1/-1;}
 @media(max-width:420px){.sp-stats-grid,.sp-fire-grid,.sp-ice-grid{gap:10px 8px}.sp-bball,.sp-fireball,.sp-iceball{width:46px;height:46px;font-size:17px}.sp-bval,.sp-fireval,.sp-iceval{height:24px;font-size:15px}.sp-kcell{font-size:10px}}
 
 .qr-toolbar{display:flex;flex-direction:column;gap:14px;margin-bottom:16px;}
@@ -751,7 +761,6 @@ body::before {
       <div class="logo-icon">K</div>
       <div class="logo-text">
         <div class="l1">KINO MASTER</div>
-        <div class="l2"><span id="t-subtitle">Auto Correcting Systems</span></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -811,7 +820,7 @@ body::before {
 
   <div class="th-grid">
     <div class="th-box">
-      <div class="th-label">TRIGGER (αν βγουν)</div>
+      <div class="th-label">ΑΝ ΚΛΗΡΩΘΟΥΝ</div>
       <div class="th-val gold" id="triggerDisplay">4</div>
       <div class="th-controls">
         <button class="th-btn" id="trigMinus">&#x2212;</button>
@@ -819,7 +828,7 @@ body::before {
       </div>
     </div>
     <div class="th-box">
-      <div class="th-label">HIT (εγγυόμαστε)</div>
+      <div class="th-label">ΕΓΓΥΟΜΑΣΤΕ</div>
       <div class="th-val blue" id="hitDisplay">3</div>
       <div class="th-controls">
         <button class="th-btn" id="hitMinus">&#x2212;</button>
@@ -959,7 +968,7 @@ var selectedMultipliers = new Set([1]);
 
 var T = {
   el: {
-    subtitle:'Αυτόματη Διόρθωση Συστημάτων',
+    subtitle:'',
     lastdraw:'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
     step1:'Τύπος Παιχνιδιού',
     step2:'Επιλογή Αριθμών',
@@ -1011,7 +1020,7 @@ var T = {
     winnerModeLabel:'ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ'
   },
   en: {
-    subtitle:'Auto Correcting Systems',
+    subtitle:'',
     lastdraw:'LAST DRAW',
     step1:'Game Type',
     step2:'Number Selection',
@@ -1610,11 +1619,43 @@ function spRender(rawDraws) {
   h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">Καυτά / κρύα: τελευταίες '+hotColdHist.length+' κληρώσεις έως '+HOT_COLD_HOURS+' ώρες</div>';
   h+=mkHotCold('ΚΑΥΤΑ',hot,fr,'fire');
   h+=mkHotCold('ΚΡΥΑ',cold,fr,'ice');
-  h+='<div style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:800;">ΚΛΗΡΩΣΕΙΣ<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
+  h+='<div id="sp-draws-wrap" style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800;">ΚΛΗΡΩΣΕΙΣ<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
+  h+='<div style="text-align:right;margin-bottom:10px;"><button onclick="spToggleGrid()" id="sp-grid-btn" title="Εναλλαγή προβολής" style="padding:5px 14px;background:#1a2240;border:1px solid #2a3a6a;border-radius:8px;color:var(--muted2);font-size:11px;cursor:pointer;letter-spacing:1px;transition:all .2s;">⊞ GRID</button></div>';
   viewHist.forEach(function(d){h+=mkKinoGrid(d);});
+  if(allHist.length>STATS_WINDOW){
+    h+='<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">▼ ΠΑΛΑΙΟΤΕΡΕΣ 12</button></div>';
+  }
   h+='</div>';
   document.getElementById('spContent').innerHTML=h;
   document.getElementById('spClose').onclick=spClose;
+  window._spAllHist=allHist;
+  window._spShown=STATS_WINDOW;
+}
+
+function spLoadMoreDraws(){
+  var allHist=window._spAllHist||[];
+  var shown=window._spShown||12;
+  var next=allHist.slice(shown,shown+12);
+  if(!next.length) return;
+  var wrap=document.getElementById('sp-draws-wrap');
+  if(!wrap) return;
+  var btnWrap=document.getElementById('sp-loadmore-wrap');
+  if(btnWrap) btnWrap.remove();
+  next.forEach(function(d){ wrap.insertAdjacentHTML('beforeend',mkKinoGrid(d)); });
+  window._spShown=shown+next.length;
+  if(window._spShown<allHist.length){
+    wrap.insertAdjacentHTML('beforeend','<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">▼ ΠΑΛΑΙΟΤΕΡΕΣ 12</button></div>');
+  }
+}
+
+function spToggleGrid(){
+  var wrap=document.getElementById('sp-draws-wrap');
+  var btn=document.getElementById('sp-grid-btn');
+  if(!wrap||!btn) return;
+  var isGrid=wrap.classList.toggle('grid-view');
+  btn.textContent=isGrid?'☰ LIST':'⊞ GRID';
+  btn.style.borderColor=isGrid?'var(--gold)':'#2a3a6a';
+  btn.style.color=isGrid?'var(--gold)':'var(--muted2)';
 }
 
 function spLoad() {
@@ -2174,6 +2215,24 @@ setLang('el');
     </div>
     <div id="spContent"><div style="text-align:center;padding:40px;color:var(--muted2);">Φορτωση...</div></div>
   </div>
+  <!-- Back to Top -->
+  <button id="spBackTop"
+    onclick="document.getElementById('spOverlay').scrollTo({top:0,behavior:'smooth'})"
+    style="display:none;position:fixed;bottom:28px;right:22px;z-index:510;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#b8800a,var(--gold));border:none;cursor:pointer;box-shadow:0 4px 18px rgba(232,184,75,.45);font-size:22px;color:#000;font-weight:900;line-height:1;transition:opacity .25s,transform .2s;"
+    title="Πάνω"
+  >↑</button>
 </div>
+<script>
+(function(){
+  var ov=document.getElementById('spOverlay');
+  var btn=document.getElementById('spBackTop');
+  if(!ov||!btn) return;
+  ov.addEventListener('scroll',function(){
+    btn.style.display=ov.scrollTop>200?'flex':'none';
+    btn.style.alignItems='center';
+    btn.style.justifyContent='center';
+  });
+})();
+</script>
 </body>
 </html>
