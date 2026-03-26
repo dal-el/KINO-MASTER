@@ -1479,6 +1479,17 @@ function generate() {
   var lb = estimateLowerBound(v, gameK, triggerVal, hitVal);
   if (lb > MAX_COMBOS) { showErr('⚠️ ' + tt('tooExpensive')); return; }
 
+  // ✅ Cache: αν pool/k/trigger/hit είναι ίδια, επέστρεψε το ίδιο αποτέλεσμα
+  var cacheKey = pool.join(',') + '|' + gameK + '|' + triggerVal + '|' + hitVal;
+  if (currentResults && currentResults._cacheKey === cacheKey) {
+    renderResults(currentResults);
+    document.getElementById('lbBar').style.display = 'flex';
+    document.getElementById('t-lbcombos').textContent = currentResults.lines.length;
+    document.getElementById('lbVal').textContent = currentResults.lines.length;
+    document.getElementById('lbVal').className = 'lb-val' + (currentResults.lines.length > 150 ? ' warn' : '');
+    return;
+  }
+
   setBusy(true);
   setTimeout(function() {
     var bestLines = null;
@@ -1488,7 +1499,7 @@ function generate() {
     }
     if (!bestLines) { showErr('⚠️ ' + tt('noValidSystem')); setBusy(false); return; }
 
-    currentResults = {pool:pool, k:gameK, trigger:triggerVal, hit:hitVal, lines:bestLines};
+    currentResults = {pool:pool, k:gameK, trigger:triggerVal, hit:hitVal, lines:bestLines, _cacheKey:cacheKey};
     renderResults(currentResults);
     document.getElementById('lbBar').style.display = 'flex';
     document.getElementById('t-lbcombos').textContent = bestLines.length;
