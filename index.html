@@ -820,7 +820,7 @@ body::before {
 
   <div class="th-grid">
     <div class="th-box">
-      <div class="th-label">ΑΝ ΚΛΗΡΩΘΟΥΝ</div>
+      <div class="th-label" id="t-triggerlabel">ΑΝ ΚΛΗΡΩΘΟΥΝ</div>
       <div class="th-val gold" id="triggerDisplay">4</div>
       <div class="th-controls">
         <button class="th-btn" id="trigMinus">&#x2212;</button>
@@ -828,7 +828,7 @@ body::before {
       </div>
     </div>
     <div class="th-box">
-      <div class="th-label">ΕΓΓΥΟΜΑΣΤΕ</div>
+      <div class="th-label" id="t-hitlabel">ΕΓΓΥΟΜΑΣΤΕ</div>
       <div class="th-val blue" id="hitDisplay">3</div>
       <div class="th-controls">
         <button class="th-btn" id="hitMinus">&#x2212;</button>
@@ -921,7 +921,7 @@ body::before {
         </div>
       </div>
       <div class="qr-toolbar-card">
-        <div class="qr-toolbar-label">ΣΥΝΕΧΟΜΕΝΕΣ ΚΛΗΡΩΣΕΙΣ</div>
+        <div class="qr-toolbar-label" id="t-consecutiveDraws">ΣΥΝΕΧΟΜΕΝΕΣ ΚΛΗΡΩΣΕΙΣ</div>
         <div class="qr-chip-group">
           <span class="qr-chip active" id="draws_1" onclick="toggleDraws(1)">1</span>
           <span class="qr-chip" id="draws_2" onclick="toggleDraws(2)">2</span>
@@ -1017,7 +1017,34 @@ var T = {
     qrFailed:'Αδύνατη δημιουργία QR',
     qrTickets:'📱 ΔΗΜΙΟΥΡΓΙΑ QR ΔΕΛΤΙΩΝ',
     drawMode:'ΔΙΑΛΟΓΗ',
-    winnerModeLabel:'ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ'
+    winnerModeLabel:'ΝΙΚΗΤΡΙΑ ΣΤΗΛΗ',
+    // Στατιστικά
+    statsTitle:'ΣΤΑΤΙΣΤΙΚΑ KINO',
+    statsClose:'ΚΛΕΙΣΙΜΟ',
+    statsLoading:'Φόρτωση...',
+    statsError:'Αδυναμία σύνδεσης.',
+    statsRepeatDelay:'Επαναλήψεις / καθυστερήσεις: όλο το διαθέσιμο ιστορικό',
+    statsHotCold:'Καυτά / κρύα: τελευταίες',
+    statsHotColdDraws:'κληρώσεις έως',
+    statsHotColdHours:'ώρες',
+    statsRepeats:'ΕΠΑΝΑΛΗΨΕΙΣ',
+    statsDelays:'ΚΑΘΥΣΤΕΡΗΣΕΙΣ',
+    statsHot:'ΚΑΥΤΑ',
+    statsCold:'ΚΡΥΑ',
+    statsDraws:'ΚΛΗΡΩΣΕΙΣ',
+    statsLoadMore:'▼ ΠΑΛΑΙΟΤΕΡΕΣ 12',
+    statsGridToggle:'⊞ GRID',
+    statsListToggle:'☰ LIST',
+    statsToggleTitle:'Εναλλαγή προβολής',
+    statsDrawLabel:'ΚΛΗΡΩΣΗ #',
+    statsWon:'Κληρωθέντες',
+    statsBonus:'Bonus',
+    statsBackTop:'Πάνω',
+    triggerLabel:'ΑΝ ΚΛΗΡΩΘΟΥΝ',
+    hitLabel:'ΕΓΓΥΟΜΑΣΤΕ',
+    consecutiveDraws:'ΣΥΝΕΧΟΜΕΝΕΣ ΚΛΗΡΩΣΕΙΣ',
+    linesX:'στήλες ×',
+    drawsX:'κληρώσεις'
   },
   en: {
     subtitle:'',
@@ -1069,7 +1096,34 @@ var T = {
     qrFailed:'Unable to generate QR',
     qrTickets:'📱 GENERATE QR TICKETS',
     drawMode:'DRAW',
-    winnerModeLabel:'WINNER ROW'
+    winnerModeLabel:'WINNER ROW',
+    // Stats overlay
+    statsTitle:'KINO STATISTICS',
+    statsClose:'CLOSE',
+    statsLoading:'Loading...',
+    statsError:'Connection failed.',
+    statsRepeatDelay:'Repeats / delays: full available history',
+    statsHotCold:'Hot / cold: last',
+    statsHotColdDraws:'draws up to',
+    statsHotColdHours:'hours',
+    statsRepeats:'REPEATS',
+    statsDelays:'DELAYS',
+    statsHot:'HOT',
+    statsCold:'COLD',
+    statsDraws:'DRAWS',
+    statsLoadMore:'▼ LOAD 12 MORE',
+    statsGridToggle:'⊞ GRID',
+    statsListToggle:'☰ LIST',
+    statsToggleTitle:'Toggle view',
+    statsDrawLabel:'DRAW #',
+    statsWon:'Winners',
+    statsBonus:'Bonus',
+    statsBackTop:'Top',
+    triggerLabel:'IF DRAWN',
+    hitLabel:'WE GUARANTEE',
+    consecutiveDraws:'CONSECUTIVE DRAWS',
+    linesX:'lines ×',
+    drawsX:'draws'
   }
 };
 
@@ -1590,9 +1644,9 @@ function mkHotCold(lbl,nums,map,cls){
 }
 function mkKinoGrid(draw){
   var hits={};draw.winningNumbers.list.forEach(function(n){hits[n]=true;});
-  var h='<div class="sp-hcard"><div class="sp-hmeta"><div class="sp-hid">ΚΛΗΡΩΣΗ #'+draw.drawId+'</div><div class="sp-htime">'+fmtTime(draw.drawTime)+'</div></div><div class="sp-kino-grid">';
+  var h='<div class="sp-hcard"><div class="sp-hmeta"><div class="sp-hid">'+tt('statsDrawLabel')+draw.drawId+'</div><div class="sp-htime">'+fmtTime(draw.drawTime)+'</div></div><div class="sp-kino-grid">';
   for(var n=1;n<=80;n++){var c='sp-kcell';if(draw.bonus===n)c+=' bonus';else if(hits[n])c+=' hit';h+='<div class="'+c+'">'+pad2(n)+'</div>';}
-  h+='</div><div class="sp-klegend"><span><span class="sp-dot hit"></span>Κληρωθέντες</span><span><span class="sp-dot bonus"></span>Bonus</span></div></div>';
+  h+='</div><div class="sp-klegend"><span><span class="sp-dot hit"></span>'+tt('statsWon')+'</span><span><span class="sp-dot bonus"></span>'+tt('statsBonus')+'</span></div></div>';
   return h;
 }
 
@@ -1612,18 +1666,18 @@ function spRender(rawDraws) {
   var maxD=del.length?(dl[del[0]]||1):1,maxR=rep.length?(st[rep[0]]||1):1;
   var h='';
   if(rep.length){
-    h+='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">Επαναλήψεις / καθυστερήσεις: όλο το διαθέσιμο ιστορικό</div>';
-    h+=mkRow('ΕΠΑΝΑΛΗΨΕΙΣ',rep,st,maxR,'repeat');
+    h+='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">'+tt('statsRepeatDelay')+'</div>';
+    h+=mkRow(tt('statsRepeats'),rep,st,maxR,'repeat');
   }
-  h+=mkRow('ΚΑΘΥΣΤΕΡΗΣΕΙΣ',del,dl,maxD,'delay');
-  h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">Καυτά / κρύα: τελευταίες '+hotColdHist.length+' κληρώσεις έως '+HOT_COLD_HOURS+' ώρες</div>';
-  h+=mkHotCold('ΚΑΥΤΑ',hot,fr,'fire');
-  h+=mkHotCold('ΚΡΥΑ',cold,fr,'ice');
-  h+='<div id="sp-draws-wrap" style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800;">ΚΛΗΡΩΣΕΙΣ<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
-  h+='<div style="text-align:right;margin-bottom:10px;"><button onclick="spToggleGrid()" id="sp-grid-btn" title="Εναλλαγή προβολής" style="padding:5px 14px;background:#1a2240;border:1px solid #2a3a6a;border-radius:8px;color:var(--muted2);font-size:11px;cursor:pointer;letter-spacing:1px;transition:all .2s;">⊞ GRID</button></div>';
+  h+=mkRow(tt('statsDelays'),del,dl,maxD,'delay');
+  h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">'+tt('statsHotCold')+' '+hotColdHist.length+' '+tt('statsHotColdDraws')+' '+HOT_COLD_HOURS+' '+tt('statsHotColdHours')+'</div>';
+  h+=mkHotCold(tt('statsHot'),hot,fr,'fire');
+  h+=mkHotCold(tt('statsCold'),cold,fr,'ice');
+  h+='<div id="sp-draws-wrap" style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800;">'+tt('statsDraws')+'<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
+  h+='<div style="text-align:right;margin-bottom:10px;"><button onclick="spToggleGrid()" id="sp-grid-btn" title="'+tt('statsToggleTitle')+'" style="padding:5px 14px;background:#1a2240;border:1px solid #2a3a6a;border-radius:8px;color:var(--muted2);font-size:11px;cursor:pointer;letter-spacing:1px;transition:all .2s;">'+tt('statsGridToggle')+'</button></div>';
   viewHist.forEach(function(d){h+=mkKinoGrid(d);});
   if(allHist.length>STATS_WINDOW){
-    h+='<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">▼ ΠΑΛΑΙΟΤΕΡΕΣ 12</button></div>';
+    h+='<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">'+tt('statsLoadMore')+'</button></div>';
   }
   h+='</div>';
   document.getElementById('spContent').innerHTML=h;
@@ -1644,7 +1698,7 @@ function spLoadMoreDraws(){
   next.forEach(function(d){ wrap.insertAdjacentHTML('beforeend',mkKinoGrid(d)); });
   window._spShown=shown+next.length;
   if(window._spShown<allHist.length){
-    wrap.insertAdjacentHTML('beforeend','<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">▼ ΠΑΛΑΙΟΤΕΡΕΣ 12</button></div>');
+    wrap.insertAdjacentHTML('beforeend','<div id="sp-loadmore-wrap" style="text-align:center;margin-top:14px;"><button onclick="spLoadMoreDraws()" style="padding:10px 28px;background:#131a2e;border:1px solid #2a3a6a;border-radius:12px;color:var(--muted2);font-size:12px;letter-spacing:2px;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'var(--gold)\'" onmouseout="this.style.borderColor=\'#2a3a6a\';this.style.color=\'var(--muted2)\'">'+tt('statsLoadMore')+'</button></div>');
   }
 }
 
@@ -1653,14 +1707,14 @@ function spToggleGrid(){
   var btn=document.getElementById('sp-grid-btn');
   if(!wrap||!btn) return;
   var isGrid=wrap.classList.toggle('grid-view');
-  btn.textContent=isGrid?'☰ LIST':'⊞ GRID';
+  btn.textContent=isGrid?tt('statsListToggle'):tt('statsGridToggle');
   btn.style.borderColor=isGrid?'var(--gold)':'#2a3a6a';
   btn.style.color=isGrid?'var(--gold)':'var(--muted2)';
 }
 
 function spLoad() {
   var el=document.getElementById('spContent');
-  el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted2);">Φορτωση...</div>';
+  el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted2);">'+tt('statsLoading')+'</div>';
   var now=new Date(),f3=new Date(now.getTime()-3*60*60*1000);
   function zp(n){return n<10?'0'+n:''+n;}
   var fs=f3.getFullYear()+'-'+zp(f3.getMonth()+1)+'-'+zp(f3.getDate());
@@ -1671,7 +1725,7 @@ function spLoad() {
 }
 
 function spTry(urls,i) {
-  if(i>=urls.length){document.getElementById('spContent').innerHTML='<div style="color:#ff5a5a;padding:20px;">Αδυναμια συνδεσης.</div>';return;}
+  if(i>=urls.length){document.getElementById('spContent').innerHTML='<div style="color:#ff5a5a;padding:20px;">'+tt('statsError')+'</div>';return;}
   fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(data){
     var d=Array.isArray(data)?data:(data&&data.content?data.content:[]);
     if(!d.length)throw 0;
@@ -1825,6 +1879,17 @@ function setLang(lang) {
   el = document.getElementById('btnWinner'); if (el) el.textContent = '🏆 ' + tt('winnerModeLabel');
   el = document.getElementById('btnDraw'); if (el) el.textContent = '🎯 ' + tt('drawMode');
   el = document.getElementById('qrBtnSticky'); if (el) el.textContent = tt('qrTickets');
+  // Stats overlay
+  el = document.getElementById('t-statsTitle'); if (el) el.textContent = tt('statsTitle');
+  el = document.getElementById('spClose'); if (el) el.textContent = tt('statsClose');
+  el = document.getElementById('t-triggerlabel'); if (el) el.textContent = tt('triggerLabel');
+  el = document.getElementById('t-hitlabel'); if (el) el.textContent = tt('hitLabel');
+  el = document.getElementById('t-consecutiveDraws'); if (el) el.textContent = tt('consecutiveDraws');
+  // Ενημέρωσε το selNums μόνο αν δεν έχουν επιλεγεί αριθμοί
+  var selNums = document.getElementById('selNums');
+  if (selNums && (!window.selected || window.selected.size === 0)) {
+    selNums.textContent = currentLang === 'el' ? 'Επίλεξε αριθμούς από τον πίνακα...' : 'Select numbers from the grid...';
+  }
 
   var input = document.getElementById('saveNameInput');
   if (input) input.placeholder = tt('placeholder');
@@ -2140,7 +2205,7 @@ function renderQRContent() {
       '<div class="qr-box" id="qr_' + ti + '"></div>' +
       '<div class="qr-combos">' + comboRows + '</div>' +
       '<div class="qr-cost-row" style="display:block;line-height:1.7;">' +
-        '<div>' + ticket.length + ' στήλες × ' + draws + ' κληρώσεις</div>' +
+        '<div>' + ticket.length + ' ' + tt('linesX') + ' ' + draws + ' ' + tt('drawsX') + '</div>' +
         '<div>Τιμή στήλης: ' + basePricePerColumn.toFixed(2) + '€ ' + (bonus ? '× 2 Bonus' : '') + ' × ' + multiplier + ' πολλ/στής</div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">' +
           '<span>Πιθανό κέρδος: ×' + (bonusFactor * multiplier) + '</span>' +
@@ -2210,16 +2275,15 @@ setLang('el');
 <div id="spOverlay" style="display:none;position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;">
   <div style="max-width:520px;margin:0 auto;padding:16px 16px 90px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:12px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;">
-      <div style="font-size:20px;font-weight:800;color:var(--gold);letter-spacing:2px;">ΣΤΑΤΙΣΤΙΚΑ KINO</div>
-      <button id="spClose" style="padding:8px 16px;background:#171d31;border:1px solid #2c3763;border-radius:12px;color:var(--muted2);font-size:13px;cursor:pointer;">ΚΛΕΙΣΙΜΟ</button>
+      <div style="font-size:20px;font-weight:800;color:var(--gold);letter-spacing:2px;" id="t-statsTitle">ΣΤΑΤΙΣΤΙΚΑ KINO</div>
+      <button id="spClose" style="padding:8px 16px;background:#171d31;border:1px solid #2c3763;border-radius:12px;color:var(--muted2);font-size:13px;cursor:pointer;" id="t-statsClose">ΚΛΕΙΣΙΜΟ</button>
     </div>
-    <div id="spContent"><div style="text-align:center;padding:40px;color:var(--muted2);">Φορτωση...</div></div>
+    <div id="spContent"><div style="text-align:center;padding:40px;color:var(--muted2);" id="t-statsLoadingInit">Φόρτωση...</div></div>
   </div>
   <!-- Back to Top -->
   <button id="spBackTop"
     onclick="document.getElementById('spOverlay').scrollTo({top:0,behavior:'smooth'})"
     style="display:none;position:fixed;bottom:28px;right:22px;z-index:510;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#b8800a,var(--gold));border:none;cursor:pointer;box-shadow:0 4px 18px rgba(232,184,75,.45);font-size:22px;color:#000;font-weight:900;line-height:1;transition:opacity .25s,transform .2s;"
-    title="Πάνω"
   >↑</button>
 </div>
 <script>
