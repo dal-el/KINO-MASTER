@@ -974,6 +974,7 @@ var drawActive = false;
 var batchModeActive = false;
 var _batchData = null;
 var currentBonus = 0;
+var _absDrawMap = {};
 
 var T = {
   el: {
@@ -2059,14 +2060,15 @@ function selectDraw(drawId, nums, bonus, fromBatch) {
 function toggleAbsDraw(btn) {
   var drawId = btn.getAttribute('data-drawid');
   var gridId = btn.getAttribute('data-gridid');
-  var numsRaw = btn.getAttribute('data-nums');
-  var bonus = parseInt(btn.getAttribute('data-bonus')||'0', 10);
-  var nums = numsRaw ? JSON.parse(numsRaw) : [];
+  var drawData = _absDrawMap[String(drawId)] || {nums: [], bonus: 0};
+  var nums = Array.isArray(drawData.nums) ? drawData.nums : [];
+  var bonus = parseInt(drawData.bonus || '0', 10);
+
   var btnRow = btn.parentElement;
   var gridDiv = gridId ? document.getElementById(gridId) : btnRow.nextElementSibling;
   if (!gridDiv) return;
 
-  // Toggle off if already active
+  // toggle off if already active
   if (gridDiv.style.display !== 'none' && gridDiv.getAttribute('data-active-draw') === String(drawId)) {
     gridDiv.style.display = 'none';
     gridDiv.removeAttribute('data-active-draw');
@@ -2075,19 +2077,20 @@ function toggleAbsDraw(btn) {
     return;
   }
 
-  // Deactivate all siblings
+  // deactivate siblings
   var siblings = btnRow.querySelectorAll('button[data-drawid]');
-  for (var i=0;i<siblings.length;i++){
-    siblings[i].style.opacity='0.7';
-    siblings[i].style.outline='none';
+  for (var i = 0; i < siblings.length; i++) {
+    siblings[i].style.opacity = '0.7';
+    siblings[i].style.outline = 'none';
   }
-  // Activate this
-  btn.style.opacity='1';
-  btn.style.outline='2px solid currentColor';
-  btn.style.outlineOffset='2px';
+
+  // activate this
+  btn.style.opacity = '1';
+  btn.style.outline = '2px solid currentColor';
+  btn.style.outlineOffset = '2px';
 
   gridDiv.setAttribute('data-active-draw', String(drawId));
-  gridDiv.style.display='block';
+  gridDiv.style.display = 'block';
   gridDiv.innerHTML = renderAbsGrid(nums, bonus);
 }
 
@@ -2402,6 +2405,7 @@ function runDraw() {
         bd_.drawCount+' κληρώσεις × '+currentResults.lines.length+' στήλες</div>'+
         '<div class="total-winnings-amount">'+bd_.aggregateWin.toFixed(2)+'<small>€</small></div>';
       // Breakdown box
+      _absDrawMap = {};
       var oldBrk=wrap.querySelector('.batch-breakdown-box'); if(oldBrk) oldBrk.remove();
       var keys_=Object.keys(bd_.hitBreakdown).sort(function(a,b){
         var ak=parseInt(a.split('/')[1]),bk=parseInt(b.split('/')[1]);
@@ -2423,20 +2427,18 @@ function runDraw() {
           if (entry.absoluteDrawIds&&entry.absoluteDrawIds.length>0){
             chips_+=entry.absoluteDrawIds.map(function(drawObj){
               var did=drawObj.id||drawObj;
-              var numsJ=JSON.stringify(drawObj.nums||[]);
-              var bon=drawObj.bonus||0;
-              return '<button onclick="toggleAbsDraw(this)" '+
-                'data-drawid="'+did+'" data-gridid="'+gridId_+'" data-nums=\''+numsJ.replace(/\'/g,"&apos;")+'\'  data-bonus="'+bon+'" '+
+              _absDrawMap[String(did)]={nums:Array.isArray(drawObj.nums)?drawObj.nums:[],bonus:drawObj.bonus||0};
+              return '<button type="button" onclick="toggleAbsDraw(this)" '+
+                'data-drawid="'+did+'" data-gridid="'+gridId_+'" '+
                 'style="display:inline-flex;align-items:center;gap:4px;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.35);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--gold);white-space:nowrap;cursor:pointer;transition:all .15s;">🏆 #'+did+'</button>';
             }).join('');
           }
           if (entry.highPayDraws&&entry.highPayDraws.length>0){
             chips_+=entry.highPayDraws.map(function(drawObj){
               var did=drawObj.id||drawObj;
-              var numsJ=JSON.stringify(drawObj.nums||[]);
-              var bon=drawObj.bonus||0;
-              return '<button onclick="toggleAbsDraw(this)" '+
-                'data-drawid="'+did+'" data-gridid="'+gridId_+'" data-nums=\''+numsJ.replace(/\'/g,"&apos;")+'\'  data-bonus="'+bon+'" '+
+              _absDrawMap[String(did)]={nums:Array.isArray(drawObj.nums)?drawObj.nums:[],bonus:drawObj.bonus||0};
+              return '<button type="button" onclick="toggleAbsDraw(this)" '+
+                'data-drawid="'+did+'" data-gridid="'+gridId_+'" '+
                 'style="display:inline-flex;align-items:center;gap:4px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.4);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--blue2);white-space:nowrap;cursor:pointer;transition:all .15s;">⭐ #'+did+'</button>';
             }).join('');
           }
