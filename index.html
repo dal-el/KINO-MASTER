@@ -570,6 +570,20 @@ border-color:#00aa55;
 background:transparent;
 box-shadow:0 0 0 2px #00aa55, 0 0 10px rgba(0,170,85,0.6);
 }
+/* Abs-grid winner — πολύ έντονο glow για τους δικούς μας */
+.nc.abs-winner {
+position:relative;
+outline:3px solid #fff;
+outline-offset:2px;
+z-index:2;
+}
+.nc.abs-winner::after {
+content:'';
+position:absolute; inset:-5px;
+border-radius:9px;
+border:3px solid rgba(255,255,255,.9);
+pointer-events:none;
+}
 .draw-badge {
 font-family:'Source Code Pro',monospace;
 font-size:11px; font-weight:600;
@@ -2042,6 +2056,68 @@ function selectDraw(drawId, nums, bonus, fromBatch) {
   if (currentResults) runDraw();
 }
 
+function toggleAbsDraw(btn, drawId, nums, bonus, gridId) {
+  var btnRow = btn.parentElement;
+  var gridDiv = gridId ? document.getElementById(gridId) : btnRow.nextElementSibling;
+  if (!gridDiv) return;
+
+  // If already showing this draw's grid, toggle off
+  if (gridDiv.style.display !== 'none' && gridDiv.getAttribute('data-active-draw') === String(drawId)) {
+    gridDiv.style.display = 'none';
+    gridDiv.removeAttribute('data-active-draw');
+    btn.style.background = 'rgba(232,184,75,.12)';
+    btn.style.borderColor = 'rgba(232,184,75,.35)';
+    return;
+  }
+
+  // Deactivate all other buttons in same row
+  var siblings = btnRow.querySelectorAll('button[data-drawid]');
+  for (var i=0;i<siblings.length;i++){
+    siblings[i].style.background='rgba(232,184,75,.12)';
+    siblings[i].style.borderColor='rgba(232,184,75,.35)';
+  }
+  // Activate this button
+  btn.style.background='rgba(232,184,75,.28)';
+  btn.style.borderColor='var(--gold)';
+
+  gridDiv.setAttribute('data-active-draw', String(drawId));
+  gridDiv.style.display='block';
+  gridDiv.innerHTML = renderAbsGrid(nums, bonus);
+}
+
+function renderAbsGrid(winNums, bonus) {
+  var pool = (currentResults && currentResults.pool) ? currentResults.pool : [];
+  var poolSet={}, winSet={};
+  pool.forEach(function(n){ poolSet[n]=true; });
+  if (winNums) winNums.forEach(function(n){ winSet[n]=true; });
+
+  var cells='';
+  for (var n=1;n<=80;n++){
+    var inPool=poolSet[n], isWin=winSet[n], isBonus=(n===bonus);
+    var cls='nc locked';
+    // Bonus: κόκκινο (πρώτο check — override όλα)
+    if (isBonus) {
+      cls+=' bonus-num';
+    // Κληρωθέν (νικήτρια): χρυσό .sel
+    } else if (isWin) {
+      cls+=' sel';
+    }
+    // Όλοι οι αριθμοί του συστήματος: λευκό περίγραμμα
+    if (inPool) cls+=' abs-winner';
+    cells+='<div class="'+cls+'" style="pointer-events:none;">'+(n<10?'0'+n:''+n)+'</div>';
+  }
+
+  var legWin='<span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted2);">'+
+    '<span style="width:14px;height:14px;border-radius:3px;background:linear-gradient(135deg,#b8860b,var(--gold));display:inline-block;"></span>Κληρωθέν νούμερο</span>';
+  var legBonus='<span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted2);">'+
+    '<span style="width:14px;height:14px;border-radius:3px;background:linear-gradient(135deg,#c51717,#ff3333);display:inline-block;"></span>BONUS</span>';
+  var legOurs='<span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted2);">'+
+    '<span style="width:14px;height:14px;border-radius:3px;border:3px solid #fff;display:inline-block;"></span>Δικός μας συνδυασμός</span>';
+
+  return '<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:8px;">'+cells+'</div>'+
+    '<div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:4px;">'+legWin+legBonus+legOurs+'</div>';
+}
+
 function runBatchDraw() {
   if (!currentResults) { alert('Δημιούργησε πρώτα σύστημα!'); return; }
   var n = parseInt(document.getElementById('batchCount').value,10)||10;
@@ -2082,10 +2158,12 @@ function runBatchDraw() {
           totalWinThisDraw+=payout;
           if (payout>0){
             var key=hits+'/'+line.length;
-            if (!hitBreakdown[key]) hitBreakdown[key]={count:0,totalPayout:0,absoluteDrawIds:[]};
+            if (!hitBreakdown[key]) hitBreakdown[key]={count:0,totalPayout:0,absoluteDrawIds:[],highPayDraws:[]};
             hitBreakdown[key].count+=1;
             hitBreakdown[key].totalPayout+=payout;
-            if (hits===line.length) hitBreakdown[key].absoluteDrawIds.push(draw.drawId);
+            var dObj_={id:draw.drawId,nums:draw.winningNumbers.list,bonus:draw.bonus||0};
+            if (hits===line.length) hitBreakdown[key].absoluteDrawIds.push(dObj_);
+            else if (payout>499) hitBreakdown[key].highPayDraws.push(dObj_);
           }
         });
         totalWinThisDraw=Math.round(totalWinThisDraw*100)/100;
@@ -2332,11 +2410,32 @@ function runDraw() {
         var keyClr=isAbs?'var(--green)':h>=Math.ceil(k2*0.7)?'var(--blue2)':'var(--muted2)';
         var tp=Math.round(entry.totalPayout*100)/100;
         var absRow='';
-        if (isAbs&&entry.absoluteDrawIds.length>0){
-          var chips=entry.absoluteDrawIds.map(function(id){
-            return '<span style="display:inline-block;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.3);border-radius:6px;padding:2px 8px;font-family:Source Code Pro,monospace;font-size:10px;color:var(--gold);white-space:nowrap;">#'+id+'</span>';
-          }).join('');
-          absRow='<div style="padding:4px 14px 10px 14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;"><span style="font-size:10px;color:var(--muted2);margin-right:2px;">🏆</span>'+chips+'</div>';
+        var hasChips_=(entry.absoluteDrawIds&&entry.absoluteDrawIds.length>0)||(entry.highPayDraws&&entry.highPayDraws.length>0);
+        if (hasChips_){
+          var gridId_='abs-grid-'+key.replace('/','_');
+          var chips_='';
+          if (entry.absoluteDrawIds&&entry.absoluteDrawIds.length>0){
+            chips_+=entry.absoluteDrawIds.map(function(drawObj){
+              var did=drawObj.id||drawObj;
+              var numsJ=JSON.stringify(drawObj.nums||[]);
+              var bon=drawObj.bonus||0;
+              return '<button onclick="toggleAbsDraw(this,'+did+','+numsJ+','+bon+',\''+gridId_+'\')" '+
+                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.35);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--gold);white-space:nowrap;cursor:pointer;transition:all .15s;" '+
+                'data-drawid="'+did+'">🏆 #'+did+'</button>';
+            }).join('');
+          }
+          if (entry.highPayDraws&&entry.highPayDraws.length>0){
+            chips_+=entry.highPayDraws.map(function(drawObj){
+              var did=drawObj.id||drawObj;
+              var numsJ=JSON.stringify(drawObj.nums||[]);
+              var bon=drawObj.bonus||0;
+              return '<button onclick="toggleAbsDraw(this,'+did+','+numsJ+','+bon+',\''+gridId_+'\')" '+
+                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.4);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--blue2);white-space:nowrap;cursor:pointer;transition:all .15s;" '+
+                'data-drawid="'+did+'">⭐ #'+did+'</button>';
+            }).join('');
+          }
+          absRow='<div style="padding:4px 14px 8px 14px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">'+chips_+'</div>'+
+            '<div id="'+gridId_+'" style="display:none;padding:0 14px 12px 14px;"></div>';
         }
         var mainRow_='<div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 14px '+(absRow?'4px':'12px')+' 14px;">'+
           '<div style="display:flex;align-items:baseline;gap:6px;">'+
