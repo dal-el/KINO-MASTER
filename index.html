@@ -1695,25 +1695,55 @@ function spToggleGrid(){
 function spLoad() {
   var el=document.getElementById('spContent');
   el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted2);">'+tt('statsLoading')+'</div>';
-  var now=new Date(),f3=new Date(now.getTime()-3*60*60*1000);
-  function zp(n){return n<10?'0'+n:''+n;}
-  var fs=f3.getFullYear()+'-'+zp(f3.getMonth()+1)+'-'+zp(f3.getDate());
-  var ts=now.getFullYear()+'-'+zp(now.getMonth()+1)+'-'+zp(now.getDate());
-  var base='https://api.opap.gr/draws/v3.0/1100/draw-date/'+fs+'/'+ts+'?limit=100';
-  var px='https://corsproxy.io/?',px2='https://api.allorigins.win/raw?url=';
-  spTry([base,px+base,px2+encodeURIComponent(base)],0);
+  var neededDraws = Math.max(STATS_WINDOW, HOT_COLD_MAX_DRAWS, 60);
+  spFetchJsonWithFallback('https://api.opap.gr/draws/v3.0/1100/last-result-and-active')
+    .then(function(meta){
+      var lastId = meta && meta.last ? Number(meta.last.drawId || 0) : 0;
+      if(!lastId) throw 0;
+      var fromId = Math.max(1, lastId - neededDraws + 1);
+      return spFetchJsonWithFallback('https://api.opap.gr/draws/v3.0/1100/draw-id/' + fromId + '/' + lastId);
+    })
+    .then(function(data){
+      var d = spExtractDrawArray(data);
+      if(!d.length) throw 0;
+      spRender(normalizeDraws(d));
+    })
+    .catch(function(){
+      document.getElementById('spContent').innerHTML='<div style="color:#ff5a5a;padding:20px;">'+tt('statsError')+'</div>';
+    });
 }
 
-function spTry(urls,i) {
-  if(i>=urls.length){document.getElementById('spContent').innerHTML='<div style="color:#ff5a5a;padding:20px;">'+tt('statsError')+'</div>';return;}
-  fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(data){
-    var d=Array.isArray(data)?data:(data&&data.content?data.content:[]);
-    if(!d.length)throw 0;
-    spRender(d);
-  }).catch(function(){spTry(urls,i+1);});
+function spFetchJsonWithFallback(url){
+  var bust = (url.indexOf('?') >= 0 ? '&' : '?') + '_=' + Date.now();
+  var urls = [
+    url + bust,
+    'https://corsproxy.io/?' + encodeURIComponent(url + bust),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url + bust)
+  ];
+  return spTryFetchList(urls, 0);
+}
+
+function spTryFetchList(urls, i){
+  if(i >= urls.length) return Promise.reject();
+  return fetch(urls[i], {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .catch(function(){ return spTryFetchList(urls, i + 1); });
+}
+
+function spExtractDrawArray(data){
+  if(Array.isArray(data)) return data;
+  if(data && Array.isArray(data.content)) return data.content;
+  if(data && typeof data.contents === 'string'){
+    try{
+      var p = JSON.parse(data.contents);
+      return Array.isArray(p) ? p : (p && Array.isArray(p.content) ? p.content : []);
+    }catch(e){ return []; }
+  }
+  return [];
 }
 
 // keep old names for compat
+function spTry(){}
 function loadStats(){}
 function processStats(){}
 function renderStat(){}
