@@ -2056,29 +2056,35 @@ function selectDraw(drawId, nums, bonus, fromBatch) {
   if (currentResults) runDraw();
 }
 
-function toggleAbsDraw(btn, drawId, nums, bonus, gridId) {
+function toggleAbsDraw(btn) {
+  var drawId = btn.getAttribute('data-drawid');
+  var gridId = btn.getAttribute('data-gridid');
+  var numsRaw = btn.getAttribute('data-nums');
+  var bonus = parseInt(btn.getAttribute('data-bonus')||'0', 10);
+  var nums = numsRaw ? JSON.parse(numsRaw) : [];
   var btnRow = btn.parentElement;
   var gridDiv = gridId ? document.getElementById(gridId) : btnRow.nextElementSibling;
   if (!gridDiv) return;
 
-  // If already showing this draw's grid, toggle off
+  // Toggle off if already active
   if (gridDiv.style.display !== 'none' && gridDiv.getAttribute('data-active-draw') === String(drawId)) {
     gridDiv.style.display = 'none';
     gridDiv.removeAttribute('data-active-draw');
-    btn.style.background = 'rgba(232,184,75,.12)';
-    btn.style.borderColor = 'rgba(232,184,75,.35)';
+    btn.style.opacity = '1';
+    btn.style.outline = 'none';
     return;
   }
 
-  // Deactivate all other buttons in same row
+  // Deactivate all siblings
   var siblings = btnRow.querySelectorAll('button[data-drawid]');
   for (var i=0;i<siblings.length;i++){
-    siblings[i].style.background='rgba(232,184,75,.12)';
-    siblings[i].style.borderColor='rgba(232,184,75,.35)';
+    siblings[i].style.opacity='0.7';
+    siblings[i].style.outline='none';
   }
-  // Activate this button
-  btn.style.background='rgba(232,184,75,.28)';
-  btn.style.borderColor='var(--gold)';
+  // Activate this
+  btn.style.opacity='1';
+  btn.style.outline='2px solid currentColor';
+  btn.style.outlineOffset='2px';
 
   gridDiv.setAttribute('data-active-draw', String(drawId));
   gridDiv.style.display='block';
@@ -2419,9 +2425,9 @@ function runDraw() {
               var did=drawObj.id||drawObj;
               var numsJ=JSON.stringify(drawObj.nums||[]);
               var bon=drawObj.bonus||0;
-              return '<button onclick="toggleAbsDraw(this,'+did+','+numsJ+','+bon+',\''+gridId_+'\')" '+
-                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.35);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--gold);white-space:nowrap;cursor:pointer;transition:all .15s;" '+
-                'data-drawid="'+did+'">🏆 #'+did+'</button>';
+              return '<button onclick="toggleAbsDraw(this)" '+
+                'data-drawid="'+did+'" data-gridid="'+gridId_+'" data-nums=\''+numsJ.replace(/\'/g,"&apos;")+'\'  data-bonus="'+bon+'" '+
+                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.35);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--gold);white-space:nowrap;cursor:pointer;transition:all .15s;">🏆 #'+did+'</button>';
             }).join('');
           }
           if (entry.highPayDraws&&entry.highPayDraws.length>0){
@@ -2429,9 +2435,9 @@ function runDraw() {
               var did=drawObj.id||drawObj;
               var numsJ=JSON.stringify(drawObj.nums||[]);
               var bon=drawObj.bonus||0;
-              return '<button onclick="toggleAbsDraw(this,'+did+','+numsJ+','+bon+',\''+gridId_+'\')" '+
-                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.4);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--blue2);white-space:nowrap;cursor:pointer;transition:all .15s;" '+
-                'data-drawid="'+did+'">⭐ #'+did+'</button>';
+              return '<button onclick="toggleAbsDraw(this)" '+
+                'data-drawid="'+did+'" data-gridid="'+gridId_+'" data-nums=\''+numsJ.replace(/\'/g,"&apos;")+'\'  data-bonus="'+bon+'" '+
+                'style="display:inline-flex;align-items:center;gap:4px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.4);border-radius:8px;padding:4px 10px;font-family:Source Code Pro,monospace;font-size:11px;color:var(--blue2);white-space:nowrap;cursor:pointer;transition:all .15s;">⭐ #'+did+'</button>';
             }).join('');
           }
           absRow='<div style="padding:4px 14px 8px 14px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">'+chips_+'</div>'+
