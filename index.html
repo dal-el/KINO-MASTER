@@ -1631,26 +1631,31 @@ function mkKinoGrid(draw){
 }
 
 function spRender(rawDraws) {
-  var allHist=normalizeDraws(rawDraws),now=Date.now(),hotColdHist=allHist.filter(function(d){
-    return d.drawTime && (now - d.drawTime) <= HOT_COLD_HOURS*60*60*1000;
-  }).slice(0,HOT_COLD_MAX_DRAWS);
-  if(!hotColdHist.length) hotColdHist=allHist.slice(0,HOT_COLD_MAX_DRAWS);
+  var allHist=normalizeDraws(rawDraws),now=Date.now();
+  // HOT/COLD: τελευταίες 36 κληρώσεις
+  var hotColdHist=allHist.slice(0,36);
   var viewHist=allHist.slice(0,STATS_WINDOW);
-  var sRepeatDelay=computeStats(allHist,allHist.length||STATS_WINDOW),sHotCold=computeStats(hotColdHist,hotColdHist.length||HOT_COLD_MAX_DRAWS),all=[];
-  var fr=sHotCold.freq,st=sRepeatDelay.streak,dl=sRepeatDelay.delay;
+  // ΕΠΑΝΑΛΗΨΕΙΣ/ΚΑΘΥΣΤΕΡΗΣΕΙΣ: όλες οι κληρώσεις
+  var sRepeatDelay=computeStats(allHist,allHist.length);
+  // HOT/COLD: μόνο από τις 36
+  var sHotCold=computeStats(hotColdHist,hotColdHist.length);
+  var all=[],fr=sHotCold.freq,st=sRepeatDelay.streak,dl=sRepeatDelay.delay;
   for(var x=1;x<=80;x++)all.push(x);
+  // HOT/COLD: top 10 νούμερα από τις 36 κληρώσεις
   var hot=all.slice().sort(function(a,b){return fr[b]!==fr[a]?fr[b]-fr[a]:a-b;}).slice(0,10);
   var cold=all.slice().sort(function(a,b){return fr[a]!==fr[b]?fr[a]-fr[b]:a-b;}).slice(0,10);
-  var del=all.slice().sort(function(a,b){return dl[b]!==dl[a]?dl[b]-dl[a]:a-b;}).slice(0,10);
-  var rep=all.filter(function(n){return st[n]>=2;}).sort(function(a,b){return st[b]!==st[a]?st[b]-st[a]:a-b;}).slice(0,10);
+  // ΚΑΘΥΣΤΕΡΗΣΕΙΣ: top 15 νούμερα από όλες τις κληρώσεις
+  var del=all.slice().sort(function(a,b){return dl[b]!==dl[a]?dl[b]-dl[a]:a-b;}).slice(0,15);
+  // ΕΠΑΝΑΛΗΨΕΙΣ: top 15 νούμερα από όλες τις κληρώσεις
+  var rep=all.filter(function(n){return st[n]>=2;}).sort(function(a,b){return st[b]!==st[a]?st[b]-st[a]:a-b;}).slice(0,15);
   var maxD=del.length?(dl[del[0]]||1):1,maxR=rep.length?(st[rep[0]]||1):1;
   var h='';
   if(rep.length){
-    h+='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">'+tt('statsRepeatDelay')+'</div>';
+    h+='<div style="font-size:11px;color:var(--muted2);margin-bottom:14px;font-family:monospace;">'+tt('statsRepeatDelay')+' ('+allHist.length+' κληρώσεις)</div>';
     h+=mkRow(tt('statsRepeats'),rep,st,maxR,'repeat');
   }
   h+=mkRow(tt('statsDelays'),del,dl,maxD,'delay');
-  h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">'+tt('statsHotCold')+' '+hotColdHist.length+' '+tt('statsHotColdDraws')+' '+HOT_COLD_HOURS+' '+tt('statsHotColdHours')+'</div>';
+  h+='<div style="font-size:11px;color:var(--muted2);margin:-6px 0 14px;font-family:monospace;">'+tt('statsHotCold')+' '+hotColdHist.length+' '+tt('statsHotColdDraws')+' (τελ. 36)</div>';
   h+=mkHotCold(tt('statsHot'),hot,fr,'fire');
   h+=mkHotCold(tt('statsCold'),cold,fr,'ice');
   h+='<div id="sp-draws-wrap" style="margin-bottom:24px;"><div style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800;">'+tt('statsDraws')+'<span style="flex:1;height:1px;background:#263155;display:block;"></span></div>';
@@ -1695,13 +1700,13 @@ function spToggleGrid(){
 function spLoad() {
   var el=document.getElementById('spContent');
   el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted2);">'+tt('statsLoading')+'</div>';
-  var neededDraws = Math.max(STATS_WINDOW, HOT_COLD_MAX_DRAWS, 60);
+  var neededDraws = 200;
   spFetchJsonWithFallback('https://api.opap.gr/draws/v3.0/1100/last-result-and-active')
     .then(function(meta){
       var lastId = meta && meta.last ? Number(meta.last.drawId || 0) : 0;
       if(!lastId) throw 0;
       var fromId = Math.max(1, lastId - neededDraws + 1);
-      return spFetchJsonWithFallback('https://api.opap.gr/draws/v3.0/1100/draw-id/' + fromId + '/' + lastId);
+      return spFetchJsonWithFallback('https://api.opap.gr/draws/v3.0/1100/draw-id/' + fromId + '/' + lastId + '?limit=' + neededDraws);
     })
     .then(function(data){
       var d = spExtractDrawArray(data);
