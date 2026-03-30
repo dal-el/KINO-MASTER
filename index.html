@@ -2054,7 +2054,7 @@ function selectDraw(drawId, nums, bonus, fromBatch) {
   syncNumGridWinner();
   drawActive = true;
   document.getElementById('btnDraw').className = 'toggle-btn active-draw';
-  if (currentResults) runDraw();
+  if (currentResults) { requestAnimationFrame(function(){ runDraw(); }); }
 }
 
 function toggleAbsDraw(btn) {
