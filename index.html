@@ -2704,15 +2704,6 @@ setLang('el');
     btn.style.justifyContent='center';
   });
 })();
-(function(){
-  var mb=document.getElementById('mainBackTop');
-  if(!mb)return;
-  window.addEventListener('scroll',function(){
-    mb.style.display=window.scrollY>300?'flex':'none';
-    mb.style.alignItems='center';
-    mb.style.justifyContent='center';
-  });
-})();
 </script>
 
 <div class="draws-modal" id="drawsModal">
@@ -2729,10 +2720,23 @@ setLang('el');
 
 <!-- SCROLL TO TOP — main page -->
 <button id="mainBackTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-  style="display:none;position:fixed;bottom:80px;right:16px;z-index:200;width:44px;height:44px;
+  style="position:fixed;bottom:80px;right:16px;z-index:9999;width:44px;height:44px;
   border-radius:50%;background:linear-gradient(135deg,#b8800a,var(--gold));border:none;cursor:pointer;
-  box-shadow:0 4px 16px rgba(232,184,75,.45);font-size:20px;color:#000;font-weight:900;
-  align-items:center;justify-content:center;transition:opacity .25s,transform .2s;">↑</button>
+  box-shadow:0 4px 16px rgba(232,184,75,.5);font-size:22px;color:#000;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;">↑</button>
+<script>
+(function(){
+  var mb=document.getElementById('mainBackTop');
+  if(!mb)return;
+  function checkScroll(){
+    var sy=window.scrollY||document.documentElement.scrollTop||document.body.scrollTop||0;
+    mb.style.opacity=sy>300?'1':'0';
+    mb.style.pointerEvents=sy>300?'all':'none';
+  }
+  window.addEventListener('scroll',checkScroll,{passive:true});
+})();
+</script>
 
 </body>
 </html>
