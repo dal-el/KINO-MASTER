@@ -809,17 +809,19 @@ letter-spacing:1px; word-break:break-all;
       <div class="logo-icon">K</div>
       <div class="logo-text">
         <div class="l1">KINO MASTER</div>
-        <div class="l2"><span id="t-subtitle">Auto Correcting Systems</span></div>
+
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <div class="lang-switch">
-        <button class="lang-btn active" id="langEl" onclick="setLang('el')">&#x1F1EC;&#x1F1F7;</button>
-        <button class="lang-btn" id="langEn" onclick="setLang('en')">&#x1F1EC;&#x1F1E7;</button>
-      </div>
-      <div class="live-badge" onclick="toggleStats()">
-        <div class="live-dot"></div>
-        <span id="liveBadgeText">STATS</span>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div class="lang-switch">
+          <button class="lang-btn active" id="langEl" onclick="setLang('el')">&#x1F1EC;&#x1F1F7;</button>
+          <button class="lang-btn" id="langEn" onclick="setLang('en')">&#x1F1EC;&#x1F1E7;</button>
+        </div>
+        <div class="live-badge" onclick="toggleStats()">
+          <div class="live-dot"></div>
+          <span id="liveBadgeText">STATS</span>
+        </div>
       </div>
       <div class="live-badge" onclick="toggleTrend()" style="background:rgba(255,119,0,.1);border-color:rgba(255,119,0,.4);">
         <div class="live-dot" style="background:var(--price);"></div>
@@ -994,7 +996,7 @@ var _absDrawMap = {};
 
 var T = {
   el: {
-    subtitle:'Αυτόματη Διόρθωση Συστημάτων',
+    subtitle:'',
     lastdraw:'ΤΕΛΕΥΤΑΙΑ ΚΛΗΡΩΣΗ',
     step1:'Τύπος Παιχνιδιού',
     step2:'Επιλογή Αριθμών',
@@ -1068,7 +1070,7 @@ var T = {
     drawsX:'κληρώσεις'
   },
   en: {
-    subtitle:'Auto Correcting Systems',
+    subtitle:'',
     lastdraw:'LAST DRAW',
     step1:'Game Type',
     step2:'Number Selection',
@@ -2937,10 +2939,9 @@ function trendAddToGrid(nums,cls){
   // nums already sorted by score desc (from trendBuildPanels)
   _trendRanked=nums.map(function(n){return{n:n,cls:cls||"fire"};});
 
-  // Add to selected
-  nums.forEach(function(n){
-    if(!selected.has(n)) selected.add(n);
-  });
+  // Replace selected with new nums (clear first)
+  selected.clear();
+  nums.forEach(function(n){ selected.add(n); });
   syncSelectedVisuals();
   if(typeof updateSelBar==="function") updateSelBar();
   if(typeof clampTriggerHit==="function") clampTriggerHit();
