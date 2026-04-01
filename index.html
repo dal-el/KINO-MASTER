@@ -790,6 +790,15 @@ letter-spacing:1px; word-break:break-all;
 .draw-row-ball.bonus-ball{border-color:var(--red)!important;color:var(--red)!important;box-shadow:0 0 0 1px var(--red);}
 /* Bonus on main grid */
 .nc.bonus-num{background:linear-gradient(135deg,#c51717,#ff3333)!important;border-color:#ff6d6d!important;color:#fff!important;box-shadow:0 0 10px rgba(255,90,90,.5)!important;}
+
+.trball{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:Source Code Pro,monospace;font-size:10px;font-weight:700;cursor:pointer;
+  border:2px solid rgba(255,255,255,.2);position:relative;transition:all .15s;flex-shrink:0;
+  box-shadow:inset 0 3px 6px rgba(255,255,255,.15),inset 0 -4px 6px rgba(0,0,0,.2);}
+.trball:hover{transform:scale(.85);opacity:.7;}
+.trball.fire{background:radial-gradient(circle at 35% 30%,#ffeeaa,#ff8800 55%,#cc3300);color:#fff;}
+.trball.rising{background:radial-gradient(circle at 35% 30%,#aaffcc,#00cc55 55%,#006622);color:#fff;}
+.trball.sel-indicator{position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1px solid #000;}
 </style>
 
 </head>
@@ -811,6 +820,10 @@ letter-spacing:1px; word-break:break-all;
       <div class="live-badge" onclick="toggleStats()">
         <div class="live-dot"></div>
         <span id="liveBadgeText">STATS</span>
+      </div>
+      <div class="live-badge" onclick="toggleTrend()" style="background:rgba(255,119,0,.1);border-color:rgba(255,119,0,.4);">
+        <div class="live-dot" style="background:var(--price);"></div>
+        <span id="trendBadgeText" style="color:var(--price);">TREND</span>
       </div>
     </div>
   </div>
@@ -855,6 +868,10 @@ letter-spacing:1px; word-break:break-all;
   <div class="sel-bar">
     <div class="sel-count-big" id="selCount">0</div>
     <div class="sel-nums-text" id="selNums">Επίλεξε αριθμούς από τον πίνακα...</div>
+  </div>
+  <div id="trendRankBar" style="display:none;margin-bottom:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
+    <div style="font-family:Oswald,sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:8px;">ΔΥΝΑΜΗ TREND (μεγαλύτερη &rarr; μικρότερη) &nbsp;&middot;&nbsp; πάτα για αφαίρεση</div>
+    <div id="trendRankBalls" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
   </div>
 
   <div class="sec-title"><div class="step-dot">3</div><span id="t-step3">Σύστημα</span></div>
@@ -907,7 +924,6 @@ letter-spacing:1px; word-break:break-all;
 
   <div class="results-wrap" id="resultsWrap">
     <div class="empty">
-      <span class="empty-icon">&#x1F3B0;</span>
       <p><span id="t-empty">Επίλεξε αριθμούς, τύπο παιχνιδιού και σύστημα, μετά πάτα ΔΗΜΙΟΥΡΓΙΑ</span></p>
     </div>
   </div>
@@ -1194,7 +1210,7 @@ function updateSelBar() {
 
 function clearResultsUI() {
   document.getElementById('resultsWrap').innerHTML =
-    '<div class="empty"><span class="empty-icon">🎰</span><p><span id="t-empty">' + tt('empty') + '</span></p></div>';
+    '<div class="empty"><p><span id=\'t-empty\'>' + tt('empty') + '</span></p></div>';
   document.getElementById('saveBtn').style.display = 'none';
   document.getElementById('qrBtnSticky').style.display = 'none';
   document.getElementById('genBtnSticky').style.display = 'none';
@@ -1216,6 +1232,10 @@ function clearNums() {
   updateSystem();
   document.getElementById('lbBar').style.display = 'none';
   clearResultsUI();
+  // Hide trend rank bar
+  _trendRanked=[];
+  var trb=document.getElementById('trendRankBar');
+  if(trb) trb.style.display='none';
 }
 
 function showQPick() {
@@ -2735,6 +2755,407 @@ setLang('el');
     mb.style.pointerEvents=sy>300?'all':'none';
   }
   window.addEventListener('scroll',checkScroll,{passive:true});
+})();
+</script>
+
+<div id="trendOverlay" style="display:none;position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="max-width:520px;margin:0 auto;padding:16px 16px 90px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:12px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;">
+      <div style="font-size:18px;font-weight:800;letter-spacing:2px;background:linear-gradient(90deg,#ff7700,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">KINO TREND</div>
+      <button onclick="closeTrend()" style="padding:8px 16px;background:#171d31;border:1px solid #2c3763;border-radius:12px;color:var(--muted2);font-size:13px;cursor:pointer;">ΚΛΕΙΣΙΜΟ</button>
+    </div>
+    <div id="trendContent"><div style="text-align:center;padding:40px;color:var(--muted2);">Φόρτωση...</div></div>
+  </div>
+  <button id="trendBackTop" onclick="document.getElementById('trendOverlay').scrollTo({top:0,behavior:'smooth'})"
+    style="display:none;position:fixed;bottom:28px;right:22px;z-index:510;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#b8600a,#ff7700);border:none;cursor:pointer;font-size:22px;color:#fff;font-weight:900;line-height:1;">&#8593;</button>
+</div>
+
+<script>
+// ── KINO TREND ──
+var _trendLoaded=false, _trendHistData=[];
+var TREND_HIST_KEY="kinoTrendHist_v1", TREND_MAX_HIST=36;
+
+function toggleTrend(){
+  var ov=document.getElementById("trendOverlay");
+  if(ov.style.display==="block"){ closeTrend(); return; }
+  ov.style.display="block";
+  document.body.style.overflow="hidden";
+  document.getElementById("trendBadgeText").textContent="CLOSE";
+  if(!_trendLoaded) trendLoad();
+}
+function closeTrend(){
+  document.getElementById("trendOverlay").style.display="none";
+  document.body.style.overflow="";
+  document.getElementById("trendBadgeText").textContent="TREND";
+}
+function trendLoadHist(){try{return JSON.parse(localStorage.getItem(TREND_HIST_KEY)||"[]");}catch(e){return[];}}
+function trendSaveHist(h){try{localStorage.setItem(TREND_HIST_KEY,JSON.stringify(h));}catch(e){}}
+function trendClearHist(){try{localStorage.removeItem(TREND_HIST_KEY);}catch(e){} _trendLoaded=false; trendLoad();}
+
+function trendCalc(draws){
+  var res=[];
+  for(var n=1;n<=80;n++){
+    var h1=0,h2=0,h3=0;
+    for(var i=0;i<36;i++){
+      if(!draws[i])continue;
+      var hit=draws[i].winningNumbers.list.indexOf(n)>=0;
+      if(i<=11)h3+=hit?1:0; else if(i<=23)h2+=hit?1:0; else h1+=hit?1:0;
+    }
+    var MEAN=3,d23=h3-h2,slope=h3-h1;
+    var score=Math.round((0.5*(h3-h1)+0.3*(h3-h2)+0.2*(h3-MEAN))*10)/10;
+    var cat;
+    if(slope>=2&&h3>MEAN)cat="ON FIRE";
+    else if(slope>=1&&d23>=0)cat="RISING";
+    else if(h1<=1&&d23>0)cat="THAWING";
+    else if(slope<0||(h3<h2&&h2>h1))cat="FADING";
+    else cat="NEUTRAL";
+    res.push({n:n,cat:cat,score:score});
+  }
+  return res;
+}
+
+function trendCatCls(cat){
+  return cat==="ON FIRE"?"fire":cat==="RISING"?"rising":cat==="THAWING"?"thaw":"fading";
+}
+function trendPad(n){return n<10?"0"+n:""+n;}
+
+function trendCatColor(cls){
+  return cls==="fire"?"#ff7700":cls==="rising"?"#00cc66":cls==="thaw"?"#44aaff":"#888888";
+}
+function trendCatBg(cls){
+  if(cls==="fire")return "rgba(255,119,0,.15)";
+  if(cls==="rising")return "rgba(0,204,102,.15)";
+  if(cls==="thaw")return "rgba(68,170,255,.15)";
+  return "rgba(136,136,136,.1)";
+}
+function trendCatBorder(cls){
+  if(cls==="fire")return "rgba(255,119,0,.5)";
+  if(cls==="rising")return "rgba(0,204,102,.5)";
+  if(cls==="thaw")return "rgba(68,170,255,.5)";
+  return "rgba(136,136,136,.35)";
+}
+function trendBallStyle(cls,isWin,isBonus,inCat){
+  var base="aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:Source Code Pro,monospace;font-size:8.5px;font-weight:700;";
+  if(isBonus&&inCat) return base+"background:linear-gradient(135deg,#c51717,#ff3333);color:#fff;box-shadow:0 0 0 2px #fff,0 0 6px rgba(255,90,90,.6);";
+  if(isBonus) return base+"background:linear-gradient(135deg,#c51717,#ff3333);color:#fff;";
+  if(isWin&&inCat){
+    var bg=cls==="fire"?"radial-gradient(circle at 35% 30%,#ffeeaa,#ff8800 55%,#cc3300)":
+           cls==="rising"?"radial-gradient(circle at 35% 30%,#aaffcc,#00cc55 55%,#006622)":
+           cls==="thaw"?"radial-gradient(circle at 35% 30%,#ccf0ff,#44aaff 55%,#0044cc)":
+           "radial-gradient(circle at 35% 30%,#e0e0e0,#888 55%,#444)";
+    return base+"background:"+bg+";color:#fff;box-shadow:0 0 0 2.5px #fff,0 0 8px rgba(255,255,255,.7);";
+  }
+  if(isWin) return base+"background:transparent;color:rgba(255,255,255,.15);box-shadow:0 0 0 2px #fff,0 0 6px rgba(255,255,255,.5);";
+  if(inCat){
+    var bg2=cls==="fire"?"radial-gradient(circle at 35% 30%,#ffeeaa,#ff8800 55%,#cc3300)":
+            cls==="rising"?"radial-gradient(circle at 35% 30%,#aaffcc,#00cc55 55%,#006622)":
+            cls==="thaw"?"radial-gradient(circle at 35% 30%,#ccf0ff,#44aaff 55%,#0044cc)":
+            "radial-gradient(circle at 35% 30%,#e0e0e0,#888 55%,#444)";
+    return base+"background:"+bg2+";color:#fff;";
+  }
+  return base+"background:rgba(255,255,255,.03);color:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.05);";
+}
+
+function trendBuildPanels(results,winSet,bonus){
+  var cats=["fire","rising","thaw","fading"];
+  var labels={"fire":"&#128293; ON FIRE","rising":"&#11014;&#65039; RISING","thaw":"&#10052;&#65039; THAWING","fading":"&#128168; FADING"};
+  var catSets={fire:{},rising:{},thaw:{},fading:{}};
+  results.forEach(function(r){catSets[trendCatCls(r.cat)][r.n]=true;});
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">';
+  cats.forEach(function(cls){
+    var count=Object.keys(catSets[cls]).length;
+    var col=trendCatColor(cls);
+    var bgH=trendCatBg(cls);
+    var border=trendCatBorder(cls);
+    // Collect nums sorted by score desc (strongest first)
+    var catNums=results.filter(function(r){
+      return trendCatCls(r.cat)===cls;
+    }).sort(function(a,b){return b.score-a.score;}).map(function(r){return r.n;});
+    var canTransfer=(cls==="fire"||cls==="rising")&&catNums.length>0&&winSet===null;
+    h+='<div style="border-radius:10px;overflow:hidden;border:1.5px solid '+border+';">';
+    h+='<div style="padding:6px 8px;display:flex;align-items:center;justify-content:space-between;background:'+bgH+';">';
+    h+='<span style="font-family:Oswald,sans-serif;font-size:11px;font-weight:700;color:'+col+';">'+labels[cls]+'</span>';
+    h+='<div style="display:flex;align-items:center;gap:6px;">';
+    if(canTransfer){
+      var numsAttr=catNums.join(",");
+      h+='<button onclick="trendAddToGridBtn(this)" '+
+        'data-nums="'+numsAttr+'" data-cls="'+cls+'" '+
+        'style="font-family:Oswald,sans-serif;font-size:9px;letter-spacing:1px;padding:3px 8px;'+
+        'background:'+col+';color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:700;">'+
+        '&#10133; ΠΡΟΣΘΗΚΗ</button>';
+    }
+    h+='<span style="font-family:Source Code Pro,monospace;font-size:10px;color:var(--muted);">'+count+'</span>';
+    h+='</div></div>';
+    h+='<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:2px;padding:5px;">';
+    for(var n=1;n<=80;n++){
+      var inCat=!!catSets[cls][n];
+      var isWin=!!(winSet&&winSet[n]);
+      var isBonus=(n===bonus);
+      h+='<div style="'+trendBallStyle(cls,isWin,isBonus,inCat)+'">'+trendPad(n)+'</div>';
+    }
+    h+='</div></div>';
+  });
+  return h+'</div>';
+}
+
+function trendBuildAnalysis(results,winSet,bonus){
+  var defs=[
+    {cat:"ON FIRE",cls:"fire",label:"&#128293; FIRE"},
+    {cat:"RISING",cls:"rising",label:"&#11014; RISING"},
+    {cat:"THAWING",cls:"thaw",label:"&#10052; THAW"},
+    {cat:"FADING",cls:"fading",label:"&#128168; FADE"}
+  ];
+  var h='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">';
+  defs.forEach(function(d){
+    var items=results.filter(function(r){return r.cat===d.cat;});
+    var hits=items.filter(function(r){return (winSet&&winSet[r.n])||r.n===bonus;}).length;
+    var pct=items.length>0?Math.round(hits/items.length*100):0;
+    var col=trendCatColor(d.cls);
+    var border=trendCatBorder(d.cls);
+    h+='<div style="border-radius:8px;padding:8px 6px;text-align:center;background:'+trendCatBg(d.cls)+';border:1px solid '+border+';">';
+    h+='<div style="font-family:Oswald,sans-serif;font-size:9px;letter-spacing:1px;color:'+col+';margin-bottom:3px;">'+d.label+'</div>';
+    h+='<div style="font-family:Oswald,sans-serif;font-size:22px;font-weight:700;color:'+col+';">'+hits+'/'+items.length+'</div>';
+    h+='<div style="font-family:Source Code Pro,monospace;font-size:9px;color:var(--muted);">'+pct+'%</div>';
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+
+var _trendRanked=[];
+
+function trendAddToGridBtn(btn){
+  var numsStr=btn.getAttribute("data-nums");
+  var cls2=btn.getAttribute("data-cls")||"fire";
+  if(!numsStr)return;
+  var nums=numsStr.split(",").map(Number).filter(Boolean);
+  trendAddToGrid(nums,cls2);
+}
+
+
+function trendAddToGrid(nums,cls){
+  // Store ranked data for display
+  // nums already sorted by score desc (from trendBuildPanels)
+  _trendRanked=nums.map(function(n){return{n:n,cls:cls||"fire"};});
+
+  // Add to selected
+  nums.forEach(function(n){
+    if(!selected.has(n)) selected.add(n);
+  });
+  syncSelectedVisuals();
+  if(typeof updateSelBar==="function") updateSelBar();
+  if(typeof clampTriggerHit==="function") clampTriggerHit();
+  if(typeof updateSystem==="function") updateSystem();
+
+  // Show rank bar
+  trendShowRankBar();
+
+  // Close overlay and scroll
+  closeTrend();
+  setTimeout(function(){
+    var bar=document.getElementById("trendRankBar");
+    if(bar) bar.scrollIntoView({behavior:"smooth",block:"center"});
+  },250);
+}
+
+function trendShowRankBar(){
+  var bar=document.getElementById("trendRankBar");
+  var container=document.getElementById("trendRankBalls");
+  if(!bar||!container||!_trendRanked.length){if(bar)bar.style.display="none";return;}
+  container.innerHTML="";
+  _trendRanked.forEach(function(item,idx){
+    var n=item.n,cls=item.cls;
+    var isSel=selected.has(n);
+    var ball=document.createElement("div");
+    ball.className="trball "+cls;
+    ball.textContent=n<10?"0"+n:""+n;
+    ball.title="Κλικ για αφαίρεση";
+
+    // deselected style
+    if(!isSel) ball.style.opacity="0.35";
+    ball.onclick=(function(num){
+      return function(){
+        if(selected.has(num)){
+          selected.delete(num);
+          this.style.opacity="0.35";
+        } else {
+          selected.add(num);
+          this.style.opacity="1";
+        }
+        syncSelectedVisuals();
+        if(typeof updateSelBar==="function") updateSelBar();
+        if(typeof clampTriggerHit==="function") clampTriggerHit();
+        if(typeof updateSystem==="function") updateSystem();
+      };
+    })(n);
+    container.appendChild(ball);
+  });
+  bar.style.display="block";
+}
+
+function trendToggleHistRow(drawId){
+  var expand=document.getElementById("th-expand-"+drawId);
+  if(!expand)return;
+  if(expand.style.display!=="none"){expand.style.display="none";return;}
+  var entry=null;
+  for(var i=0;i<_trendHistData.length;i++){if(_trendHistData[i].drawId===drawId){entry=_trendHistData[i];break;}}
+  if(!entry)return;
+  var results=[];
+  for(var n=1;n<=80;n++) results.push({n:n,cat:entry.predCats[n]||"NEUTRAL"});
+  var winSet={};
+  (entry.winNums||[]).forEach(function(n){winSet[n]=true;});
+  var pnl=trendBuildPanels(results,winSet,entry.bonus||0);
+  expand.innerHTML='<div style="padding:6px 8px;background:rgba(255,255,255,.02);">'+pnl+'</div>';
+  expand.style.display="block";
+}
+
+function trendRender(draws,results,prevDraw,prevResults,hist){
+  _trendHistData=hist||[];
+  var last=draws[0];
+  var now=new Date();
+  var hh=now.getHours(),mm=now.getMinutes(),ss=now.getSeconds();
+  var tStr=(hh<10?"0"+hh:hh)+":"+(mm<10?"0"+mm:mm)+":"+(ss<10?"0"+ss:ss);
+  var lastId=last?"#"+last.drawId:"";
+  var nextId=last?"#"+(last.drawId+1):"";
+  var prevWinSet={};
+  if(prevDraw) prevDraw.winningNumbers.list.forEach(function(n){prevWinSet[n]=true;});
+  var prevBonus=prevDraw?prevDraw.bonus||0:0;
+  var prevId=prevDraw?"#"+prevDraw.drawId:"";
+
+  var h="";
+
+  // Status bar
+  h+='<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">';
+  h+='<span style="font-family:Source Code Pro,monospace;font-size:11px;color:var(--muted);">Τελευταία: <b style="color:var(--gold)">'+lastId+'</b> &middot; 36 κλ.</span>';
+  h+='<span style="font-family:Source Code Pro,monospace;font-size:11px;color:var(--muted2);">'+tStr+'</span></div>';
+  h+='<div style="height:2px;background:linear-gradient(90deg,#ff7700,var(--gold));border-radius:1px;margin-bottom:14px;"></div>';
+  h+='<div style="background:rgba(255,90,90,.04);border:1px solid rgba(255,90,90,.12);border-radius:8px;padding:7px 10px;font-size:10px;color:var(--muted);font-family:Source Code Pro,monospace;margin-bottom:14px;">&#9888; Heuristic trend &mdash; &#972;&#967;&#953; &#949;&#947;&#947;&#973;&#951;&#963;&#951;. &#932;&#959; KINO &#949;&#943;&#957;&#945;&#953; RNG.</div>';
+
+  // Prediction section
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+  h+='<div style="font-family:Oswald,sans-serif;font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:20px;background:rgba(232,184,75,.15);border:1px solid rgba(232,184,75,.4);color:var(--gold);">&#127919; ΠΡΟΒΛΕΨΗ '+nextId+'</div>';
+  h+='<div style="flex:1;height:1px;background:var(--border);"></div>';
+  h+='<span style="font-family:Source Code Pro,monospace;font-size:10px;color:var(--muted);">&#946;&#940;&#963;&#949;&#953; '+lastId+'</span></div>';
+  h+=trendBuildPanels(results,null,0);
+
+  h+='<div style="height:1px;background:var(--border);margin:16px 0;"></div>';
+
+  // Previous result section
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+  h+='<div style="font-family:Oswald,sans-serif;font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:20px;background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.3);color:var(--green);">&#9989; ΑΠΟΤΕΛΕΣΜΑ '+prevId+'</div>';
+  h+='<div style="flex:1;height:1px;background:var(--border);"></div></div>';
+
+  if(prevDraw&&prevResults.length){
+    h+=trendBuildPanels(prevResults,prevWinSet,prevBonus);
+    h+=trendBuildAnalysis(prevResults,prevWinSet,prevBonus);
+  } else {
+    h+='<div style="font-family:Source Code Pro,monospace;font-size:11px;color:var(--muted2);padding:16px;text-align:center;">&#931;&#965;&#947;&#954;&#949;&#957;&#964;&#961;&#974;&#957;&#949;&#964;&#945;&#953; &#945;&#960;&#972; &#949;&#948;&#974; &#954;&#945;&#953; &#960;&#941;&#961;&#945;...</div>';
+  }
+
+  // History section
+  if(hist&&hist.length>1){
+    h+='<div style="height:1px;background:var(--border);margin:16px 0;"></div>';
+    h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+    h+='<div style="font-family:Oswald,sans-serif;font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:20px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.4);color:#c4b5fd;">&#128202; ΙΣΤΟΡΙΚΟ ('+hist.length+'/36)</div>';
+    h+='<div style="flex:1;height:1px;background:var(--border);"></div>';
+    h+='<button onclick="trendClearHist()" style="font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;">&#128465;</button></div>';
+
+    h+='<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;">';
+    h+='<div style="display:grid;grid-template-columns:55px 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);">';
+    h+='<div style="padding:6px 8px;font-family:Source Code Pro,monospace;font-size:9px;color:var(--muted);">ΚΛ.</div>';
+    h+='<div style="padding:6px 4px;font-family:Oswald,sans-serif;font-size:9px;color:#ff7700;text-align:center;">&#128293;</div>';
+    h+='<div style="padding:6px 4px;font-family:Oswald,sans-serif;font-size:9px;color:#00cc66;text-align:center;">&#11014;</div>';
+    h+='<div style="padding:6px 4px;font-family:Oswald,sans-serif;font-size:9px;color:#44aaff;text-align:center;">&#10052;</div>';
+    h+='<div style="padding:6px 4px;font-family:Oswald,sans-serif;font-size:9px;color:#888;text-align:center;">&#128168;</div></div>';
+
+    var avgs={ON_FIRE:{ht:0,tt:0},RISING:{ht:0,tt:0},THAWING:{ht:0,tt:0},FADING:{ht:0,tt:0}};
+    hist.forEach(function(e,i){
+      var bg2=i%2===0?"rgba(255,255,255,.02)":"transparent";
+      h+='<div id="th-row-'+e.drawId+'" onclick="trendToggleHistRow('+e.drawId+')" style="display:grid;grid-template-columns:55px 1fr 1fr 1fr 1fr;background:'+bg2+';border-bottom:1px solid rgba(255,255,255,.03);cursor:pointer;">';
+      h+='<div style="padding:5px 8px;font-family:Source Code Pro,monospace;font-size:9px;color:var(--blue);">#'+e.drawId+'</div>';
+      [["ON_FIRE","#ff7700"],["RISING","#00cc66"],["THAWING","#44aaff"],["FADING","#888888"]].forEach(function(kv){
+        var key=kv[0],col2=kv[1];
+        var hv=e.hits[key]||0,tv=e.totals[key]||0;
+        var pv=tv>0?Math.round(hv/tv*100):0;
+        avgs[key.replace("_"," ")]=avgs[key.replace("_"," ")]||{ht:0,tt:0};
+        if(avgs[key])avgs[key].ht+=hv,avgs[key].tt+=tv;
+        h+='<div style="padding:5px 4px;text-align:center;">';
+        h+='<span style="font-family:Oswald,sans-serif;font-size:11px;color:'+col2+';">'+hv+'/'+tv+'</span>';
+        h+='<span style="font-family:Source Code Pro,monospace;font-size:8px;color:var(--muted2);display:block;">'+pv+'%</span>';
+        h+='</div>';
+      });
+      h+='</div>';
+      h+='<div id="th-expand-'+e.drawId+'" style="display:none;border-bottom:1px solid rgba(255,255,255,.06);"></div>';
+    });
+
+    // Averages row
+    h+='<div style="display:grid;grid-template-columns:55px 1fr 1fr 1fr 1fr;background:rgba(255,255,255,.05);border-top:1px solid var(--border);">';
+    h+='<div style="padding:6px 8px;font-family:Oswald,sans-serif;font-size:9px;color:var(--muted);">ΜΟΣ</div>';
+    [["ON_FIRE","#ff7700"],["RISING","#00cc66"],["THAWING","#44aaff"],["FADING","#888888"]].forEach(function(kv){
+      var avg2=avgs[kv[0]]&&avgs[kv[0]].tt>0?Math.round(avgs[kv[0]].ht/avgs[kv[0]].tt*100):0;
+      h+='<div style="padding:6px 4px;text-align:center;"><span style="font-family:Oswald,sans-serif;font-size:13px;font-weight:700;color:'+kv[1]+';">'+avg2+'%</span></div>';
+    });
+    h+='</div></div>';
+  }
+
+  document.getElementById("trendContent").innerHTML=h;
+}
+
+function trendLoad(){
+  _trendLoaded=true;
+  document.getElementById("trendContent").innerHTML='<div style="text-align:center;padding:40px;color:var(--muted2);">&#934;&#972;&#961;&#964;&#969;&#963;&#951;...</div>';
+  var draws37;
+  spFetchJsonWithFallback("https://api.opap.gr/draws/v3.0/1100/last-result-and-active")
+    .then(function(meta){
+      var lastId=meta&&meta.last?Number(meta.last.drawId||0):0;
+      if(!lastId)throw 0;
+      var fromId=Math.max(1,lastId-36);
+      return spFetchJsonWithFallback("https://api.opap.gr/draws/v3.0/1100/draw-id/"+fromId+"/"+lastId+"?limit=37");
+    })
+    .then(function(data){
+      draws37=normalizeDraws(spExtractDrawArray(data));
+      if(draws37.length<13)throw 0;
+      var currentDraws=draws37.slice(0,36);
+      var prevDraw=draws37[0]||null;
+      var prevDraws=draws37.slice(1,37);
+      var currentResults=trendCalc(currentDraws);
+      var prevResults=prevDraws.length>=12?trendCalc(prevDraws):[];
+      if(prevDraw&&prevResults.length){
+        var hist2=trendLoadHist();
+        var already=hist2.some(function(e){return e.drawId===prevDraw.drawId;});
+        if(!already){
+          var ws={};
+          prevDraw.winningNumbers.list.forEach(function(n){ws[n]=true;});
+          var bon=prevDraw.bonus||0;
+          var pc={};
+          prevResults.forEach(function(r){pc[r.n]=r.cat;});
+          var hts={},tots={};
+          ["ON FIRE","RISING","THAWING","FADING"].forEach(function(cat){
+            var key=cat.replace(" ","_");
+            var items=prevResults.filter(function(r){return r.cat===cat;});
+            tots[key]=items.length;
+            hts[key]=items.filter(function(r){return ws[r.n]||r.n===bon;}).length;
+          });
+          hist2.unshift({drawId:prevDraw.drawId,drawTime:prevDraw.drawTime||0,predCats:pc,winNums:prevDraw.winningNumbers.list,bonus:bon,hits:hts,totals:tots});
+          if(hist2.length>TREND_MAX_HIST)hist2=hist2.slice(0,TREND_MAX_HIST);
+          trendSaveHist(hist2);
+        }
+      }
+      trendRender(currentDraws,currentResults,prevDraw,prevResults,trendLoadHist());
+    })
+    .catch(function(){
+      document.getElementById("trendContent").innerHTML='<div style="text-align:center;padding:40px;color:var(--red);">&#913;&#948;&#973;&#957;&#945;&#964;&#951; &#966;&#972;&#961;&#964;&#969;&#963;&#951;</div>';
+    });
+}
+
+(function(){
+  var ov=document.getElementById("trendOverlay");
+  var btn=document.getElementById("trendBackTop");
+  if(!ov||!btn)return;
+  ov.addEventListener("scroll",function(){
+    btn.style.display=ov.scrollTop>200?"flex":"none";
+    btn.style.alignItems="center";
+    btn.style.justifyContent="center";
+  });
 })();
 </script>
 
